@@ -1,0 +1,12 @@
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.deps.json
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.dll
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.pdb
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.csproj.AssemblyReference.cache
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.AssemblyInfoInputs.cache
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.AssemblyInfo.cs
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.csproj.CoreCompileInputs.cache
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.dll
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\refint\ArithmeticFunctions.dll
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.pdb
+C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ref\ArithmeticFunctions.dll
