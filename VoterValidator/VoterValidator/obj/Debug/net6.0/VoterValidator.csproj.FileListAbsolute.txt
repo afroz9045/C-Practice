@@ -1,0 +1,15 @@
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\bin\Debug\net6.0\VoterValidator.exe
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\bin\Debug\net6.0\VoterValidator.deps.json
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\bin\Debug\net6.0\VoterValidator.runtimeconfig.json
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\bin\Debug\net6.0\VoterValidator.dll
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\bin\Debug\net6.0\VoterValidator.pdb
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.csproj.AssemblyReference.cache
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.GeneratedMSBuildEditorConfig.editorconfig
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.AssemblyInfoInputs.cache
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.AssemblyInfo.cs
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.csproj.CoreCompileInputs.cache
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.dll
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\refint\VoterValidator.dll
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.pdb
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\VoterValidator.genruntimeconfig.cache
+E:\Backend Tasks\DotNet-Practice\VoterValidator\VoterValidator\obj\Debug\net6.0\ref\VoterValidator.dll
