@@ -4,12 +4,12 @@
     "E:\\Backend Tasks\\DotNet-Practice\\Calc\\Calc\\Calc.csproj": {}
   },
   "projects": {
-    "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj": {
+    "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
-        "projectName": "ArithmeticFunctions",
-        "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
+        "projectUniqueName": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj",
+        "projectName": "ArithmeticComputations",
+        "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj",
         "packagesPath": "C:\\Users\\QualMinds\\.nuget\\packages\\",
         "outputPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\obj\\",
         "projectStyle": "PackageReference",
@@ -82,8 +82,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj": {
-                "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj"
+              "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj": {
+                "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj"
               }
             }
           }

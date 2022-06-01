@@ -8,15 +8,15 @@
     ".NETCoreApp,Version=v6.0": {
       "Calc/1.0.0": {
         "dependencies": {
-          "ArithmeticFunctions": "1.0.0"
+          "ArithmeticComputations": "1.0.0"
         },
         "runtime": {
           "Calc.dll": {}
         }
       },
-      "ArithmeticFunctions/1.0.0": {
+      "ArithmeticComputations/1.0.0": {
         "runtime": {
-          "ArithmeticFunctions.dll": {}
+          "ArithmeticComputations.dll": {}
         }
       }
     }
@@ -27,7 +27,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "ArithmeticFunctions/1.0.0": {
+    "ArithmeticComputations/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

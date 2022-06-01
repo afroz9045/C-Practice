@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "ArithmeticFunctions/1.0.0": {
+      "ArithmeticComputations/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "compile": {
-          "bin/placeholder/ArithmeticFunctions.dll": {}
+          "bin/placeholder/ArithmeticComputations.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ArithmeticFunctions.dll": {}
+          "bin/placeholder/ArithmeticComputations.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "ArithmeticFunctions/1.0.0": {
+    "ArithmeticComputations/1.0.0": {
       "type": "project",
-      "path": "../ArithmeticFunctions/ArithmeticFunctions.csproj",
-      "msbuildProject": "../ArithmeticFunctions/ArithmeticFunctions.csproj"
+      "path": "../ArithmeticFunctions/ArithmeticComputations.csproj",
+      "msbuildProject": "../ArithmeticFunctions/ArithmeticComputations.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "ArithmeticFunctions >= 1.0.0"
+      "ArithmeticComputations >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -53,8 +53,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj": {
-              "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj"
+            "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj": {
+              "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticComputations.csproj"
             }
           }
         }

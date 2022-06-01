@@ -21,8 +21,6 @@ E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\Calc.deps.json
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\Calc.runtimeconfig.json
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\Calc.dll
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\Calc.pdb
-E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\ArithmeticFunctions.dll
-E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\ArithmeticFunctions.pdb
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\Calc.csproj.AssemblyReference.cache
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\Calc.GeneratedMSBuildEditorConfig.editorconfig
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\Calc.AssemblyInfoInputs.cache
@@ -34,3 +32,5 @@ E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\refint\Calc.dll
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\Calc.pdb
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\Calc.genruntimeconfig.cache
 E:\Backend Tasks\DotNet-Practice\Calc\Calc\obj\Debug\net6.0\ref\Calc.dll
+E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\ArithmeticComputations.dll
+E:\Backend Tasks\DotNet-Practice\Calc\Calc\bin\Debug\net6.0\ArithmeticComputations.pdb
