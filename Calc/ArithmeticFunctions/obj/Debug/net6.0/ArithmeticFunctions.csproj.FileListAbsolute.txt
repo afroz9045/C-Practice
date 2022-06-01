@@ -10,3 +10,15 @@ C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6
 C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\refint\ArithmeticFunctions.dll
 C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.pdb
 C:\Users\QualMinds\Desktop\Backend Tasks\Calc\ArithmeticFunctions\obj\Debug\net6.0\ref\ArithmeticFunctions.dll
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.deps.json
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.dll
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\bin\Debug\net6.0\ArithmeticFunctions.pdb
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.csproj.AssemblyReference.cache
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.GeneratedMSBuildEditorConfig.editorconfig
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.AssemblyInfoInputs.cache
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.AssemblyInfo.cs
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.csproj.CoreCompileInputs.cache
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.dll
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\refint\ArithmeticFunctions.dll
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ArithmeticFunctions.pdb
+E:\Backend Tasks\DotNet-Practice\Calc\ArithmeticFunctions\obj\Debug\net6.0\ref\ArithmeticFunctions.dll

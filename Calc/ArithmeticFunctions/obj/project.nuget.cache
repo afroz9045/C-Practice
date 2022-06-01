@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mHGy9k8pbSFX1cEEjRt8Taut1KAHCvtVDQ2vpe58BUgBnf5B6/033+7tchQqiFPP5Oegx/HSEDaq4h25lgS49w==",
+  "dgSpecHash": "eB0U95ddpklDkRuCNEoipDDEFyB/kebBU7kBnVwPDipJkhDDo6+XuFAZx1o6RcwUQJCwxEF6c9uNUwwrhbIrDQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
+  "projectFilePath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

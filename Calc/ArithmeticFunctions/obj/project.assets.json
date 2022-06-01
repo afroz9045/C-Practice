@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
+      "projectUniqueName": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
       "projectName": "ArithmeticFunctions",
-      "projectPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
+      "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\ArithmeticFunctions.csproj",
       "packagesPath": "C:\\Users\\QualMinds\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\Calc\\ArithmeticFunctions\\obj\\",
+      "outputPath": "E:\\Backend Tasks\\DotNet-Practice\\Calc\\ArithmeticFunctions\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\QualMinds\\AppData\\Roaming\\NuGet\\NuGet.Config",
