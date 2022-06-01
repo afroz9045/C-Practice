@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\CountingNumbers\\CountingNumbers\\CountingNumbers.csproj",
+      "projectUniqueName": "E:\\Backend Tasks\\DotNet-Practice\\CountingNumbers\\CountingNumbers\\CountingNumbers.csproj",
       "projectName": "CountingNumbers",
-      "projectPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\CountingNumbers\\CountingNumbers\\CountingNumbers.csproj",
+      "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\CountingNumbers\\CountingNumbers\\CountingNumbers.csproj",
       "packagesPath": "C:\\Users\\QualMinds\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\CountingNumbers\\CountingNumbers\\obj\\",
+      "outputPath": "E:\\Backend Tasks\\DotNet-Practice\\CountingNumbers\\CountingNumbers\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\QualMinds\\AppData\\Roaming\\NuGet\\NuGet.Config",
