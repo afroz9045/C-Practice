@@ -1,4 +1,4 @@
-﻿namespace ArithmeticFunctions
+﻿namespace ArithmeticComputation
 {
     public class ArithmeticCalculations
     {
@@ -17,7 +17,7 @@ switch (mathematicalOperator)
     case "%":
         return Modulus(num1, num2);
                 default:
-                    throw new Exception("Enter arithmetic operator only");
+                    throw new Exception("Enter arithmetic operator only!");
             }
         }
         public static int Sum(int num1,int  num2)

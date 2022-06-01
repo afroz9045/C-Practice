@@ -1,5 +1,5 @@
 ﻿//// See https://aka.ms/new-console-template for more information
-using ArithmeticFunctions;
+using ArithmeticComputation;
 
 Console.WriteLine("Enter first number :");
 int num1 = Convert.ToInt32(Console.ReadLine());
