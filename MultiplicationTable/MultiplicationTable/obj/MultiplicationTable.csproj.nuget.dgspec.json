@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj": {}
+    "E:\\Backend Tasks\\DotNet-Practice\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj": {}
   },
   "projects": {
-    "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj": {
+    "E:\\Backend Tasks\\DotNet-Practice\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj",
+        "projectUniqueName": "E:\\Backend Tasks\\DotNet-Practice\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj",
         "projectName": "MultiplicationTable",
-        "projectPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj",
+        "projectPath": "E:\\Backend Tasks\\DotNet-Practice\\MultiplicationTable\\MultiplicationTable\\MultiplicationTable.csproj",
         "packagesPath": "C:\\Users\\QualMinds\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\QualMinds\\Desktop\\Backend Tasks\\MultiplicationTable\\MultiplicationTable\\obj\\",
+        "outputPath": "E:\\Backend Tasks\\DotNet-Practice\\MultiplicationTable\\MultiplicationTable\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\QualMinds\\AppData\\Roaming\\NuGet\\NuGet.Config",
