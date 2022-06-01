@@ -3,12 +3,12 @@
 Console.WriteLine("Enter your age: ");
 int age = Convert.ToInt32(Console.ReadLine());
 
-Console.WriteLine("Enter your nationality");
+Console.WriteLine("Enter your nationality:");
 string nationality = Console.ReadLine();
 
 if(age>=18 && (nationality == "india" || nationality == "indian"))
 {
-    Console.WriteLine("You Are eligible to vote");
+    Console.WriteLine("You are eligible to vote");
 }
 else
 {
