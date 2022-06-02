@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // See https://aka.ms/new-console-template for more information
 using TemperatureUnitConversion;
 Console.WriteLine("Enter 1 to convert from celsius to fahrenheit");
