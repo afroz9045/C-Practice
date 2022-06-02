@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "TemperatureUnitsConversion/1.0.0": {
+        "dependencies": {
+          "TemperatureUnitConversion": "1.0.0"
+        },
+        "runtime": {
+          "TemperatureUnitsConversion.dll": {}
+        }
+      },
+      "TemperatureUnitConversion/1.0.0": {
+        "runtime": {
+          "TemperatureUnitConversion.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TemperatureUnitsConversion/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TemperatureUnitConversion/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

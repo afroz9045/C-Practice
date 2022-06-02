@@ -1,0 +1,12 @@
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\bin\Debug\net6.0\TemperatureUnitConversion.deps.json
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\bin\Debug\net6.0\TemperatureUnitConversion.dll
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\bin\Debug\net6.0\TemperatureUnitConversion.pdb
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.csproj.AssemblyReference.cache
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.GeneratedMSBuildEditorConfig.editorconfig
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.AssemblyInfoInputs.cache
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.AssemblyInfo.cs
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.csproj.CoreCompileInputs.cache
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.dll
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\refint\TemperatureUnitConversion.dll
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\TemperatureUnitConversion.pdb
+E:\Backend Tasks\DotNet-Practice\TemperatureUnitsConversion\TemperatureUnitConversion\obj\Debug\net6.0\ref\TemperatureUnitConversion.dll
