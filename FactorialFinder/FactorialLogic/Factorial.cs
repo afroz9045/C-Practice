@@ -2,9 +2,9 @@
 {
     public class Factorial
     {
-        public static int FactorialCalculation(int number)
+        public static double FactorialCalculation(int number)
         {
-            int factorialResult = 1;
+            double factorialResult = 1;
             while(number>0)
             {
                 factorialResult *= number;
