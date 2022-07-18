@@ -1,6 +1,7 @@
 ﻿using Qualminds.Ems.Core.Constants;
 using Qualminds.Ems.Core.Contracts.Infrastructure;
 using Qualminds.Ems.Core.Entities;
+using System.Text;
 
 namespace Qualminds.Ems.Infrastructure.IO
 {
@@ -10,6 +11,7 @@ namespace Qualminds.Ems.Infrastructure.IO
       private readonly string _filePath;
         private Employee _EmpData;
       private string _name;
+        StringBuilder sb = new StringBuilder();
 
         public EmployeeService(string filePath)
         {
@@ -24,7 +26,7 @@ namespace Qualminds.Ems.Infrastructure.IO
             try
             {
                streamWriter = File.CreateText(_filePath);
-               streamWriter.WriteLine($"\t\t\t\t\t{FileConstants.EmployeeIdField}{FileConstants.Delimeter}\t\t\t\t\t{FileConstants.EmployeeNameField}{FileConstants.Delimeter}\t\t{FileConstants.EmployeeDesignationField}");
+               streamWriter.WriteLine($"{FileConstants.EmployeeIdField}{FileConstants.Delimeter}{FileConstants.EmployeeNameField}{FileConstants.Delimeter}{FileConstants.EmployeeDesignationField}");
             }
             catch (Exception ex)
             {
@@ -43,7 +45,7 @@ namespace Qualminds.Ems.Infrastructure.IO
       public Employee AddEmployee(Employee employee)
       {
          employee.Id = Guid.NewGuid();
-         File.AppendAllText(_filePath, $"{employee.Id}{FileConstants.Delimeter}\t\t\t{employee.Name}{FileConstants.Delimeter}\t\t\t{employee.Designation}\n");
+         File.AppendAllText(_filePath, $"{employee.Id}{FileConstants.Delimeter}{employee.Name}{FileConstants.Delimeter}{employee.Designation}\n");
          return employee;
       }
 
@@ -52,18 +54,20 @@ namespace Qualminds.Ems.Infrastructure.IO
          throw new NotImplementedException();
       }
 
-      public IEnumerable<Employee> GetEmployees()
+      public StringBuilder GetEmployees()
       {
          var employeesCommaSeparatedList = File.ReadAllLines(_filePath).Skip(1);
-         //var employees = new List<Employee>();   // Replaced with yield return.
+            //var employees = new List<Employee>();   // Replaced with yield return.
+            sb.AppendLine($"\t\t{FileConstants.EmployeeIdField}\t\t\t{FileConstants.EmployeeNameField}\t\t{FileConstants.EmployeeDesignationField}");
          foreach (var employeeRow in employeesCommaSeparatedList)
          {
             var employeeData = employeeRow.Split(FileConstants.Delimeter);
-            yield return new Employee { Id = Guid.Parse(employeeData[0]), Name = employeeData[1], Designation = employeeData[2] };
+            sb.AppendLine($"{Guid.Parse(employeeData[0])}\t {employeeData[1]}\t\t{employeeData[2]}");
+            //yield return new Employee { Id = Guid.Parse(employeeData[0]), Name = employeeData[1], Designation = employeeData[2] };
             //employees.Add(employee);
          }
-         //return employees;
-      }
+            return sb;
+        }
 
       public void DeleteEmployees()
       {

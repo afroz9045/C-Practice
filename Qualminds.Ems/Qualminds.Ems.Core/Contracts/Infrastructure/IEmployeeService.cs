@@ -1,4 +1,5 @@
 ﻿using Qualminds.Ems.Core.Entities;
+using System.Text;
 
 namespace Qualminds.Ems.Core.Contracts.Infrastructure
 {
@@ -10,7 +11,7 @@ namespace Qualminds.Ems.Core.Contracts.Infrastructure
 
       public IEnumerable<Employee> AddEmployees(IEnumerable<Employee> employees);
 
-      public IEnumerable<Employee> GetEmployees();
+      public StringBuilder GetEmployees();
 
       public void DeleteEmployees();
    }

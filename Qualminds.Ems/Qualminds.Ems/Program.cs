@@ -1,6 +1,7 @@
 ﻿using Qualminds.Ems.Core.Contracts.Infrastructure;
 using Qualminds.Ems.Core.Entities;
 using Qualminds.Ems.Infrastructure.IO;
+using System.Text;
 using System.Text.Json;
 
 char SelectedOption;
@@ -27,6 +28,10 @@ do
         employeeServiceAdd.AddEmployee(new Employee { Name = EmpName, Designation = EmpDesignation });
        
     }
+    else if (SelectedOption == 'n')
+    {
+        break;
+    }
     Console.WriteLine("Do you want to add more:\n\t\t press 'yes' for continue and 'no' for exit");
     AddMoreOption = Console.ReadLine();
 } while (AddMoreOption == "yes");
@@ -34,11 +39,12 @@ do
 
 Console.WriteLine($"\nCreated {fileName} with predefined headers");
 
-
-var employees = employeeService.GetEmployees();
-var stringifiedEmployees = JsonSerializer.Serialize(employees);
 Console.WriteLine("\nList of all Employees:\n");
-Console.WriteLine(stringifiedEmployees);
+StringBuilder employees = employeeService.GetEmployees();
+Console.WriteLine(employees);
+//var stringifiedEmployees = JsonSerializer.Serialize(employees);
+
+//Console.WriteLine(stringifiedEmployees);
 
 
 
