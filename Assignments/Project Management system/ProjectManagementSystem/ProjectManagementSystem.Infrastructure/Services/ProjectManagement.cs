@@ -4,6 +4,8 @@ using System.Text.Json;
 using static ProjectManagementSystem.Infrastructure.Data.ProjectManagementDataInMemory;
 using System.Text;
 
+using System.Collections;
+
 namespace ProjectManagementSystem.Infrastructure.Services
 {
     public class ProjectManagement : IProjectManagement
@@ -67,7 +69,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
             return findProjectByName.ToList();
 
         }
-
+        // Getting Projects by Dept Name
         public List<Project> GetProjectsByDepartmentName(string departmentName)
         {
             var projectFilteredData = from project in projects
@@ -79,6 +81,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
             
         }
 
+        // Getting Employees By Dept Id
         public IEnumerable<Employee> GetEmployeesByDeptId(int deptId)
         {
             var employeeFilteredData = from employee in employees
@@ -87,6 +90,48 @@ namespace ProjectManagementSystem.Infrastructure.Services
             return employeeFilteredData;
         }
 
+        // Getting Employees details Employee Id
+        public IEnumerable<Employee> GetEmployeeDetailsByEmpId(int empId)
+        {
+            var empRecord = employees.Where(employee => employee.EmployeeNumber == empId).ToList();
+            return empRecord;
+        }
+        
+        // Getting Number of Employees Working in each department
+        public IEnumerable GetNumberOfEmployeesInEachDepartment()
+        {
+            var numberOfEmployees = from emp in employees
+                                    group emp by emp.DepartmentId into groupedDept
+                                    select new
+                                    {
+                                        departmentId = groupedDept.Key,
+                                        count = groupedDept.Count()
+                                    };
+            foreach (var count in numberOfEmployees)
+            {
+                Console.WriteLine($"\t{count.departmentId}\t\t{count.count}");
+            }
+
+            return numberOfEmployees;
+
+        }
+
+        // Getting Total Salary Paid for each department
+        public IEnumerable GetTotalSalaryByEachDepartment()
+        {
+            var totalSalaryPerDept = from emp in employees
+                                     group emp by emp.DepartmentId into dept
+                                     select new
+                                     {
+                                         departmentId = dept.Key,
+                                         totalSalary = dept.Sum(s => s.Salary)
+                                     };
+            foreach (var departmentSalary in totalSalaryPerDept)
+            {
+                Console.WriteLine($"\t{departmentSalary.departmentId}\t\t{departmentSalary.totalSalary}");
+            }
+            return totalSalaryPerDept;
+        }
         public static void GetDetails<T>(IEnumerable<T> collectiondata)
         {
             foreach (var data in collectiondata)
@@ -96,11 +141,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
         }
 
-        public static void GetSpecificDetails<T>(IEnumerable<T> collection) 
+        public static void GetSpecificDetails(IEnumerable collection)
         {
             foreach (var data in collection)
             {
-                Console.WriteLine(data);
+
+                Console.WriteLine($"{data}");
             }
         }
     }

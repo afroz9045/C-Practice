@@ -37,15 +37,27 @@ ProjectManagement.GetDetails(projectDetailsByDeptId);
 
 Console.WriteLine("\n\n\t\tGetting project by department name:\n");
 var projectsByDepartmentName = data.GetProjectsByDepartmentName("Marketing");
-ProjectManagement.GetSpecificDetails(projectsByDepartmentName);
+ProjectManagement.GetDetails(projectsByDepartmentName);
 //foreach (var projectData in projectsByDepartmentName)
 //{
 //    Console.WriteLine(projectData);
 //}
-Console.WriteLine("\n\n\t\tEmployee filter data:\n");
+Console.WriteLine("\n\n\t\tGetting Employee data using Department details:\n");
 
 var employeeFilterData = data.GetEmployeesByDeptId(1);
-ProjectManagement.GetSpecificDetails(employeeFilterData);
+ProjectManagement.GetDetails(employeeFilterData);
+
+Console.WriteLine("\n\n\t\tGetting Employee Record using Employee Id:\n");
+var empRecordByEmpId = data.GetEmployeeDetailsByEmpId(114);
+ProjectManagement.GetDetails(empRecordByEmpId);
+
+Console.WriteLine("\n\n\t\tGetting Number of employees In Each Department:\n");
+data.GetNumberOfEmployeesInEachDepartment();
+
+Console.WriteLine("\n\n\t\tGetting Total Salary In Each Department:\n");
+data.GetTotalSalaryByEachDepartment();
+
+
 
 
 
