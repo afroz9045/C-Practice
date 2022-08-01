@@ -5,11 +5,9 @@ namespace ProjectManagementSystem.Core.Contracts
 {
     public interface IProjectManagement
     {
-        public List<Department> GetDepartments();
-        public List<Project> GetProjects();
-        public List<Employee> GetEmployees();
+        public IEnumerable<Department> GetDepartment(int? deptId = null, string? deptName = null);
+        public IEnumerable<Project> GetProject(int? departmentId, string? projectName, string? departmentName);
+        public IEnumerable<Employee> GetEmployees(int? deptId = null, int? empId = null);
         public List<Assignment> GetAssignments();
-        public List<Project> GetProjectsByDepartmentName(string departmentName);
-        public IEnumerable<Employee> GetEmployeesByDeptId(int deptId);
     }
 }
