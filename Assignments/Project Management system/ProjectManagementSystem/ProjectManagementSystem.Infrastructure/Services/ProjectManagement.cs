@@ -8,7 +8,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
 {
     public class ProjectManagement : IProjectManagement
     {
-    
+
         // Assignment
         public List<Assignment> GetAssignments()
         {
@@ -69,7 +69,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
         //public IEnumerable<Assignment> GetAssignment(int? deptId = null, string? deptName = null)
 
         // Project and Assignment details
-        public IEnumerable<CombinedEntities> GetProjectAndAssignmentDetails(int? departmentId=null)
+        public IEnumerable<CombinedEntities> GetProjectAndAssignmentDetails(int? departmentId = null)
         {
             var projectAndAssignment = (from dept in department
                                         join emp in employees
@@ -85,8 +85,40 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                             projectName = proj.ProjectName,
                                             assignmentName = assign.AssignmentName,
                                             employeeName = emp.EmployeeName
-                                        }).DistinctBy(d=>d.projectName);
+                                        }).DistinctBy(d => d.projectName);
             return projectAndAssignment;
+
+        }
+
+        // Searching
+        bool isSearchFound = false;
+        public void SearchEntity(string searchKeyword)
+        {
+
+            var combinedData = GetProjectAndAssignmentDetails();
+            foreach (var data in combinedData)
+            {
+
+                if (data.departmentName.Contains(searchKeyword) || data.projectName.Contains(searchKeyword) || data.assignmentName.Contains(searchKeyword) || data.employeeName.Contains(searchKeyword))
+                {
+                    Console.WriteLine($"Results found: {data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
+                    isSearchFound = true;
+                    //if (isSearchFound==false)
+                    //{
+                    //    Console.WriteLine($"Sorry {searchKeyword} is not found!");
+                    //    break;
+                    //}
+
+                }
+
+
+            }
+            if (!isSearchFound)
+            {
+                Console.WriteLine($"Sorry {searchKeyword} is not found!");
+                
+            }
+
 
         }
 
@@ -134,7 +166,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
         }
 
-        public static void GetSpecificDetails(IEnumerable<CombinedEntities>? collection = null,IEnumerable<TotalSalaryByDepartment>? totalSalary = null)
+        public static void GetSpecificDetails(IEnumerable<CombinedEntities>? collection = null, IEnumerable<TotalSalaryByDepartment>? totalSalary = null)
         {
             if (collection != null)
             {
@@ -144,17 +176,18 @@ namespace ProjectManagementSystem.Infrastructure.Services
                     Console.WriteLine($"\t{data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
                 }
             }
-            else if(totalSalary != null) { 
-            foreach (var data in totalSalary)
+            else if (totalSalary != null)
             {
-                Console.WriteLine($"\t{data.departmentId}\t\t{data.totalSalary}");
-            }
+                foreach (var data in totalSalary)
+                {
+                    Console.WriteLine($"\t{data.departmentId}\t\t{data.totalSalary}");
+                }
             }
             else
             {
                 throw new NullReferenceException();
             }
         }
-        }
     }
+}
 

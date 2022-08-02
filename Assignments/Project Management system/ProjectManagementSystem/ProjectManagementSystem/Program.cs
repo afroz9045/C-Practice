@@ -31,6 +31,8 @@ var assignmentDetails = data.GetAssignments();
 
 
 
+
+
 Console.WriteLine("\t--------------------- Department Details: ---------------------\n");
 ProjectManagement.GetDetails(departmentsDetails);
 
@@ -101,5 +103,9 @@ ProjectManagement.GetSpecificDetails(allDetails);
 
 
 
+
+//Finding 
+Console.WriteLine("Searching");
+data.SearchEntity("Markeerting");
 
 
