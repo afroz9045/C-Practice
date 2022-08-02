@@ -69,7 +69,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
         //public IEnumerable<Assignment> GetAssignment(int? deptId = null, string? deptName = null)
 
         // Project and Assignment details
-        public IEnumerable<CombinedEntities> GetProjectAndAssignmentDetails(int? departmentId = null)
+        public IEnumerable<ProjectResourceDetails> GetProjectAndAssignmentDetails(string? deptName = null,int ? departmentId = null)
         {
             var projectAndAssignment = (from dept in department
                                         join emp in employees
@@ -78,15 +78,24 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                         on emp.DepartmentId equals proj.DepartmentId
                                         join assign in assignments
                                         on emp.EmployeeNumber equals assign.EmployeeNumber
-                                        where (departmentId == null || dept.DeptId == departmentId)
-                                        select new CombinedEntities()
+                                        where (departmentId == null || dept.DeptId == departmentId)&&(deptName ==null || dept.DeptName.ToLower()== deptName.ToLower())
+                                        select new 
                                         {
                                             departmentName = dept.DeptName,
                                             projectName = proj.ProjectName,
                                             assignmentName = assign.AssignmentName,
                                             employeeName = emp.EmployeeName
-                                        }).DistinctBy(d => d.projectName);
-            return projectAndAssignment;
+                                        }).Distinct();
+            var combinedData = from data in projectAndAssignment
+                               select new ProjectResourceDetails()
+                               {
+                                   departmentName = data.departmentName,
+                                   projectName = data.projectName,
+                                   assignmentName = data.assignmentName,
+                                   employeeName = data.employeeName
+                               };
+
+            return combinedData;
 
         }
 
@@ -99,16 +108,10 @@ namespace ProjectManagementSystem.Infrastructure.Services
             foreach (var data in combinedData)
             {
 
-                if (data.departmentName.Contains(searchKeyword) || data.projectName.Contains(searchKeyword) || data.assignmentName.Contains(searchKeyword) || data.employeeName.Contains(searchKeyword))
+                if (data.departmentName.ToLower().Contains(searchKeyword) || data.projectName.ToLower().Contains(searchKeyword) || data.assignmentName.ToLower().Contains(searchKeyword) || data.employeeName.ToLower().Contains(searchKeyword))
                 {
                     Console.WriteLine($"Results found: {data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
                     isSearchFound = true;
-                    //if (isSearchFound==false)
-                    //{
-                    //    Console.WriteLine($"Sorry {searchKeyword} is not found!");
-                    //    break;
-                    //}
-
                 }
 
 
@@ -166,7 +169,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
         }
 
-        public static void GetSpecificDetails(IEnumerable<CombinedEntities>? collection = null, IEnumerable<TotalSalaryByDepartment>? totalSalary = null)
+        public static void GetSpecificDetails(IEnumerable<ProjectResourceDetails>? collection = null, IEnumerable<TotalSalaryByDepartment>? totalSalary = null)
         {
             if (collection != null)
             {

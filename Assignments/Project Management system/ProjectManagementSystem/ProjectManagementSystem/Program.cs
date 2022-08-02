@@ -90,22 +90,85 @@ var totalDepartmentSalary = data.GetTotalSalaryByEachDepartment();
 ProjectManagement.GetSpecificDetails(totalSalary: totalDepartmentSalary);
 Console.WriteLine("\n\n");
 
-
+Console.WriteLine("\n\nAll details:\n");
 var allDetails = data.GetProjectAndAssignmentDetails();
 ProjectManagement.GetSpecificDetails(allDetails);
-//Console.WriteLine("All details:");
-//data.GetProjectAndAssignmentDetails();
-//Console.WriteLine("\n\ndepartment wise details:");
-//data.GetProjectAndAssignmentDetails(2);
-//var allDetails = data.GetProjectAndAssignmentDetails();
-//ProjectManagement.GetSpecificDetails(allDetails);
+
+Console.WriteLine("\n\nPlease select any one option:\n");
+Console.WriteLine("press 1 to filter with Department Id");
+Console.WriteLine("press 2 to filter with Department Name");
+Console.WriteLine("press 3 to search");
+
+var selectedOption = Convert.ToInt32(Console.ReadLine());
+
+
+
+
+switch (selectedOption)
+{
+    case 1:
+        Console.WriteLine("Enter department id:");
+        try
+        {
+            int deptId = Convert.ToInt32(Console.ReadLine());
+            if (deptId < 0 || deptId > 3)
+            {
+                throw new InvalidOperationException("Invalid selection please enter valid input!");
+            }
+            var departmentWiseDetails = data.GetProjectAndAssignmentDetails(departmentId: deptId);
+            Console.WriteLine("\n\ndepartment wise details by department id:\n");
+            ProjectManagement.GetSpecificDetails(departmentWiseDetails);
+
+        }
+
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        break;
+
+    case 2:
+        Console.WriteLine("Enter department name:");
+        string? deptName = Console.ReadLine();
+        try
+        {
+            if (string.IsNullOrEmpty(deptName) || deptName != department.)
+            {
+                throw new InvalidOperationException("Invalid input! please enter valid input");
+            }
+            var detailsByDepartmentName = data.GetProjectAndAssignmentDetails(deptName.ToLower());
+            Console.WriteLine("\n\ndepartment wise details by department name:\n");
+            ProjectManagement.GetSpecificDetails(detailsByDepartmentName);
+        }
+        catch (InvalidOperationException i)
+        {
+
+            Console.WriteLine(i.Message);
+        }
+     
+        break;
+    case 3:
+        Console.WriteLine("Query you search by inputing:");
+        var searchKeyword = Console.ReadLine();
+        data.SearchEntity(searchKeyword.ToLower());
+        break;
+    default:
+        Console.WriteLine("Invalid Input! please enter valid input.");
+        break;
+}
+
+
+
+
+
+
 
 
 
 
 
 //Finding 
-Console.WriteLine("Searching");
-data.SearchEntity("Markeerting");
+//Console.WriteLine("\n\nSearching:\n");
+//data.SearchEntity("Ma");
 
 
