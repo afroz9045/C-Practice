@@ -22,7 +22,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
             {
                 var findDept = from department in department
                                where (deptId == null || department.DeptId == deptId)
-                               && (deptName == null || department.DeptName == deptName)
+                               && (deptName.ToLower() == null || department.DeptName.ToLower() == deptName)
                                select department;
                 return findDept;
 
@@ -64,38 +64,52 @@ namespace ProjectManagementSystem.Infrastructure.Services
             return employees;
         }
 
-
-        // Get Assignment
-        //public IEnumerable<Assignment> GetAssignment(int? deptId = null, string? deptName = null)
-
         // Project and Assignment details
-        public IEnumerable<ProjectResourceDetails> GetProjectAndAssignmentDetails(string? deptName = null,int ? departmentId = null)
+        public IEnumerable<ProjectResourceDetails>? GetProjectAndAssignmentDetails(string? deptName = null,int ? departmentId = null)
         {
-            var projectAndAssignment = (from dept in department
-                                        join emp in employees
-                                        on dept.DeptId equals emp.DepartmentId
-                                        join proj in projects
-                                        on emp.DepartmentId equals proj.DepartmentId
-                                        join assign in assignments
-                                        on emp.EmployeeNumber equals assign.EmployeeNumber
-                                        where (departmentId == null || dept.DeptId == departmentId)&&(deptName ==null || dept.DeptName.ToLower()== deptName.ToLower())
-                                        select new 
-                                        {
-                                            departmentName = dept.DeptName,
-                                            projectName = proj.ProjectName,
-                                            assignmentName = assign.AssignmentName,
-                                            employeeName = emp.EmployeeName
-                                        }).Distinct();
-            var combinedData = from data in projectAndAssignment
-                               select new ProjectResourceDetails()
-                               {
-                                   departmentName = data.departmentName,
-                                   projectName = data.projectName,
-                                   assignmentName = data.assignmentName,
-                                   employeeName = data.employeeName
-                               };
+            try
+            {
+                if (deptName != null)
+                {
+                    if (deptName != "Marketing".ToLower() && deptName != "Finance".ToLower() && deptName != "Accounting".ToLower())
+                    {
+                        throw new InvalidDataException();
+                    }
+                }
+                var projectAndAssignment = (from dept in department
+                                            join emp in employees
+                                            on dept.DeptId equals emp.DepartmentId
+                                            join proj in projects
+                                            on emp.DepartmentId equals proj.DepartmentId
+                                            join assign in assignments
+                                            on emp.EmployeeNumber equals assign.EmployeeNumber
+                                            where (departmentId == null || dept.DeptId == departmentId) && (deptName == null || dept.DeptName.ToLower() == deptName.ToLower())
+                                            select new
+                                            {
+                                                departmentName = dept.DeptName,
+                                                projectName = proj.ProjectName,
+                                                assignmentName = assign.AssignmentName,
+                                                employeeName = emp.EmployeeName
+                                            }).Distinct();
+                var combinedData = from data in projectAndAssignment
+                                   select new ProjectResourceDetails()
+                                   {
+                                       departmentName = data.departmentName,
+                                       projectName = data.projectName,
+                                       assignmentName = data.assignmentName,
+                                       employeeName = data.employeeName
+                                   };
 
-            return combinedData;
+                return combinedData;
+
+            }
+            catch (InvalidDataException)
+            {
+
+                Console.WriteLine("Please Enter Valid Department name!");
+                return null;
+            }
+            
 
         }
 
@@ -154,17 +168,13 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                          departmentId = dept.Key,
                                          totalSalary = dept.Sum(s => s.Salary)
                                      };
-            //foreach (var departmentSalary in totalSalaryPerDept)
-            //{
-            //    Console.WriteLine($"\t{departmentSalary.departmentId}\t\t{departmentSalary.totalSalary}");
-            //}
             return totalSalaryPerDept;
         }
         public static void GetDetails<T>(IEnumerable<T> collectiondata)
         {
             foreach (var data in collectiondata)
             {
-                Console.WriteLine(data?.ToString());
+                Console.WriteLine(data?.ToString()+"\n\n");
             }
 
         }
@@ -188,7 +198,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
             }
             else
             {
-                throw new NullReferenceException();
+                return;
             }
         }
     }
