@@ -9,7 +9,6 @@ bool isContinueResult;
 ProjectManagement data = new ProjectManagement();
 
 
-
 do
 {
 
@@ -30,12 +29,12 @@ do
     Console.WriteLine("Enter 14 to get Assignment Details");
     Console.WriteLine("Enter 15 to get Number of employees In Each Department");
     Console.WriteLine("Enter 16 to get Total Salary In Each Department");
-    Console.WriteLine("Enter 17 to get all details");
+    Console.WriteLine("Enter 17 to get all details\n");
 
 
 
     var selectedOption = Convert.ToInt32(Console.ReadLine());
-  
+
     bool IsContinue()
     {
         Console.WriteLine("Do you want to continue...? enter 'Y' for yes/ any key for no");
@@ -63,7 +62,7 @@ do
         {
             if (!(char.IsLetterOrDigit(data, i)))
             {
-                 throw new FormatException();
+                throw new FormatException("Input entered format is not supported please enter valid type");
             }
         }
 
@@ -73,11 +72,11 @@ do
     {
         if (deptId < 0 || deptId > 3)
         {
-            throw new InvalidOperationException("Invalid selection please enter valid input!");
+            throw new ArgumentOutOfRangeException("Invalid selection please enter valid input!");
         }
         if (!typeCheckInt(Convert.ToString(deptId)))
         {
-            throw new FormatException();
+            throw new FormatException("Input Entered is invalid please enter ");
         }
     }
 
@@ -89,7 +88,6 @@ do
         }
         speacialExpressionCheck(deptName);
     }
-
 
 
     switch (selectedOption)
@@ -128,7 +126,7 @@ do
             {
                 departmentNameValidate(deptName);
 
-                var detailsByDepartmentName = data.GetProjectAndAssignmentDetails(deptName.ToLower());
+                var detailsByDepartmentName = data.GetProjectAndAssignmentDetails(deptName);
                 if (detailsByDepartmentName != null)
                 {
                     Console.WriteLine("\n\ndepartment wise details by department name:\n");
@@ -136,7 +134,7 @@ do
                 }
                 break;
             }
-            catch (InvalidOperationException i)
+            catch (ArgumentOutOfRangeException i)
             {
 
                 Console.WriteLine(i.Message);
@@ -153,7 +151,19 @@ do
         case 3:
             Console.WriteLine("Query you search by inputing:");
             var searchKeyword = Console.ReadLine();
-            data.SearchEntity(searchKeyword.ToLower());
+            try
+            {
+                if (string.IsNullOrWhiteSpace(searchKeyword))
+                {
+                    throw new NullReferenceException("Search keyword can't be null or whitespace\n");
+                }
+                data.SearchEntity(searchKeyword.ToLower());
+            }
+            catch (NullReferenceException n)
+            {
+                Console.WriteLine(n.Message);
+            }
+
             break;
         case 4:
             var departmentsDetails = data.GetDepartment();
@@ -166,11 +176,14 @@ do
                 Console.WriteLine("Enter Department id:");
                 var departmentId = Convert.ToInt32(Console.ReadLine());
                 departmentIdValidate(departmentId);
-                var departmentDetailsById = data.GetDepartment(departmentId);
-                Console.WriteLine("\n\n\t--------------------- Department Details By Id: ------------------\n");
-                ProjectManagement.GetDetails(departmentDetailsById);
+                var departmentDetailsById = data.GetDepartment(deptId: departmentId);
+                if (departmentDetailsById != null)
+                {
+                    Console.WriteLine("\n\n\t--------------------- Department Details By Id: ------------------\n");
+                    ProjectManagement.GetDetails(departmentDetailsById);
+                }
             }
-            catch (InvalidOperationException e)
+            catch (ArgumentOutOfRangeException e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -206,9 +219,10 @@ do
                 Console.WriteLine(e.Message);
             }
             var departmentDetailsUsingName = data.GetDepartment(deptName: departmentName);
-            if((departmentDetailsUsingName != null) && (departmentDetailsUsingName.ToString().Contains(departmentName.ToLower()))) { 
-            Console.WriteLine("\n\n\t--------------------- Department Details By Name: ---------------------\n");
-            ProjectManagement.GetDetails(departmentDetailsUsingName);
+            if (departmentDetailsUsingName != null)
+            {
+                Console.WriteLine("\n\n\t--------------------- Department Details By Name: ---------------------\n");
+                ProjectManagement.GetDetails(departmentDetailsUsingName);
             }
             break;
         case 7:
@@ -218,24 +232,69 @@ do
             break;
         case 8:
             Console.WriteLine("Enter department id");
-            var deptIdForProject = Convert.ToInt32(Console.ReadLine());
-            var projectDetailsByDeptId = data.GetProject(deptIdForProject);
-            Console.WriteLine("\n\n\t********************************* Project Details By Department Id: *********************************\n");
-            ProjectManagement.GetDetails(projectDetailsByDeptId);
+            try
+            {
+                var deptIdForProject = Convert.ToInt32(Console.ReadLine());
+                departmentIdValidate(deptIdForProject);
+                var projectDetailsByDeptId = data.GetProject(deptIdForProject);
+                Console.WriteLine("\n\n\t********************************* Project Details By Department Id: *********************************\n");
+                ProjectManagement.GetDetails(projectDetailsByDeptId);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             break;
         case 9:
             Console.WriteLine("Enter department name");
-            var departmentNameForProject = Console.ReadLine();
-            var projectsByDepartmentName = data.GetProject(departmentName: departmentNameForProject);
-            Console.WriteLine("\n\n\t********************************* Getting project by department name: *********************************\n");
-            ProjectManagement.GetDetails(projectsByDepartmentName);
+            try
+            {
+                var departmentNameForProject = Console.ReadLine();
+                departmentNameValidate(departmentNameForProject);
+                var projectsByDepartmentName = data.GetProject(departmentName: departmentNameForProject.ToLower());
+                if (projectsByDepartmentName != null)
+                {
+                    Console.WriteLine("\n\n\t********************************* Getting project by department name: *********************************\n");
+                    ProjectManagement.GetDetails(projectsByDepartmentName);
+                }
+            }
+            catch (ArgumentOutOfRangeException i)
+            {
+                Console.WriteLine(i.Message);
+            }
+            catch (FormatException f)
+            {
+                Console.WriteLine(f.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             break;
         case 10:
             Console.WriteLine("Enter project name");
-            var projectNameForProjectDetails = Console.ReadLine();
-            var projectsByProjectName = data.GetProject(projectName: projectNameForProjectDetails);
-            Console.WriteLine("\n\n\t********************************* Getting project by Project name: *********************************\n");
-            ProjectManagement.GetDetails(projectsByProjectName);
+            try
+            {
+                var projectNameForProjectDetails = Console.ReadLine();
+                var projectsByProjectName = data.GetProject(projectName: projectNameForProjectDetails);
+                Console.WriteLine("\n\n\t********************************* Getting project by Project name: *********************************\n");
+                ProjectManagement.GetDetails(projectsByProjectName);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
             break;
         case 11:
             var employeeDetails = data.GetEmployees();
