@@ -2,7 +2,7 @@
 {
     public class TotalSalaryByDepartment
     {
-        public int departmentId { get; set; }
-        public int totalSalary { get; set; }
+        public int? departmentId { get; set; }
+        public int? totalSalary { get; set; }
     }
 }

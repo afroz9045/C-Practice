@@ -18,15 +18,8 @@ namespace ProjectManagementSystem.Infrastructure.Services
         // Get Department
         public IEnumerable<Department>? GetDepartment(int? deptId = null, string? deptName = null)
         {
-            try
-            {
                 if (deptId != null || deptName != null)
                 {
-                   
-                        if ((deptName != "Marketing".ToLower() && deptName != "Finance".ToLower() && deptName != "Accounting".ToLower())&& (deptId != 1 && deptId != 2 && deptId != 3))
-                        {
-                            throw new InvalidDataException();
-                        }
                     var findDept = from department in department
                                    where (deptId == null || department.DeptId == deptId)
                                    && (deptName == null || department.DeptName.ToLower() == deptName)
@@ -35,27 +28,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
                 }
                 return department;
-            }
-            catch (InvalidDataException)
-            {
-                Console.WriteLine("Please enter valid input");
-                return null;
-            }
-
-
-
         }
         // Get Project
         public IEnumerable<Project>? GetProject(int? departmentId = null, string? projectName = null, string? departmentName = null)
         {
-            try
-            {
                 if (departmentId != null || projectName != null || departmentName != null)
                 {
-                    if ((departmentName.Equals("Marketing", StringComparison.InvariantCultureIgnoreCase)&& departmentName.Equals("Finance", StringComparison.CurrentCultureIgnoreCase) && departmentName.Equals("Accounting",StringComparison.CurrentCultureIgnoreCase) && (departmentId != 1 && departmentId != 2 && departmentId != 3)))
-                        {
-                        throw new InvalidDataException();
-                    }
                     var findProject = from project in projects
                                       join depart in department
                                       on project.DepartmentId equals depart.DeptId
@@ -66,14 +44,6 @@ namespace ProjectManagementSystem.Infrastructure.Services
                     return findProject;
                 }
                 return projects;
-            }
-            catch (InvalidDataException)
-            {
-                Console.WriteLine("Please enter valid input");
-                return null;
-            }
-
-
         }
 
         // Get Employee
@@ -93,19 +63,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
         // Project and Assignment details
         public IEnumerable<ProjectResourceDetails>? GetProjectAndAssignmentDetails(string? deptName = null, int? departmentId = null)
         {
-            try
-            {
-                if (departmentId != null || deptName != null)
-                {
-                    if (!(deptName.Equals("Finance",StringComparison.InvariantCultureIgnoreCase)) 
-                        && !(deptName.Equals("Marketing", StringComparison.InvariantCultureIgnoreCase)) 
-                        && !(deptName.Equals("Accounting", StringComparison.InvariantCultureIgnoreCase)) 
-                        && (!(departmentId == 1) && !(departmentId == 2) && !(departmentId == 3)))
-                    {
-                        throw new InvalidDataException();
-                    }
-                    
-                }
+           
                 var projectAndAssignment = (from dept in department
                                             join emp in employees
                                             on dept.DeptId equals emp.DepartmentId
@@ -113,7 +71,8 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                             on emp.DepartmentId equals proj.DepartmentId
                                             join assign in assignments
                                             on emp.EmployeeNumber equals assign.EmployeeNumber
-                                            where (dept.DeptId == departmentId)||(dept.DeptName.Equals(deptName,StringComparison.InvariantCultureIgnoreCase))
+                                            where (departmentId==null||dept.DeptId == departmentId) 
+                                            && (deptName==null||dept.DeptName.Equals(deptName, StringComparison.InvariantCultureIgnoreCase))
                                             select new
                                             {
                                                 departmentName = dept.DeptName,
@@ -131,23 +90,13 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                    };
 
                 return combinedData;
-
-            }
-            catch (InvalidDataException)
-            {
-
-                Console.WriteLine("Please Enter Valid Department name!");
-                return null;
-            }
-
-
         }
+
 
         // Searching
         bool isSearchFound = false;
         public void SearchEntity(string searchKeyword)
         {
-
             var combinedData = GetProjectAndAssignmentDetails();
             foreach (var data in combinedData)
             {
@@ -157,16 +106,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
                     Console.WriteLine($"Results found: {data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
                     isSearchFound = true;
                 }
-
-
             }
             if (!isSearchFound)
             {
                 Console.WriteLine($"Sorry {searchKeyword} is not found!");
 
             }
-
-
         }
 
         // Getting Number of Employees Working in each department
