@@ -10,7 +10,7 @@ namespace Pms.Core.Entities
 
         public override string? ToString()
         {
-            return $"{DeptId}\t{phoneNumber}\t{DeptName}";
+            return $"\t{DeptId}\t\t{phoneNumber}\t\t{DeptName}";
         }
 
 

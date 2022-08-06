@@ -12,7 +12,7 @@
         public DateOnly EndDate { get; set; }
         public override string? ToString()
         {
-            return $"{ProjectID}\t{DepartmentId}\t{MaxHours}\t{StartDate}\t{EndDate}\t{ProjectName}";
+            return $"{ProjectID}\t\t{DepartmentId}\t\t{MaxHours}\t\t{StartDate}\t\t{EndDate}\t{ProjectName}";
         }
 
     }

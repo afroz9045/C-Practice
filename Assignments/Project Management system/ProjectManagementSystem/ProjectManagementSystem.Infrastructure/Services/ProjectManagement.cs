@@ -103,7 +103,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
                 if (data.departmentName.ToLower().Contains(searchKeyword) || data.projectName.ToLower().Contains(searchKeyword) || data.assignmentName.ToLower().Contains(searchKeyword) || data.employeeName.ToLower().Contains(searchKeyword))
                 {
-                    Console.WriteLine($"Results found: {data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
+                    Console.WriteLine($"\t\t{data.departmentName}\t\t{data.projectName}\t\t{data.assignmentName}\t\t{data.employeeName}");
                     isSearchFound = true;
                 }
             }
@@ -161,7 +161,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 foreach (var data in collection)
                 {
 
-                    Console.WriteLine($"\t{data.departmentName}\t{data.projectName}\t{data.assignmentName}\t{data.employeeName}");
+                    Console.WriteLine($"\t{data.departmentName}\t\t{data.projectName}\t{data.assignmentName}\t\t\t{data.employeeName}");
                 }
             }
             else if (totalSalary != null)

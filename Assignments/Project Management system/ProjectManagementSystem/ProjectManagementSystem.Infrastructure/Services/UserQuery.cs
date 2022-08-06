@@ -1,4 +1,5 @@
 ﻿using static ProjectManagementSystem.Infrastructure.Validations.Validations;
+using static ProjectManagementSystem.Infrastructure.Data.Constants;
 using Serilog;
 
 namespace ProjectManagementSystem.Infrastructure.Services
@@ -6,9 +7,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
     public static  class UserQuery
     {
-        const string Project_Id = "Project Id";
-        const string Employee_Number = "EmployeeNumber";
-        const string Hours_Worked = "Hours Worked";
+       
 
         public static void SelectOptions(int selectedOption)
         {
@@ -28,7 +27,8 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         var departmentWiseDetails = data.GetProjectAndAssignmentDetails(departmentId: deptId);
                         if (validate(departmentWiseDetails))
                         {
-                            Console.WriteLine("\n\ndepartment wise details by department id:\n");
+                            Console.WriteLine("\n\ndepartment wise details by department id:\n\n");
+                            Console.WriteLine($"\t{DepartmentName}\t\t{ProjectName}\t\t{AssignmentName}\t\t{EmployeeName}\n");
                             ProjectManagement.GetSpecificDetails(departmentWiseDetails);
                             break;
                         }
@@ -51,7 +51,8 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         var detailsByDepartmentName = data.GetProjectAndAssignmentDetails(deptName);
                         if (validate(detailsByDepartmentName))
                         {
-                            Console.WriteLine("\n\ndepartment wise details by department name:\n");
+                            Console.WriteLine("\n\ndepartment wise details by department name:\n\n");
+                            Console.WriteLine($"\t{DepartmentName}\t\t{ProjectName}\t\t{AssignmentName}\t\t{EmployeeName}\n");
                             ProjectManagement.GetSpecificDetails(detailsByDepartmentName);
                             break;
                         }
@@ -73,6 +74,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                             Log.Debug("Invalid input");
                             throw new NullReferenceException("Search keyword can't be null or whitespace\n");
                         }
+                        Console.WriteLine($"\t\t{DepartmentName}\t\t{ProjectName}\t\t\t{AssignmentName}\t\t{EmployeeName}\n");
                         data.SearchEntity(searchKeyword.ToLower());
                     }
                     catch (NullReferenceException n)
@@ -87,6 +89,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 case 4:
                     var departmentsDetails = data.GetDepartment();
                     Console.WriteLine("\t--------------------- Department Details: ---------------------\n");
+                    Console.WriteLine($"{DepartmentId}\t\t{PhoneNumber}\t\t{DepartmentName}");
                     ProjectManagement.GetDetails(departmentsDetails);
                     break;
                 case 5:
@@ -98,6 +101,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(departmentDetailsById))
                         {
                             Console.WriteLine("\n\n\t--------------------- Department Details By Id: ------------------\n");
+                            Console.WriteLine($"\t{DepartmentId}\t{PhoneNumber}\t\t{DepartmentName}\n");
                             ProjectManagement.GetDetails(departmentDetailsById);
                             break;
                         }
@@ -118,6 +122,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(departmentDetailsUsingName))
                         {
                             Console.WriteLine("\n\n\t--------------------- Department Details By Name: ---------------------\n");
+                            Console.WriteLine($"\t{DepartmentId}\t{PhoneNumber}\t\t{DepartmentName}\n");
                             ProjectManagement.GetDetails(departmentDetailsUsingName);
                             break;
                         }
@@ -133,6 +138,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 case 7:
                     var projectDetails = data.GetProject();
                     Console.WriteLine("\n\n\t********************************* Project Details: *********************************\n");
+                    Console.WriteLine($"{ProjectId}\t{DepartmentId}\t{MaxHours}\t{StartDate}\t\t{EndDate}\t{ProjectName}\n");
                     ProjectManagement.GetDetails(projectDetails);
                     break;
                 case 8:
@@ -144,6 +150,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(projectDetailsByDeptId))
                         {
                             Console.WriteLine("\n\n\t********************************* Project Details By Department Id: *********************************\n");
+                            Console.WriteLine($"{ProjectId}\t{DepartmentId}\t{MaxHours}\t{StartDate}\t\t{EndDate}\t{ProjectName}\n");
                             ProjectManagement.GetDetails(projectDetailsByDeptId);
                             break;
                         }
@@ -165,6 +172,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(projectsByDepartmentName))
                         {
                             Console.WriteLine("\n\n\t********************************* Getting project by department name: *********************************\n");
+                            Console.WriteLine($"{ProjectId}\t{DepartmentId}\t{MaxHours}\t{StartDate}\t\t{EndDate}\t{ProjectName}\n");
                             ProjectManagement.GetDetails(projectsByDepartmentName);
                             break;
                         }
@@ -185,6 +193,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(projectsByProjectName))
                         {
                             Console.WriteLine("\n\n\t********************************* Getting project by Project name: *********************************\n");
+                            Console.WriteLine($"{ProjectId}\t{DepartmentId}\t{MaxHours}\t{StartDate}\t\t{EndDate}\t{ProjectName}\n");
                             ProjectManagement.GetDetails(projectsByProjectName);
                             break;
                         }
@@ -203,6 +212,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 case 11:
                     var employeeDetails = data.GetEmployees();
                     Console.WriteLine("\n\n\t############################ Employee Details: ############################\n");
+                    Console.WriteLine($"{EmployeeNumber}\t{DepartmentId}\t{PhoneNumber}\t{Email}\t\t\t{Salary}\t\t{FirstName}\t{LastName}\n");
                     ProjectManagement.GetDetails(employeeDetails);
                     break;
                 case 12:
@@ -214,6 +224,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(employeeFilterData))
                         {
                             Console.WriteLine("\n\n\t############################ Getting Employee data using Department Id: ############################\n");
+                            Console.WriteLine($"{EmployeeNumber}\t{DepartmentId}\t{PhoneNumber}\t{Email}\t\t\t{Salary}\t\t{FirstName}\t{LastName}\n");
                             ProjectManagement.GetDetails(employeeFilterData);
                             break;
                         }
@@ -235,6 +246,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                         if (validate(empRecordByEmpId))
                         {
                             Console.WriteLine("\n\n\t############################ Getting Employee Record using Employee Id: ############################\n");
+                            Console.WriteLine($"{EmployeeNumber}\t{DepartmentId}\t{PhoneNumber}\t{Email}\t\t\t{Salary}\t\t{FirstName}\t{LastName}\n");
                             ProjectManagement.GetDetails(empRecordByEmpId);
                             break;
                         }
@@ -250,22 +262,25 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 case 14:
                     var assignmentDetails = data.GetAssignments();
                     Console.WriteLine("\n\n\t\tAssignment Details:\n");
-                    Console.WriteLine($"{Project_Id}\t{Employee_Number}\t{Hours_Worked}\n");
+                    Console.WriteLine($"{ProjectId}\t{EmployeeNumber}\t{HoursWorked}\n");
                     ProjectManagement.GetDetails(assignmentDetails);
                     break;
                 case 15:
                     Console.WriteLine("\n\n\t############################ Getting Number of employees In Each Department: ############################\n");
+                    Console.WriteLine($"\t{DepartmentId}\t\t{NumberOfEmployees}");
                     data.GetNumberOfEmployeesInEachDepartment();
                     break;
                 case 16:
                     Console.WriteLine("\n\n\t\tGetting Total Salary In Each Department:\n");
                     var totalDepartmentSalary = data.GetTotalSalaryByEachDepartment();
+                    Console.WriteLine($"\t{DepartmentId}\t\t{TotalSalary}");
                     ProjectManagement.GetSpecificDetails(totalSalary: totalDepartmentSalary);
                     Console.WriteLine("\n\n");
                     break;
                 case 17:
                     var allDetails = data.GetProjectAndAssignmentDetails();
                     Console.WriteLine("\n\nAll details:\n");
+                    Console.WriteLine($"\t{DepartmentId}\t\t\t{ProjectName}\t\t{AssignmentName}\t\t{EmployeeName}");
                     ProjectManagement.GetSpecificDetails(allDetails);
                     break;
                 default:
