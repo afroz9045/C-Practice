@@ -13,7 +13,8 @@
 
         public override string? ToString()
         {
-            return $"{EmployeeNumber}\t{DepartmentId}\t{Phone}\t{Email}\t\t{Salary}\t{EmployeeName}\t{FirstName}\t{LastName}";
+
+            return $"{EmployeeNumber}\t{DepartmentId}\t{Phone}\t{Email}\t\t{Salary}\t\t{FirstName}\t\t{LastName}";
         }
 
     }
