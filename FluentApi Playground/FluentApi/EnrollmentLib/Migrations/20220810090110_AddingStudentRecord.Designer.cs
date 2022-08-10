@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnrollmentLib.Migrations
 {
     [DbContext(typeof(EnrollmentContext))]
-    [Migration("20220809104110_SchemaUpdateForModel")]
-    partial class SchemaUpdateForModel
+    [Migration("20220810090110_AddingStudentRecord")]
+    partial class AddingStudentRecord
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,23 +27,19 @@ namespace EnrollmentLib.Migrations
 
             modelBuilder.Entity("EnrollmentLib.Course", b =>
                 {
-                    b.Property<int>("CourseID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"), 1L, 1);
-
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("CourseName");
 
-                    b.HasKey("CourseID");
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
 
-                    b.ToTable("Courses", "Course");
+                    b.HasKey("Credits", "Title");
+
+                    b.ToTable("Courses", "Enrollment");
                 });
 
             modelBuilder.Entity("EnrollmentLib.Enrollment", b =>
@@ -54,8 +50,15 @@ namespace EnrollmentLib.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentID"), 1L, 1);
 
+                    b.Property<int>("CourseCredits")
+                        .HasColumnType("int");
+
                     b.Property<int>("CourseID")
                         .HasColumnType("int");
+
+                    b.Property<string>("CourseTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("Grade")
                         .HasColumnType("int");
@@ -65,9 +68,9 @@ namespace EnrollmentLib.Migrations
 
                     b.HasKey("EnrollmentID");
 
-                    b.HasIndex("CourseID");
-
                     b.HasIndex("StudentID");
+
+                    b.HasIndex("CourseCredits", "CourseTitle");
 
                     b.ToTable("Enrollments", "Enrollment");
                 });
@@ -95,19 +98,35 @@ namespace EnrollmentLib.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Students", "Enrollment");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            EnrollmentDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstMidName = "Shabaz",
+                            LastName = "khan"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            EnrollmentDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstMidName = "Sarfaraz",
+                            LastName = "khan"
+                        });
                 });
 
             modelBuilder.Entity("EnrollmentLib.Enrollment", b =>
                 {
-                    b.HasOne("EnrollmentLib.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EnrollmentLib.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnrollmentLib.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseCredits", "CourseTitle")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

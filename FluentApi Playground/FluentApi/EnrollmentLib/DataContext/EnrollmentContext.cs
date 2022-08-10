@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EnrollmentLib.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnrollmentLib.DataContext
 {
@@ -14,11 +15,10 @@ namespace EnrollmentLib.DataContext
         }
         protected  override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Student>().Property(t => t.FirstMidName).HasColumnName("FirstName");
-            modelBuilder.Entity<Course>().Property(c => c.Title).HasColumnName("CourseName");
-            //modelBuilder.Entity<Course>().ToTable("Courses", schema: "Course");
-            modelBuilder.HasDefaultSchema("Enrollment");
-            modelBuilder.Entity<Course>().HasKey(c => new { c.Credits, c.Title });
+        
+
+            modelBuilder.Seed();
+           
         }
     }
 }

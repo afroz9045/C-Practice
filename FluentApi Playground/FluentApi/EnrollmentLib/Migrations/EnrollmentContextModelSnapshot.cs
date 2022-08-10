@@ -96,6 +96,22 @@ namespace EnrollmentLib.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Students", "Enrollment");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            EnrollmentDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstMidName = "Shabaz",
+                            LastName = "khan"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            EnrollmentDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstMidName = "Sarfaraz",
+                            LastName = "khan"
+                        });
                 });
 
             modelBuilder.Entity("EnrollmentLib.Enrollment", b =>

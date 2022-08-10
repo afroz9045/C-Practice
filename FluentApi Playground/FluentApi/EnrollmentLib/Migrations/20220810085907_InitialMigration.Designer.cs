@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnrollmentLib.Migrations
 {
     [DbContext(typeof(EnrollmentContext))]
-    [Migration("20220809111622_CompositeKeyAdding")]
-    partial class CompositeKeyAdding
+    [Migration("20220810085907_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,6 +98,15 @@ namespace EnrollmentLib.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Students", "Enrollment");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            EnrollmentDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstMidName = "Shabaz",
+                            LastName = "khan"
+                        });
                 });
 
             modelBuilder.Entity("EnrollmentLib.Enrollment", b =>
