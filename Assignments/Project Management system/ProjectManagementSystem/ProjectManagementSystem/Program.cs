@@ -12,14 +12,14 @@ do
 {
 
     Console.WriteLine("\n\nPlease select any one option:\n");
-    Console.WriteLine("Enter 1 to filter with Department Id");
-    Console.WriteLine("Enter 2 to filter with Department Name");
-    Console.WriteLine("Enter 3 to search");
-    Console.WriteLine("Enter 4 to get department details");
-    Console.WriteLine("Enter 5 to get department details by department id");
-    Console.WriteLine("Enter 6 to get department details by department name");
-    Console.WriteLine("Enter 7 to get project details");
-    Console.WriteLine("Enter 8 to get Project Details By Department Id");
+    Console.WriteLine("Enter 1 for Department details");
+    //Console.WriteLine("Enter 2 to filter with Department Name");
+    Console.WriteLine("Enter 2 to search");
+    //Console.WriteLine("Enter 4 to get department details");
+    //Console.WriteLine("Enter 5 to get department details by department id");
+    //Console.WriteLine("Enter 6 to get department details by department name");
+    Console.WriteLine("Enter 3 for project details");
+    //Console.WriteLine("Enter 8 to get Project Details By Department Id");
     Console.WriteLine("Enter 9 to get project by department name");
     Console.WriteLine("Enter 10 to get project by Project name");
     Console.WriteLine("Enter 11 to get Employee Details");
