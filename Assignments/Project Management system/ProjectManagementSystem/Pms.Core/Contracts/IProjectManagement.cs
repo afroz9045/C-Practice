@@ -1,13 +1,18 @@
 ﻿using Pms.Core.Entities;
+using ProjectManagementSystem.Core.Models;
 using System.Collections;
 
-namespace ProjectManagementSystem.Core.Contracts
+namespace ProjectManagementSystem.Infrastructure.Services
 {
     public interface IProjectManagement
     {
-        public IEnumerable<Department> GetDepartment(int? deptId = null, string? deptName = null);
-        public IEnumerable<Project> GetProject(int? departmentId, string? projectName, string? departmentName);
-        public IEnumerable<Employee> GetEmployees(int? deptId = null, int? empId = null);
-        public List<Assignment> GetAssignments();
+        List<Assignment> GetAssignments();
+        IEnumerable<Department>? GetDepartment(int? deptId = null, string? deptName = null);
+        IEnumerable<Employee> GetEmployees(int? deptId = null, int? empId = null);
+        IEnumerable GetNumberOfEmployeesInEachDepartment();
+        IEnumerable<Project>? GetProject(int? departmentId = null, string? projectName = null, string? departmentName = null);
+        IEnumerable<ProjectResourceDetails>? GetProjectAndAssignmentDetails(string? deptName = null, int? departmentId = null);
+        IEnumerable<TotalSalaryByDepartment> GetTotalSalaryByEachDepartment();
+        void SearchEntity(string searchKeyword);
     }
 }
