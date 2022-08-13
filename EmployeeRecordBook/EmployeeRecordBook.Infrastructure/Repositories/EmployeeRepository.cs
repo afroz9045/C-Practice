@@ -2,7 +2,6 @@
 using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace EmployeeRecordBook.Infrastructure.Repositories
 {
@@ -69,7 +68,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
         }
         IEnumerable<EmployeeDto> orderData;
         IEnumerable<EmployeeDto> employeeQuery;
-        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(/*int pageIndex,int pageSize,*/string sortOrder ="asc", string sortField = "Name", string filterText = null)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize, string? sortOrder ="asc", string? sortField = "Name", string filterText = null)
         {
             employeeQuery = from employee in _employeeContext.Employees.Include(e => e.Department)
                             where (filterText == null || employee.Name.Contains(filterText))
@@ -81,7 +80,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                                 Salary = employee.Salary,
                                 DepartmentName = employee.Department.Name
                             };
-            orderData = OrderBy(sortField, employeeQuery, sortOrder);
+            orderData = OrderBy(sortField, employeeQuery, sortOrder).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             return orderData.ToList();  // Executes DB Query in DB and Get results.
         }
         public async Task<Employee> GetEmployeeAsync(int employeeId)

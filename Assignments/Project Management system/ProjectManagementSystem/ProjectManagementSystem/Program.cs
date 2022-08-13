@@ -20,15 +20,16 @@ do
     //Console.WriteLine("Enter 6 to get department details by department name");
     Console.WriteLine("Enter 3 for project details");
     //Console.WriteLine("Enter 8 to get Project Details By Department Id");
-    Console.WriteLine("Enter 9 to get project by department name");
-    Console.WriteLine("Enter 10 to get project by Project name");
-    Console.WriteLine("Enter 11 to get Employee Details");
-    Console.WriteLine("Enter 12 to get Employee Record using Department Id");
-    Console.WriteLine("Enter 13 to get Employee Record using Employee Id");
-    Console.WriteLine("Enter 14 to get Assignment Details");
-    Console.WriteLine("Enter 15 to get Number of employees In Each Department");
-    Console.WriteLine("Enter 16 to get Total Salary In Each Department");
-    Console.WriteLine("Enter 17 to get all details\n");
+    //Console.WriteLine("Enter 9 to get project by department name");
+    //Console.WriteLine("Enter 10 to get project by Project name");
+    Console.WriteLine("Enter 4 for Employee details");
+    //Console.WriteLine("Enter 11 to get Employee Details");
+    //Console.WriteLine("Enter 12 to get Employee Record using Department Id");
+    //Console.WriteLine("Enter 13 to get Employee Record using Employee Id");
+    Console.WriteLine("Enter 5 to get Assignment Details");
+    Console.WriteLine("Enter 6 to get Number of employees In Each Department");
+    Console.WriteLine("Enter 7 to get Total Salary In Each Department");
+    Console.WriteLine("Enter 8 to get all details of projects and assignment\n");
 
 
 
