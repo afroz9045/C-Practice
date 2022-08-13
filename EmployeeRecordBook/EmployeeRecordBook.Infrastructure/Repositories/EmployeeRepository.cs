@@ -80,7 +80,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                                 Salary = employee.Salary,
                                 DepartmentName = employee.Department.Name
                             };
-            orderData = OrderBy(sortField, employeeQuery, sortOrder).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            orderData = OrderBy(sortField, employeeQuery, sortOrder).Skip((pageIndex - 1) * pageSize).Take(pageSize); //pagination
             return orderData.ToList();  // Executes DB Query in DB and Get results.
         }
         public async Task<Employee> GetEmployeeAsync(int employeeId)
