@@ -1,10 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using AutoMapper;
 using EmployeeRecordBook.Configurations;
-using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Infrastructure.Data;
 using EmployeeRecordBook.Infrastructure.Repositories;
-using EmployeeRecordBook.ViewModels;
 
 Console.WriteLine("Hello, World!");
 
@@ -68,7 +66,7 @@ using (var employeeContext = new EmployeeContext())
    //});
   // Console.WriteLine($"Created Employees: {anil.Id} {anil.Name}, {sunil.Id} {sunil.Name}");
     Console.WriteLine("\nsorted employee data:");
-    var employees = await employeeRepository.GetEmployeesAsync("desc", "Email", "mo");
+    var employees = await employeeRepository.GetEmployeesAsync(pageIndex:1,pageSize:4,sortOrder:"asc",sortField:"Name");
     foreach(var empData in employees)
     {
         Console.WriteLine($"{empData.Name}\t{empData.Email}\t{empData.Id}\t{empData.Salary}\t{empData.DepartmentName}");

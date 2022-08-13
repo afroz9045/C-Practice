@@ -9,7 +9,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
         Task CreateRangeAsync(IEnumerable<Employee> employees);
         Task DeleteAsync(int employeeId);
         Task<Employee> GetEmployeeAsync(int employeeId);
-        Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(string sortOrder, string sortField, string filterText = null);
+        Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize,string sortOrder, string sortField, string filterText = null);
         Task<Employee> UpdateAsync(int employeeId, Employee employee);
     }
 }
