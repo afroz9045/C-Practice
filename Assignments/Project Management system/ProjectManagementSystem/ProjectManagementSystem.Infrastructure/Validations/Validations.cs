@@ -164,7 +164,7 @@ namespace ProjectManagementSystem.Infrastructure.Validations
             Console.WriteLine($"\t\t{DepartmentName}\t\t{ProjectName}\t\t\t{AssignmentName}\t\t{EmployeeName}\n");
             data.SearchEntity(searchKeyword.ToLower());
         }
-
+        // project sub categories
         public static void Project()
         {
             ProjectManagement data = new ProjectManagement();
