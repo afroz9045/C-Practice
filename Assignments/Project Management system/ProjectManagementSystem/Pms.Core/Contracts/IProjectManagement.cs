@@ -13,6 +13,6 @@ namespace ProjectManagementSystem.Infrastructure.Services
         IEnumerable<Project>? GetProject(int? departmentId = null, string? projectName = null, string? departmentName = null);
         IEnumerable<ProjectResourceDetails>? GetProjectAndAssignmentDetails(string? deptName = null, int? departmentId = null);
         IEnumerable<TotalSalaryByDepartment> GetTotalSalaryByEachDepartment();
-        void SearchEntity(string searchKeyword);
+        IEnumerable<ProjectResourceDetails> SearchEntity(string searchKeyword);
     }
 }

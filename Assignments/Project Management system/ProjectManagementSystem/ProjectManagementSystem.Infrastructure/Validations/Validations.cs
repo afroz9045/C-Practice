@@ -10,7 +10,7 @@ namespace ProjectManagementSystem.Infrastructure.Validations
         public static bool isContinueResult;
         public static bool IsContinue()
         {
-            Console.WriteLine("Do you want to continue...? enter 'Y' for yes/ any key for no");
+            Console.WriteLine("Do you want to continue...? enter 'Y'/any key for no");
             var selectedChar = Convert.ToChar(Console.ReadLine());
             if (selectedChar == 'Y' || selectedChar == 'y')
             {
@@ -23,6 +23,33 @@ namespace ProjectManagementSystem.Infrastructure.Validations
             return isContinueResult;
         }
 
+        public static void IsInputContinue(string entities)
+        {
+            Console.WriteLine("\n Do you want to try again press 'y' for yes / any key for no");
+            char isContinue = Convert.ToChar(Console.ReadLine());
+            if (isContinue == 'y' || isContinue == 'Y')
+            {
+                switch (entities)
+                {
+                    case "department":
+                        UserQuery.SelectOptions(1);
+                        break;
+                    case "search":
+                        UserQuery.SelectOptions(2);
+                        break;
+                    case "project":
+                        UserQuery.SelectOptions(3);
+                        break;
+                    case "employee":
+                        UserQuery.SelectOptions(4);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            return;
+        }
         public static bool DepartmentIdValidate(int deparmentId)
         {
             ProjectManagement data = new ProjectManagement();
@@ -31,20 +58,14 @@ namespace ProjectManagementSystem.Infrastructure.Validations
             int number = 0;
             if (!int.TryParse(Convert.ToString(deparmentId), out number))
             {
-                return isValid = false;
-                Log.Debug($"Invalid department Id {deparmentId}");
                 throw new FormatException("Input entered is of another format");
             }
             if (deparmentId <= 0)
             {
-                return isValid = false;
-                Log.Debug($"Invalid department Id {deparmentId}");
                 throw new ArgumentOutOfRangeException("Input entered is out of range");
             }
             if (!validate(departmentWiseDetails))
             {
-                return isValid = false;
-                Log.Debug($"Invalid department Id {deparmentId}");
                 throw new Exception("Invalid input");
             }
 
@@ -59,12 +80,10 @@ namespace ProjectManagementSystem.Infrastructure.Validations
             var detailsByDepartmentName = data.GetProjectAndAssignmentDetails(departmentName);
             if (int.TryParse(departmentName, out number))
             {
-                return isValid = false;
                 throw new FormatException("Input entered is of another format");
             }
             if (!validate(detailsByDepartmentName))
             {
-                return isValid = false;
                 throw new Exception("Invalid input");
             }
             return isValid = true;
@@ -161,8 +180,22 @@ namespace ProjectManagementSystem.Infrastructure.Validations
                 Log.Debug("Invalid input");
                 throw new NullReferenceException("Search keyword can't be null or whitespace\n");
             }
-            Console.WriteLine($"\t\t{DepartmentName}\t\t{ProjectName}\t\t\t{AssignmentName}\t\t{EmployeeName}\n");
-            data.SearchEntity(searchKeyword.ToLower());
+            var searchData = data.SearchEntity(searchKeyword.ToLower());
+            if (searchData != null && validate(searchData))
+            {
+                foreach (var searchResult in searchData)
+                {
+                    Console.WriteLine($"{searchResult.projectName} {searchResult.departmentName} {searchResult.employeeName} {searchResult.assignmentName}");
+                }
+
+            }
+            else
+            {
+                Log.Debug("Data not found!");
+                Console.WriteLine("Data not found!");
+                IsInputContinue("search");
+            }
+            //Console.WriteLine($"\t\t{DepartmentName}\t\t{ProjectName}\t\t\t{AssignmentName}\t\t{EmployeeName}\n");
         }
         // project sub categories
         public static void Project()
@@ -276,7 +309,7 @@ namespace ProjectManagementSystem.Infrastructure.Validations
                         ProjectManagement.GetDetails(empRecordByEmpId);
                         break;
                     }
-                    break;
+                    throw new Exception("Invalid input!");
 
                 default:
                     Console.WriteLine("Enter valid selection");
