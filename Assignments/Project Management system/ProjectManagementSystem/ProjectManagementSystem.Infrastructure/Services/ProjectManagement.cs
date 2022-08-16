@@ -94,23 +94,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
 
         // Searching
         bool isSearchFound = false;
-        public void SearchEntity(string searchKeyword)
+        public IEnumerable<ProjectResourceDetails>  SearchEntity(string searchKeyword)
         {
-            var combinedData = GetProjectAndAssignmentDetails();
-            foreach (var data in combinedData)
-            {
-
-                if (data.departmentName.ToLower().Contains(searchKeyword) || data.projectName.ToLower().Contains(searchKeyword) || data.assignmentName.ToLower().Contains(searchKeyword) || data.employeeName.ToLower().Contains(searchKeyword))
-                {
-                    Console.WriteLine($"\t\t{data.departmentName}\t\t{data.projectName}\t\t{data.assignmentName}\t\t{data.employeeName}");
-                    isSearchFound = true;
-                }
-            }
-            if (!isSearchFound)
-            {
-                Console.WriteLine($"Sorry {searchKeyword} is not found!");
-
-            }
+            var searchData = from data in GetProjectAndAssignmentDetails()
+                             where data.departmentName.ToLower().Contains(searchKeyword) || data.employeeName.ToLower().Contains(searchKeyword) || data.projectName.ToLower().Contains(searchKeyword) || data.assignmentName.ToLower().Contains(searchKeyword)
+                             select data;
+            return searchData;
         }
 
         // Getting Number of Employees Working in each department
