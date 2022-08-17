@@ -7,7 +7,6 @@ namespace ProjectManagementSystem.Infrastructure.Services
     {
         public static void MainMenu()
         {
-            int option;
             do
             {
                 Console.WriteLine("\n\nPlease select any one option:\n");
@@ -22,23 +21,10 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 Console.WriteLine("Enter 9 to clear console");
                 Console.WriteLine("Enter 10 to exit\n");
 
-                try
-                {
+                var selectedOption = Convert.ToInt32(Console.ReadLine());
 
-                    var selectedOption = Console.ReadLine();
-                    if(!int.TryParse(selectedOption, out option))
-                    {
-                        throw new FormatException("Invalid Input format!");
-                    }
-                    option = int.Parse(selectedOption);
-                    SelectOptions(option);
-                    IsContinue();
-                }
-                catch (FormatException f)
-                {
-
-                    Console.WriteLine(f.Message);
-                }
+                SelectOptions(selectedOption);
+                IsContinue();
             } while (isContinueResult);
 
         }
@@ -50,7 +36,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
             .WriteTo.Console()
             .WriteTo.File("logs/logFile.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
-
+           
             switch (selectedOption)
             {
                 case 1:
