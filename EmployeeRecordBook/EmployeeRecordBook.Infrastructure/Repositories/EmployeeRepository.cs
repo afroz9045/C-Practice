@@ -27,8 +27,9 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                 await employeeContext.SaveChangesAsync();
             }
         }
+        
         IEnumerable<EmployeeDto> sortResult;
-        public IEnumerable<EmployeeDto> OrderBy(string sortField, IEnumerable<EmployeeDto> collection, string sortOrder)
+        public async Task<IEnumerable<EmployeeDto>> OrderBy(string sortField, IEnumerable<EmployeeDto> collection, string sortOrder,int pageIndex,int pageSize)
         {
             switch (sortOrder)
             {
@@ -36,13 +37,13 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                     switch (sortField)
                     {
                         case "Id":
-                            return sortResult = collection.OrderBy(x => x.Id);
+                            return sortResult= collection.OrderBy(x => x.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize);
                         case "Name":
-                            return sortResult = collection.OrderBy(x => x.Name);
+                            return sortResult = collection.OrderBy(x => x.Name).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         case "Email":
-                            return sortResult = collection.OrderBy(x => x.Email);
+                            return sortResult = collection.OrderBy(x => x.Email).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         case "Salary":
-                            return sortResult = collection.OrderBy(x => x.Salary);
+                            return sortResult = collection.OrderBy(x => x.Salary).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
 
                         default:
                             Console.WriteLine("Enter valid sorting order");
@@ -52,13 +53,13 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                     switch (sortField)
                     {
                         case "Id":
-                            return sortResult = collection.OrderByDescending(x => x.Id);
+                            return sortResult = collection.OrderByDescending(x => x.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         case "Name":
-                            return sortResult = collection.OrderByDescending(x => x.Name);
+                            return sortResult = collection.OrderByDescending(x => x.Name).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         case "Email":
-                            return sortResult = collection.OrderByDescending(x => x.Email);
+                            return sortResult = collection.OrderByDescending(x => x.Email).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         case "Salary":
-                            return sortResult = collection.OrderByDescending(x => x.Salary);
+                            return sortResult = collection.OrderByDescending(x => x.Salary).Skip((pageIndex - 1) * pageSize).Take(pageSize); ;
                         default:
                             Console.WriteLine("Enter valid sorting order");
                             return sortResult = collection;
@@ -68,7 +69,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
         }
         IEnumerable<EmployeeDto> orderData;
         IEnumerable<EmployeeDto> employeeQuery;
-        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize, string? sortOrder ="asc", string? sortField = "Name", string filterText = null)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize, string sortOrder ="asc", string sortField = "Name", string? filterText = null)
         {
             employeeQuery = from employee in _employeeContext.Employees.Include(e => e.Department)
                             where (filterText == null || employee.Name.Contains(filterText))
@@ -80,7 +81,8 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                                 Salary = employee.Salary,
                                 DepartmentName = employee.Department.Name
                             };
-            orderData = OrderBy(sortField, employeeQuery, sortOrder).Skip((pageIndex - 1) * pageSize).Take(pageSize); //pagination
+            orderData = await OrderBy(sortField, employeeQuery, sortOrder,pageIndex,pageSize);/*.Skip((pageIndex - 1) * pageSize).Take(pageSize);*/ //pagination
+
             return orderData.ToList();  // Executes DB Query in DB and Get results.
         }
         public async Task<Employee> GetEmployeeAsync(int employeeId)
