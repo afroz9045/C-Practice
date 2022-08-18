@@ -29,7 +29,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
         }
         
         IEnumerable<EmployeeDto> sortResult;
-        public async Task<IEnumerable<EmployeeDto>> OrderBy(string sortField, IEnumerable<EmployeeDto> collection, string sortOrder,int pageIndex,int pageSize)
+        public  IEnumerable<EmployeeDto> OrderBy(string sortField, IEnumerable<EmployeeDto> collection, string sortOrder,int pageIndex,int pageSize)
         {
             switch (sortOrder)
             {
@@ -67,11 +67,12 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
             }
             return sortResult;
         }
-        IEnumerable<EmployeeDto> orderData;
-        IEnumerable<EmployeeDto> employeeQuery;
+      
         public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize, string sortOrder ="asc", string sortField = "Name", string? filterText = null)
         {
-            employeeQuery = from employee in _employeeContext.Employees.Include(e => e.Department)
+            IEnumerable<EmployeeDto> orderData;
+            IEnumerable<EmployeeDto> employeeQuery;
+            employeeQuery = await(from employee in _employeeContext.Employees.Include(e => e.Department)
                             where (filterText == null || employee.Name.Contains(filterText))
                             select new EmployeeDto
                             {
@@ -80,8 +81,8 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                                 Email = employee.Email,
                                 Salary = employee.Salary,
                                 DepartmentName = employee.Department.Name
-                            };
-            orderData = await OrderBy(sortField, employeeQuery, sortOrder,pageIndex,pageSize);/*.Skip((pageIndex - 1) * pageSize).Take(pageSize);*/ //pagination
+                            }).ToListAsync();
+            orderData = OrderBy(sortField, employeeQuery, sortOrder,pageIndex,pageSize);/*.Skip((pageIndex - 1) * pageSize).Take(pageSize);*/ //pagination
 
             return orderData.ToList();  // Executes DB Query in DB and Get results.
         }
