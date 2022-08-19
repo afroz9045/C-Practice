@@ -17,12 +17,20 @@ IMapper mapper = config.CreateMapper();
 using (var employeeContext = new EmployeeContext())
 {
     IEmployeeRepository employeeRepository = new EmployeeRepository(employeeContext);
-
-    Console.WriteLine("\nsorted employee data:");
-    var employees = await employeeRepository.GetEmployeesAsync(pageIndex: 1, pageSize: 4, sortOrder: "asc", sortField: "Name");
-    foreach (var empData in employees)
+    try
     {
-        Console.WriteLine($"{empData.Name}\t{empData.Email}\t{empData.Id}\t{empData.Salary}\t{empData.DepartmentName}");
+        var employees = await employeeRepository.GetEmployeesAsync(pageIndex: 1, pageSize: 4, sortOrder: "asc", sortField: "Name");
+        Console.WriteLine("\nsorted employee data:");
+        foreach (var empData in employees)
+        {
+            Console.WriteLine($"{empData.Name}\t{empData.Email}\t{empData.Id}\t{empData.Salary}\t{empData.DepartmentName}");
+        }
     }
+    catch (ArgumentException a)
+    {
+
+        Console.WriteLine(a.Message);
+    }
+    
 
 }
