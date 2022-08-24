@@ -12,8 +12,8 @@ namespace EmployeeRecordBook.Infrastructure.Repositories.Dapper
       {
          _dbConnection = dbConnection;
       }
-   
-      public async Task<Employee> CreateAsync(Employee employee)
+
+        public async Task<Employee> CreateAsync(Employee employee)
       {
          var command = "Insert Employee(Name, Email, Salary, DepartmentId) Values(@Name, @Email, @Salary, @DepartmentId)";
          var result = await _dbConnection.ExecuteAsync(command, employee);
@@ -24,7 +24,22 @@ namespace EmployeeRecordBook.Infrastructure.Repositories.Dapper
         {
             throw new NotImplementedException();
         }
+        public async Task<IEnumerable<EmployeeDetailsByView>> GetEmployeeDetailsByView()
+        {
+            var viewQuery = "select * from vEmployeeRecord";
+            return await _dbConnection.QueryAsync<EmployeeDetailsByView>(viewQuery);
+        }
 
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByProcedure()
+        {
+            var procedureQuery = "exec spGetEmployees";
+            return await _dbConnection.QueryAsync<EmployeeDto>(procedureQuery);
+        }
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByIdProcedure()
+        {
+            var procedureQuery = "exec spGetEmployeesById 3";
+            return await _dbConnection.QueryAsync<EmployeeDto>(procedureQuery);
+        }
         public async Task DeleteAsync(int employeeId)
       {
          var command = "Delete from Employee where Id = @Id";
@@ -56,5 +71,7 @@ namespace EmployeeRecordBook.Infrastructure.Repositories.Dapper
          await _dbConnection.ExecuteAsync(command, employee);
          return employee;
       }
-   }
+
+       
+    }
 }

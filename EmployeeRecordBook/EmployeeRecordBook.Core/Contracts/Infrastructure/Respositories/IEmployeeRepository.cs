@@ -11,5 +11,8 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
         Task<Employee> GetEmployeeAsync(int employeeId);
         Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(int pageIndex, int pageSize,string sortOrder, string sortField, string filterText = null);
         Task<Employee> UpdateAsync(int employeeId, Employee employee);
+        Task<IEnumerable<EmployeeDetailsByView>> GetEmployeeDetailsByView();
+        Task<IEnumerable<EmployeeDto>> GetEmployeeByProcedure();
+        Task<IEnumerable<EmployeeDto>> GetEmployeeByIdProcedure();
     }
 }

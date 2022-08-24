@@ -10,6 +10,6 @@ namespace EmployeeRecordBook.Core.Infrastructure.Repositories
         Task<Employee> GetEmployeeAsync(int employeeId);
         Task<IEnumerable<EmployeeDto>> GetEmployeesAsync();
         Task<Employee> UpdateAsync(int employeeId, Employee employee);
-        Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView(string viewQuery);
+        Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView();
     }
 }

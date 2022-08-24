@@ -64,5 +64,25 @@ namespace EmployeeRecordBook.Infrastructure.Repositories.EntityFramework
         {
             throw new NotImplementedException();
         }
+
+        public Task GetProductDetailsByView()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<EmployeeDetailsByView>> IEmployeeRepository.GetEmployeeDetailsByView()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<EmployeeDto>> GetEmployeeByProcedure()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<EmployeeDto>> GetEmployeeByIdProcedure()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

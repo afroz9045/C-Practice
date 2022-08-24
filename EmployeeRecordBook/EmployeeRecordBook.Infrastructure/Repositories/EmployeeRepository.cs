@@ -107,5 +107,20 @@ namespace EmployeeRecordBook.Infrastructure.Repositories
                     throw new ArgumentException("Invalid argument");
             }
         }
+
+        public Task<IEnumerable<EmployeeDetailsByView>> GetEmployeeDetailsByView()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<EmployeeDto>> GetEmployeeByProcedure()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<EmployeeDto>> GetEmployeeByIdProcedure()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

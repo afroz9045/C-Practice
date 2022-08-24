@@ -1,10 +1,14 @@
-﻿using EmployeeRecordBook.Core.Dtos;
+﻿using AutoMapper;
+using EmployeeRecordBook.Core.Dtos;
 using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Core.Infrastructure.Repositories;
 using EmployeeRecordBook.Infrastructure.Data;
+using EmployeeRecordBook.Infrastructure.Repositories.Dapper;
 using EmployeeRecordBook.Infrastructure.Repositories.EntityFramework;
 using EmployeeRecordBook.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeRecordBook.Api.Controllers
 {
@@ -13,34 +17,49 @@ namespace EmployeeRecordBook.Api.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeesController()
+        private readonly IMapper _mapper;
+        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper)
         {
-            _employeeRepository = new EmployeeRepository(new EmployeeContext());
+            _employeeRepository = employeeRepository;
+            _mapper = mapper;
         }
 
 
         [HttpGet]
-        public async Task<IEnumerable<EmployeeDto>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _employeeRepository.GetEmployeesAsync();
+            var result = await _employeeRepository.GetEmployeesAsync();
+            if (result.Count() <= 0)
+                return NotFound();
+            return Ok(result);
         }
-        string MinimumEmpDetails = "Select * from vEmployeeRecord";
-        [HttpGet("{MinimumEmpDetails}")]
-        public async Task<IEnumerable<EmployeeMinimumData>> GetMinimumEmployeeData(string MinimumEmpDetails)
+
+        [HttpGet("MinimumEmpDetails")]
+        public async Task<IEnumerable<EmployeeMinimumData>> GetMinimumEmployeeData()
         {
-            return await _employeeRepository.GetEmployeesByView(MinimumEmpDetails);
+            return await _employeeRepository.GetEmployeesByView();
         }
+
         [HttpGet("{id}")]
-        public async Task<Employee> Get(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<EmployeeMinimumData>>> Get(int id)
         {
-            return await _employeeRepository.GetEmployeeAsync(id);
+            if (id <= 0 || id >= 9999999)
+                return BadRequest("Invalid Id");
+            var result = await _employeeRepository.GetEmployeeAsync(id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
 
 
         [HttpPost]
         public async Task<Employee> Post([FromBody] EmployeeVm employeeVm)
         {
-            var employee = new Employee { Name = employeeVm.Name, Email = employeeVm.Email, Salary = employeeVm.Salary, DepartmentId = employeeVm.DepartmentId };
+            //var employee = new Employee { Name = employeeVm.Name, Email = employeeVm.Email, Salary = employeeVm.Salary, DepartmentId = employeeVm.DepartmentId };
+            var employee = _mapper.Map<EmployeeVm, Employee>(employeeVm);
             return await _employeeRepository.CreateAsync(employee);
         }
 
