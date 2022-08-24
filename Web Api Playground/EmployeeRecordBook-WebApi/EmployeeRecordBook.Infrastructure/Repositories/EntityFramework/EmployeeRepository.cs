@@ -64,9 +64,9 @@ namespace EmployeeRecordBook.Infrastructure.Repositories.EntityFramework
          await _employeeContext.SaveChangesAsync();
       }
 
-        public async Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView(string viewQuery)
+        public async Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView()
         {
-            //var viewQuery = "Select * from vEmployeeRecord";
+            var viewQuery = "Select * from vEmployeeRecord";
             return await _dbConnection.QueryAsync<EmployeeMinimumData>(viewQuery);
 
         }

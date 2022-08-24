@@ -1,16 +1,12 @@
 ﻿using EmployeeRecordBook.Core.Contracts.Infrastructure;
 using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmployeeRecordBook.Infrastructure.Repositories.EntityFramework
 {
-   public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
    {
+      
       public async Task CreateAsync(Department department)
       {
          // Not ideal way to use DB Context instance here, instead use constuctor injection. 

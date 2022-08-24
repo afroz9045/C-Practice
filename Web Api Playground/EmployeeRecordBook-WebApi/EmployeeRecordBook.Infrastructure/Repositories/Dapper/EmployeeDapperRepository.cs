@@ -2,21 +2,23 @@
 using EmployeeRecordBook.Core.Dtos;
 using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Core.Infrastructure.Repositories;
+using Microsoft.Data.SqlClient;
 using System.Data;
 namespace EmployeeRecordBook.Infrastructure.Repositories.Dapper
 {
     public class EmployeeDapperRepository : IEmployeeRepository
    {
       private readonly IDbConnection _dbConnection;
-      public EmployeeDapperRepository(IDbConnection dbConnection)
+      public EmployeeDapperRepository(IDbConnection connection)
       {
-         _dbConnection = dbConnection;
+         _dbConnection = connection;
       }
    
-    public async Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView(string viewQuery)
+    public async Task<IEnumerable<EmployeeMinimumData>> GetEmployeesByView()
         {
-            //var viewQuery = "Select * from vEmployeeRecord";
-            return await _dbConnection.QueryAsync<EmployeeMinimumData>(viewQuery);
+            var viewQuery = "Select * from vEmployeeRecord";
+            var result = await _dbConnection.QueryAsync<EmployeeMinimumData>(viewQuery);
+            return result;
 
         }
       public async Task<Employee> CreateAsync(Employee employee)
