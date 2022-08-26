@@ -1,5 +1,5 @@
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Infrastructure.Data;
+using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
