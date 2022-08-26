@@ -1,32 +1,32 @@
 ﻿using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Infrastructure.Repositories
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository:IBookRepository
     {
-        private readonly LibraryManagementSystemDbContext _bookDbContext;
+        private readonly LibraryManagementSystemDbContext _libraryDbContext;
 
-        public BookRepository(LibraryManagementSystemDbContext dbContext)
+        public BookRepository(LibraryManagementSystemDbContext libraryDbContext)
         {
-            _bookDbContext = dbContext;
-        }
-        public async Task<BooksDto> AddBookAsync(BooksDto bookDto)
-        {
-            _bookDbContext.Add(bookDto);
-            await _bookDbContext.SaveChangesAsync();
-            return bookDto;
+            _libraryDbContext = libraryDbContext;
         }
 
-        public async Task<IEnumerable<Book>> GetBooks()
+        public async Task<Book> AddBook(BookDto book)
         {
-            return  await _bookDbContext.Books.ToListAsync();
+            var bookDetails = new Book()
+            {
+                AuthorName = book.AuthorName,
+                BookEdition = book.BookEdition,
+                BookId = book.BookId,
+                BookName = book.BookName,
+                Isbn = book.Isbn
+
+            };
+            _libraryDbContext.Books.Add(bookDetails);
+            await _libraryDbContext.SaveChangesAsync();
+            return bookDetails;
         }
-
-
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement.Core.Dtos
 {
-    public class BooksDto
+    public class BookDto
     {
         public int BookId { get; set; }
         public string BookName { get; set; } = null!;

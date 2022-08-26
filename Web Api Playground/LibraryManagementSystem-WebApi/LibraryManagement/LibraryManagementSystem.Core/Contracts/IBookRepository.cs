@@ -5,6 +5,6 @@ namespace LibraryManagement.Core.Contracts
 {
     public interface IBookRepository
     {
-        Task<BooksDto> AddBookAsync(BooksDto bookDto);
+        Task<Book> AddBook(BookDto book);
     }
 }
