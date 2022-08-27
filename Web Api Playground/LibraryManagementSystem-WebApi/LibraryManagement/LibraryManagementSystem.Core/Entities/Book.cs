@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LibraryManagement.Core.Entities
+﻿namespace LibraryManagement.Core.Entities
 {
-    public partial class Book
+    public class Book
     {
         public Book()
         {
-            Issues = new HashSet<Issue>();
-            Returns = new HashSet<Return>();
+            //Issues = new HashSet<Issue>();
+            //Returns = new HashSet<Return>();
         }
 
         public int BookId { get; set; }
@@ -17,7 +14,7 @@ namespace LibraryManagement.Core.Entities
         public string AuthorName { get; set; } = null!;
         public string BookEdition { get; set; } = null!;
 
-        public virtual ICollection<Issue> Issues { get; set; }
-        public virtual ICollection<Return> Returns { get; set; }
+        public virtual List<Issue> Issues { get; set; }
+        public virtual List<Return> Returns { get; set; }
     }
 }

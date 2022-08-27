@@ -5,6 +5,10 @@ namespace LibraryManagement.Core.Contracts
 {
     public interface IBookRepository
     {
-        Task<Book> AddBook(BookDto book);
+        Task<Book> AddBookAsync(BookDto book);
+        Task<IEnumerable<BookDto>> GetBooksAsync();
+        Task<Book> GetBookById(int bookId);
+        Task<Book> UpdateBookAsync(BookDto book, int id);
+        Task<Book> DeleteBookAsync(int id);
     }
 }
