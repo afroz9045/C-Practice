@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
     {
@@ -19,7 +19,40 @@ namespace LibraryManagementAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> AddBook([FromBody] BookDto book)
         {
-            return Ok(await _bookRepository.AddBook(book));
+            return Ok(await _bookRepository.AddBookAsync(book));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetBooks()
+        {
+            return Ok(await _bookRepository.GetBooksAsync());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetBookById(int id)
+        {
+            var result = _bookRepository.GetBookById(id);
+            if(result!=null)
+              return Ok(await result);
+            return NotFound();
+
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateBookDetails([FromBody]BookDto book, int id)
+        {
+            var result = _bookRepository.UpdateBookAsync(book, id);
+            if (result!=null)
+                return Ok(await result);
+            return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteBook(int id)
+        {
+            var result = _bookRepository.DeleteBookAsync(id);
+            if (result != null)
+                return Ok(await result);
+            return NotFound();
         }
     }
 }
