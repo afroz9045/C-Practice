@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LibraryManagement.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Infrastructure.Data
 {
     public partial class LibraryManagementSystemDbContext : DbContext
     {
@@ -21,14 +22,14 @@ namespace LibraryManagement.Core.Entities
         public virtual DbSet<Student> Students { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=LibraryManagementSystemDb");
-            }
-        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=(localDb)\\MSSQLLocalDB;Database=LibraryManagementSystemDb;Trusted_Connection=True;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,20 +40,22 @@ namespace LibraryManagement.Core.Entities
                 entity.Property(e => e.BookId).HasColumnName("bookId");
 
                 entity.Property(e => e.AuthorName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("authorName");
 
                 entity.Property(e => e.BookEdition)
-                    .HasMaxLength(1)
+                    .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("bookEdition");
 
                 entity.Property(e => e.BookName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(15)
                     .HasColumnName("bookName");
 
                 entity.Property(e => e.Isbn).HasColumnName("isbn");
+
+                entity.Property(e => e.StockAvailable).HasColumnName("stockAvailable");
             });
 
             modelBuilder.Entity<Department>(entity =>
@@ -151,17 +154,18 @@ namespace LibraryManagement.Core.Entities
                 entity.Property(e => e.DepartmentId).HasColumnName("departmentId");
 
                 entity.Property(e => e.Gender)
-                    .HasMaxLength(1)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("gender");
 
                 entity.Property(e => e.StudentDepartment)
-                    .HasMaxLength(1)
+                    .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("studentDepartment");
 
                 entity.Property(e => e.StudentName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
                     .HasColumnName("studentName");
 
                 entity.HasOne(d => d.Department)
@@ -194,9 +198,9 @@ namespace LibraryManagement.Core.Entities
                     .HasConstraintName("FK__staff__designati__47DBAE45");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            // OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

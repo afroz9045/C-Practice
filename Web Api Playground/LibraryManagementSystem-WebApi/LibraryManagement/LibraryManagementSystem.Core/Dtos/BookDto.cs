@@ -7,5 +7,6 @@
         public int Isbn { get; set; }
         public string AuthorName { get; set; } = null!;
         public string BookEdition { get; set; } = null!;
+        public int? StockAvailable { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LibraryManagement.Core.Entities
+﻿namespace LibraryManagement.Core.Entities
 {
     public partial class Return
     {
