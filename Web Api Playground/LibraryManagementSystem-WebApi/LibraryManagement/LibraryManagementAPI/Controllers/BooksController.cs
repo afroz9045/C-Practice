@@ -16,6 +16,7 @@ namespace LibraryManagementAPI.Controllers
         {
             _bookRepository = bookRepository;
         }
+
         [HttpPost]
         public async Task<ActionResult> AddBook([FromBody] BookDto book)
         {
@@ -32,16 +33,16 @@ namespace LibraryManagementAPI.Controllers
         public async Task<ActionResult> GetBookById(int id)
         {
             var result = _bookRepository.GetBookById(id);
-            if(result!=null)
-              return Ok(await result);
+            if (result != null)
+                return Ok(await result);
             return NotFound();
-
         }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBookDetails([FromBody]BookDto book, int id)
+        public async Task<ActionResult> UpdateBookDetails([FromBody] BookDto book, int id)
         {
             var result = _bookRepository.UpdateBookAsync(book, id);
-            if (result!=null)
+            if (result != null)
                 return Ok(await result);
             return BadRequest();
         }

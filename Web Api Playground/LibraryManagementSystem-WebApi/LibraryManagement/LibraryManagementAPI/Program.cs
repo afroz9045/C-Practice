@@ -1,7 +1,9 @@
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Entities;
+using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Repositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibraryManagementSystemDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(
+                    builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
 
 var app = builder.Build();
 

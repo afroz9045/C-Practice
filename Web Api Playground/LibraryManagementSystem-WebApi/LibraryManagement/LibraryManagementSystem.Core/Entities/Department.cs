@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement.Core.Entities
 {
-    public class Department
+    public partial class Department
     {
         public Department()
         {
