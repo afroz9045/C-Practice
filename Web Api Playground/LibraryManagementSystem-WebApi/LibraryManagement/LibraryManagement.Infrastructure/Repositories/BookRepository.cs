@@ -19,7 +19,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             _dapperConnection = dapperConnection;
         }
 
-        public async Task<Book> AddBookAsync(BookDto book)
+        public async Task<Book> AddBookAsync(Book book)
         {
             if (_libraryDbContext.Books.Count() == 0)
             {
@@ -29,7 +29,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             var bookDetails = await GetBookById(book.BookId);
             if (bookDetails == null)
             {
-                var bookDataDetails = new Book()
+                var bookRecord = new Book()
                 {
                     AuthorName = book.AuthorName,
                     BookEdition = book.BookEdition,
@@ -38,9 +38,9 @@ namespace LibraryManagement.Infrastructure.Repositories
                     Isbn = book.Isbn,
                     StockAvailable = 1,
                 };
-                _libraryDbContext.Books.Add(bookDataDetails);
+                _libraryDbContext.Books.Add(bookRecord);
                 await _libraryDbContext.SaveChangesAsync();
-                return bookDataDetails;
+                return bookRecord;
             }
             else
             {

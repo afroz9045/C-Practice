@@ -1,5 +1,7 @@
 ﻿using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Dtos;
+using LibraryManagement.Core.Entities;
+using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,8 +20,15 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddBook([FromBody] BookDto book)
+        public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
         {
+            var book = new Book
+            {
+                AuthorName = bookVm.AuthorName,
+                BookEdition = bookVm.BookEdition,
+                BookName = bookVm.BookName,
+                Isbn = bookVm.Isbn
+            };
             return Ok(await _bookRepository.AddBookAsync(book));
         }
 
