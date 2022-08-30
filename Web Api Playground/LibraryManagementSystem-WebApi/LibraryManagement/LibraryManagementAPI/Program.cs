@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibraryManagementSystemDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(
                     builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
 

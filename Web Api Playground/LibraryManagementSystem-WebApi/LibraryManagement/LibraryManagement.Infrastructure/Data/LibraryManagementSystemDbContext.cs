@@ -22,14 +22,14 @@ namespace LibraryManagement.Infrastructure.Data
         public virtual DbSet<Student> Students { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=(localDb)\\MSSQLLocalDB;Database=LibraryManagementSystemDb;Trusted_Connection=True;");
-        //            }
-        //        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=(localDb)\\MSSQLLocalDB;Database=LibraryManagementSystemDb;Trusted_Connection=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,13 +70,6 @@ namespace LibraryManagement.Infrastructure.Data
                 entity.Property(e => e.DepartmentName)
                     .HasMaxLength(50)
                     .HasColumnName("departmentName");
-
-                entity.Property(e => e.StudentId).HasColumnName("studentId");
-
-                entity.HasOne(d => d.Student)
-                    .WithMany(p => p.Departments)
-                    .HasForeignKey(d => d.StudentId)
-                    .HasConstraintName("FK__departmen__stude__3E52440B");
             });
 
             modelBuilder.Entity<Designation>(entity =>
@@ -198,7 +191,7 @@ namespace LibraryManagement.Infrastructure.Data
                     .HasConstraintName("FK__staff__designati__47DBAE45");
             });
 
-            // OnModelCreatingPartial(modelBuilder);
+            //OnModelCreatingPartial(modelBuilder);
         }
 
         //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
