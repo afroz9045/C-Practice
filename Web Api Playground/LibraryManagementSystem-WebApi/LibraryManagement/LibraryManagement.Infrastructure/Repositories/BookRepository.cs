@@ -1,9 +1,8 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace LibraryManagement.Infrastructure.Repositories
@@ -12,11 +11,13 @@ namespace LibraryManagement.Infrastructure.Repositories
     {
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
         private readonly IDbConnection _dapperConnection;
+        private readonly IMapper _mapper;
 
-        public BookRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection)
+        public BookRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IMapper mapper)
         {
             _libraryDbContext = libraryDbContext;
             _dapperConnection = dapperConnection;
+            _mapper = mapper;
         }
 
         public async Task<Book> AddBookAsync(Book book)
@@ -51,50 +52,29 @@ namespace LibraryManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<dynamic>> GetBooksAsync()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            //var bookData = await (from book in _libraryDbContext.Books
-            //                      select new BookDto()
-            //                      {
-            //                          AuthorName = book.AuthorName,
-            //                          BookEdition = book.BookEdition,
-            //                          BookId = book.BookId,
-            //                          BookName = book.BookName,
-            //                          Isbn = book.Isbn,
-            //                          StockAvailable = book.StockAvailable
-            //                      }).ToListAsync();
             var gettingBooksQuery = "select * from [books]";
-            var bookData = await _dapperConnection.QueryAsync(gettingBooksQuery);
+            var bookData = await _dapperConnection.QueryAsync<Book>(gettingBooksQuery);
             return bookData;
         }
 
         public async Task<Book> GetBookById(int bookId)
         {
-            var bookData = await (from book in _libraryDbContext.Books
-                                  where book.BookId == bookId
-                                  select new Book()
-                                  {
-                                      AuthorName = book.AuthorName,
-                                      BookEdition = book.BookEdition,
-                                      BookId = book.BookId,
-                                      BookName = book.BookName,
-                                      Isbn = book.Isbn,
-                                      StockAvailable = book.StockAvailable
-                                  }).FirstOrDefaultAsync();
-
-            return bookData;
+            var getBookByIdQuery = "select * from [Books] where bookId=@bookId";
+            return await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId = bookId });
         }
 
-        public async Task<Book> UpdateBookAsync(BookDto book, int id)
+        public async Task<Book> UpdateBookAsync(Book book, int id)
         {
             var bookToBeUpdated = await GetBookById(id);
-
+            bookToBeUpdated.BookId = book.BookId;
             bookToBeUpdated.AuthorName = book.AuthorName;
             bookToBeUpdated.BookEdition = book.BookEdition;
             bookToBeUpdated.BookName = book.BookName;
             bookToBeUpdated.Isbn = book.Isbn;
 
-            _libraryDbContext.Books.Update(bookToBeUpdated);
+            _libraryDbContext.Update(bookToBeUpdated);
             await _libraryDbContext.SaveChangesAsync();
             return bookToBeUpdated;
         }

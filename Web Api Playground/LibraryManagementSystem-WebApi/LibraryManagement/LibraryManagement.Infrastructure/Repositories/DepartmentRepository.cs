@@ -3,7 +3,6 @@ using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace LibraryManagement.Infrastructure.Repositories
@@ -19,25 +18,17 @@ namespace LibraryManagement.Infrastructure.Repositories
             _dapperConnection = dapperConnection;
         }
 
-        public async Task<IEnumerable<dynamic>> GetDepartmentsAsync()
+        public async Task<IEnumerable<Department>> GetDepartmentsAsync()
         {
             var getDepartmentQuery = "select * from [department]";
-            var departmentData = await _dapperConnection.QueryAsync(getDepartmentQuery);
+            var departmentData = await _dapperConnection.QueryAsync<Department>(getDepartmentQuery);
             return departmentData;
         }
 
-        public async Task<dynamic> GetDepartmentByIdAsync(short departmentId)
+        public async Task<Department> GetDepartmentByIdAsync(short deptId)
         {
-            //var getDepartmentByIdQuery = "select * from [department] where deptId = @departmentId";
-            //return (await _dapperConnection.QueryAsync(getDepartmentByIdQuery, new { deptId = departmentId })).FirstOrDefault();
-            var departmentData = await (from department in _libraryDbContext.Departments
-                                        where department.DeptId == departmentId
-                                        select new Department()
-                                        {
-                                            DeptId = department.DeptId,
-                                            DepartmentName = department.DepartmentName
-                                        }).FirstOrDefaultAsync();
-            return departmentData;
+            var getDepartmentByIdQuery = "select * from [department] where deptId = @deptId";
+            return (await _dapperConnection.QueryFirstAsync<Department>(getDepartmentByIdQuery, new { deptId = deptId }));
         }
 
         public async Task<Department> AddDepartmentAsync(Department department)
@@ -45,20 +36,18 @@ namespace LibraryManagement.Infrastructure.Repositories
             var departmentRecord = new Department()
             {
                 DepartmentName = department.DepartmentName,
-                DeptId = department.DeptId,
-                //StudentId = department.StudentId
+                DeptId = department.DeptId
             };
             _libraryDbContext.Departments.Add(departmentRecord);
             await _libraryDbContext.SaveChangesAsync();
             return departmentRecord;
         }
 
-        public async Task<Department> UpdateDepartmentAsync(short departmentId, DepartmentDto department)
+        public async Task<Department> UpdateDepartmentAsync(short departmentId, Department department)
         {
             var departmentRecord = await GetDepartmentByIdAsync(departmentId);
 
-            departmentRecord.DeptId = department.DeptId;
-            //departmentRecord.StudentId = department.StudentId;
+            departmentRecord.DeptId = departmentId;
             departmentRecord.DepartmentName = department.DepartmentName;
 
             _libraryDbContext.Update(departmentRecord);
@@ -69,7 +58,7 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Department> DeleteDepartmentAsync(short departmentId)
         {
             var departmentRecord = await GetDepartmentByIdAsync(departmentId);
-            _libraryDbContext.Books?.Remove(departmentRecord);
+            _libraryDbContext.Departments?.Remove(departmentRecord);
             await _libraryDbContext.SaveChangesAsync();
             return departmentRecord;
         }

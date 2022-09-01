@@ -1,5 +1,5 @@
-﻿using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
+﻿using AutoMapper;
+using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
 using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -8,27 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController : CommonController
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IMapper _mapper;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookRepository bookRepository, IMapper mapper)
         {
             _bookRepository = bookRepository;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
         {
-            var book = new Book
-            {
-                AuthorName = bookVm.AuthorName,
-                BookEdition = bookVm.BookEdition,
-                BookName = bookVm.BookName,
-                Isbn = bookVm.Isbn
-            };
+            var book = _mapper.Map<BookVm, Book>(bookVm);
             return Ok(await _bookRepository.AddBookAsync(book));
         }
 
@@ -48,8 +42,9 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBookDetails([FromBody] BookDto book, int id)
+        public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int id)
         {
+            var book = _mapper.Map<BookVm, Book>(bookVm);
             var result = _bookRepository.UpdateBookAsync(book, id);
             if (result != null)
                 return Ok(await result);

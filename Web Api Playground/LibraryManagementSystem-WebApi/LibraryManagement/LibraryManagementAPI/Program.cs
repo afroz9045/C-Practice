@@ -1,39 +1,21 @@
-using LibraryManagement.Core.Contracts;
-using LibraryManagement.Infrastructure.Data;
-using LibraryManagement.Infrastructure.Repositories;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
+using AutoMapper;
+using LibraryManagementAPI.Configuration;
+using LibraryManagementAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Configure and Register AutoMapper
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<LibraryManagementSystemDbContext>(option =>
-option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(
-                    builder.Configuration.GetConnectionString("LibraryManagementDbContext")));
+var config = new MapperConfiguration(config => config.AddProfile(new AutoMapperConfiguration()));
+IMapper mapper = config.CreateMapper();
+builder.Services.AddSingleton<IMapper>(mapper);
+
+#endregion Configure and Register AutoMapper
+
+IConfiguration configuration = builder.Configuration;
+builder.Services.RegisterSystemServices();
+builder.Services.RegisterApplicationServices(configuration);
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
+app.CreateMiddlewarePipeline();
 app.Run();
