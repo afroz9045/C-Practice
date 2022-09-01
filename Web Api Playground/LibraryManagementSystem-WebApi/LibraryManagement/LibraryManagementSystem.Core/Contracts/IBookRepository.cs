@@ -1,5 +1,4 @@
-﻿using LibraryManagement.Core.Dtos;
-using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Contracts
 {
@@ -7,11 +6,11 @@ namespace LibraryManagement.Core.Contracts
     {
         Task<Book> AddBookAsync(Book book);
 
-        Task<IEnumerable<dynamic>> GetBooksAsync();
+        Task<IEnumerable<Book>> GetBooksAsync();
 
         Task<Book> GetBookById(int bookId);
 
-        Task<Book> UpdateBookAsync(BookDto book, int id);
+        Task<Book> UpdateBookAsync(Book book, int id);
 
         Task<Book> DeleteBookAsync(int id);
     }

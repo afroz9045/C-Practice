@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -26,19 +25,18 @@ namespace LibraryManagement.Infrastructure.Repositories
             return studentData;
         }
 
-        public async Task<dynamic> GetStudentByIdAsync(int studentId)
+        public async Task<Student> GetStudentByIdAsync(int studentId)
         {
             var getStudentByIdQuery = "select * from [student] where studentId=@studentId";
-            return await _dapperConnection.QueryAsync(getStudentByIdQuery, new { studentId = studentId });
+            return await _dapperConnection.QueryFirstAsync<Student>(getStudentByIdQuery, new { studentId = studentId });
         }
 
-        public async Task<Student> AddStudentAsync(StudentDto student)
+        public async Task<Student> AddStudentAsync(Student student)
         {
             Student studentRecord = new Student()
             {
                 DepartmentId = student.DepartmentId,
                 StudentName = student.StudentName,
-                //StudentId = student.StudentId,
                 Gender = student.Gender,
                 StudentDepartment = await (from department in _libraryDbContext.Departments
                                            where student.DepartmentId == department.DeptId
@@ -52,11 +50,9 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Student> updateStudentAsync(Student student, int studentId)
         {
             var studentRecord = await GetStudentByIdAsync(studentId);
-            studentRecord.StudentId = student.StudentId;
+            studentRecord.DepartmentId = student.DepartmentId;
             studentRecord.StudentName = student.StudentName;
             studentRecord.Gender = student.Gender;
-            studentRecord.StudentDepartment = student.StudentDepartment;
-            studentRecord.DepartmentId = student.DepartmentId;
 
             _libraryDbContext.Update(studentRecord);
             await _libraryDbContext.SaveChangesAsync();

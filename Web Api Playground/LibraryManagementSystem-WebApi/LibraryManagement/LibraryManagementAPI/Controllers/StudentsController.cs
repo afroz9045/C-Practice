@@ -1,19 +1,20 @@
-﻿using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
+﻿using AutoMapper;
+using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
+using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class StudentsController : ControllerBase
+    public class StudentsController : CommonController
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IMapper _mapper;
 
-        public StudentsController(IStudentRepository studentRepository)
+        public StudentsController(IStudentRepository studentRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,14 +31,16 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddStudent([FromBody] StudentDto student)
+        public async Task<ActionResult> AddStudent([FromBody] StudentVm studentVm)
         {
+            var student = _mapper.Map<StudentVm, Student>(studentVm);
             return Ok(await _studentRepository.AddStudentAsync(student));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateStudent([FromBody] Student student, int id)
+        public async Task<ActionResult> UpdateStudent([FromBody] StudentVm studentVm, int id)
         {
+            var student = _mapper.Map<StudentVm, Student>(studentVm);
             var result = _studentRepository.updateStudentAsync(student, id);
             if (result != null)
                 return Ok(await result);

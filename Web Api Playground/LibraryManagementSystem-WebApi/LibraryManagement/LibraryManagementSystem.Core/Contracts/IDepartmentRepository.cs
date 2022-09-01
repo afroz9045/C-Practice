@@ -1,5 +1,4 @@
-﻿using LibraryManagement.Core.Dtos;
-using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Contracts
 {
@@ -9,10 +8,10 @@ namespace LibraryManagement.Core.Contracts
 
         Task<Department> DeleteDepartmentAsync(short departmentId);
 
-        Task<dynamic> GetDepartmentByIdAsync(short departmentId);
+        Task<Department> GetDepartmentByIdAsync(short departmentId);
 
-        Task<IEnumerable<dynamic>> GetDepartmentsAsync();
+        Task<IEnumerable<Department>> GetDepartmentsAsync();
 
-        Task<Department> UpdateDepartmentAsync(short departmentId, DepartmentDto department);
+        Task<Department> UpdateDepartmentAsync(short departmentId, Department department);
     }
 }

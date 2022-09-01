@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Contracts;
+﻿using AutoMapper;
+using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagementAPI.ViewModels;
@@ -6,15 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class DepartmentsController : ControllerBase
+    public class DepartmentsController : CommonController
     {
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
-        public DepartmentsController(IDepartmentRepository departmentRepository)
+        public DepartmentsController(IDepartmentRepository departmentRepository, IMapper mapper)
         {
             _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,16 +34,14 @@ namespace LibraryManagementAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> AddDepartment([FromBody] DepartmentVm departmentVm)
         {
-            var department = new Department
-            {
-                DepartmentName = departmentVm.DepartmentName
-            };
+            var department = _mapper.Map<DepartmentVm, Department>(departmentVm);
             return Ok(await _departmentRepository.AddDepartmentAsync(department));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentDto department, short id)
+        public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short id)
         {
+            var department = _mapper.Map<DepartmentVm, Department>(departmentVm);
             var result = _departmentRepository.UpdateDepartmentAsync(id, department);
             if (result != null)
                 return Ok(await result);
