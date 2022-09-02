@@ -1,4 +1,7 @@
-﻿namespace LibraryManagement.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace LibraryManagement.Core.Entities
 {
     public partial class Department
     {

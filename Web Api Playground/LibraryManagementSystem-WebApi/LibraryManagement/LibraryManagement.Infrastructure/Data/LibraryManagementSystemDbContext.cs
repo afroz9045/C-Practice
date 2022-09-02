@@ -1,6 +1,9 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
+using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace LibraryManagement.Infrastructure.Data
 {
@@ -30,6 +33,10 @@ namespace LibraryManagement.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.RegisterEntityConfigurations();
+
+            //OnModelCreatingPartial(modelBuilder);
         }
+
+        //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

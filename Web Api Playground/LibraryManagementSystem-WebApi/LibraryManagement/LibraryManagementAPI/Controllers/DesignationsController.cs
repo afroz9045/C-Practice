@@ -34,28 +34,28 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetDesignationById(Guid id)
+        public async Task<ActionResult> GetDesignationById(string id)
         {
             var result = Ok(await _designationRepository.GetDesignationByIdAsync(id));
             return result;
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDesignation([FromBody] DesignationVm designationVm, Guid id)
+        public async Task<ActionResult> UpdateDesignation([FromBody] DesignationVm designationVm, string id)
         {
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
-            var result = _designationRepository.UpdateDesignationAsync(id, designation);
+            var result = await _designationRepository.UpdateDesignationAsync(id, designation);
             if (result != null)
-                return Ok(await result);
+                return Ok(result);
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDesignation(Guid id)
+        public async Task<ActionResult> DeleteDesignation(string id)
         {
-            var designation = _designationRepository.DeleteDepartmentAsync(id);
+            var designation = await _designationRepository.DeleteDepartmentAsync(id);
             if (designation != null)
-                return Ok(await designation);
+                return Ok(designation);
             return NotFound();
         }
     }

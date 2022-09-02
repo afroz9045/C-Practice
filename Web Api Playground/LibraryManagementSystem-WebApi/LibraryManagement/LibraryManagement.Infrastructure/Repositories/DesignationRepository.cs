@@ -24,7 +24,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             return departmentData;
         }
 
-        public async Task<Designation> GetDesignationByIdAsync(Guid designationId)
+        public async Task<Designation> GetDesignationByIdAsync(string designationId)
         {
             var getDesignationByIdQuery = "select * from [designation] where designationId = @designationId";
             return (await _dapperConnection.QueryFirstAsync<Designation>(getDesignationByIdQuery, new { designationId = designationId }));
@@ -34,29 +34,27 @@ namespace LibraryManagement.Infrastructure.Repositories
         {
             var designationRecord = new Designation()
             {
-                DesignationId = new Guid(),
-                DesignationName = designation.DesignationName,
-                StaffId = new Guid()
+                DesignationId = designation.DesignationId,
+                DesignationName = designation.DesignationName
             };
             _libraryDbContext.Designations.Add(designationRecord);
             await _libraryDbContext.SaveChangesAsync();
             return designationRecord;
         }
 
-        public async Task<Designation> UpdateDesignationAsync(Guid designationId, Designation designation)
+        public async Task<Designation> UpdateDesignationAsync(string designationId, Designation designation)
         {
             var designationRecord = await GetDesignationByIdAsync(designationId);
 
             designationRecord.DesignationId = designationId;
             designationRecord.DesignationName = designation.DesignationName;
-            designationRecord.StaffId = designation.StaffId;
 
             _libraryDbContext.Update(designationRecord);
             await _libraryDbContext.SaveChangesAsync();
             return designationRecord;
         }
 
-        public async Task<Designation> DeleteDepartmentAsync(Guid designationId)
+        public async Task<Designation> DeleteDepartmentAsync(string designationId)
         {
             var designationRecord = await GetDesignationByIdAsync(designationId);
             _libraryDbContext.Designations?.Remove(designationRecord);

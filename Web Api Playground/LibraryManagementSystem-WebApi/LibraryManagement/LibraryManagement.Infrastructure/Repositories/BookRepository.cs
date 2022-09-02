@@ -9,6 +9,10 @@ namespace LibraryManagement.Infrastructure.Repositories
 {
     public class BookRepository : IBookRepository
     {
+        public BookRepository()
+        {
+        }
+
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
         private readonly IDbConnection _dapperConnection;
         private readonly IMapper _mapper;

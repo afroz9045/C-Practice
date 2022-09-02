@@ -6,12 +6,12 @@ namespace LibraryManagement.Core.Contracts
     {
         Task<Staff> AddStaffAsync(Staff staff);
 
-        Task<Staff> DeleteStaffAsync(Guid staffId);
+        Task<Staff> DeleteStaffAsync(string staffId);
 
         Task<IEnumerable<Staff>> GetStaffAsync();
 
-        Task<Staff> GetStaffByIDAsync(Guid staffId);
+        Task<Staff> GetStaffByIDAsync(string staffId);
 
-        Task<Staff> UpdateStaffAsync(Staff staff, Guid staffId);
+        Task<Staff> UpdateStaffAsync(Staff staff, string staffId);
     }
 }

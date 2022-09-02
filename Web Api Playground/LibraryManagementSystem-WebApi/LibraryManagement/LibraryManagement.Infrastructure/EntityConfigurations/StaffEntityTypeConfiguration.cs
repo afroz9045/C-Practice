@@ -1,6 +1,7 @@
 ﻿using LibraryManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static Dapper.SqlMapper;
 
 namespace LibraryManagement.Infrastructure.EntityConfigurations
 {
@@ -24,10 +25,10 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
                 .HasMaxLength(20)
                 .HasColumnName("staffName");
 
-            builder.HasOne(d => d.DesignationNavigation)
+            builder.HasOne(d => d.Designation)
                 .WithMany(p => p.staff)
                 .HasForeignKey(d => d.DesignationId)
-                .HasConstraintName("FK__staff__designati__47DBAE45");
+                .HasConstraintName("FK__staff__designati__70DDC3D8");
         }
     }
 }
