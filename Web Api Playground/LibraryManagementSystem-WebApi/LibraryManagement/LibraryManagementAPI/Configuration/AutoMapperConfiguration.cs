@@ -13,6 +13,7 @@ namespace LibraryManagementAPI.Configuration
             CreateMap<StudentVm, Student>();
             CreateMap<StaffVm, Staff>();
             CreateMap<DesignationVm, Designation>();
+            CreateMap<IssueVm, Issue>();
         }
     }
 }

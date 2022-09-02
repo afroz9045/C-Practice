@@ -18,15 +18,6 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
             builder.Property(e => e.DesignationName)
                 .HasMaxLength(20)
                 .HasColumnName("designation");
-
-            builder.Property(e => e.StaffId)
-                .HasMaxLength(50)
-            .HasColumnName("staffId");
-
-            builder.HasOne(d => d.Staff)
-                .WithMany(p => p.Designations)
-                .HasForeignKey(d => d.StaffId)
-                .HasConstraintName("FK__designati__staff__46E78A0C");
         }
     }
 }

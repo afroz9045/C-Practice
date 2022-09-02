@@ -6,12 +6,12 @@ namespace LibraryManagement.Core.Contracts
     {
         Task<Designation> AddDesignationAsync(Designation designation);
 
-        Task<Designation> DeleteDepartmentAsync(Guid designationId);
+        Task<Designation> DeleteDepartmentAsync(string designationId);
 
         Task<IEnumerable<Designation>> GetDesignationAsync();
 
-        Task<Designation> GetDesignationByIdAsync(Guid designationId);
+        Task<Designation> GetDesignationByIdAsync(string designationId);
 
-        Task<Designation> UpdateDesignationAsync(Guid designationId, Designation designation);
+        Task<Designation> UpdateDesignationAsync(string designationId, Designation designation);
     }
 }

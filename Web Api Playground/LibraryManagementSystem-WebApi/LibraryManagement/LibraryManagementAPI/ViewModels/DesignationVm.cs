@@ -2,8 +2,8 @@
 {
     public class DesignationVm
     {
-        public Guid DesignationId { get; set; }
+        public string DesignationId { get; set; }
         public string DesignationName { get; set; } = null!;
-        public Guid StaffId { get; set; }
+        //public Guid StaffId { get; set; }
     }
 }

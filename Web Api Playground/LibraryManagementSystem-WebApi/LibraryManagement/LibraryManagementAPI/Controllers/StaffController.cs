@@ -31,14 +31,14 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetStaffById(Guid id)
+        public async Task<ActionResult> GetStaffById(string id)
         {
             var result = Ok(await _staffRepository.GetStaffByIDAsync(id));
             return result;
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateStaff([FromBody] StaffVm staffVm, Guid id)
+        public async Task<ActionResult> UpdateStaff([FromBody] StaffVm staffVm, string id)
         {
             var staff = _mapper.Map<StaffVm, Staff>(staffVm);
             var result = _staffRepository.UpdateStaffAsync(staff, id);
@@ -48,7 +48,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDepartment(Guid id)
+        public async Task<ActionResult> DeleteDepartment(string id)
         {
             var result = _staffRepository.DeleteStaffAsync(id);
             if (result != null)

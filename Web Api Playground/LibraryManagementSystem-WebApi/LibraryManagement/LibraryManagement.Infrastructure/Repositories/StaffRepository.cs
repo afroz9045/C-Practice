@@ -21,10 +21,10 @@ namespace LibraryManagement.Infrastructure.Repositories
         {
             var staffRecord = new Staff()
             {
-                StaffId = new Guid(),
+                StaffId = staff.StaffId,
                 StaffName = staff.StaffName,
                 Gender = staff.Gender,
-                DesignationId = new Guid()
+                DesignationId = staff.DesignationId
             };
             _libraryDbContext.Add(staffRecord);
             await _libraryDbContext.SaveChangesAsync();
@@ -38,13 +38,13 @@ namespace LibraryManagement.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<Staff> GetStaffByIDAsync(Guid staffId)
+        public async Task<Staff> GetStaffByIDAsync(string staffId)
         {
             var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
             return (await _dapperConnection.QueryFirstAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
         }
 
-        public async Task<Staff> UpdateStaffAsync(Staff staff, Guid staffId)
+        public async Task<Staff> UpdateStaffAsync(Staff staff, string staffId)
         {
             var staffRecord = await GetStaffByIDAsync(staffId);
             staffRecord.StaffId = staffId;
@@ -57,7 +57,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             return staffRecord;
         }
 
-        public async Task<Staff> DeleteStaffAsync(Guid staffId)
+        public async Task<Staff> DeleteStaffAsync(string staffId)
         {
             var staffRecord = await GetStaffByIDAsync(staffId);
             _libraryDbContext.Remove(staffRecord);

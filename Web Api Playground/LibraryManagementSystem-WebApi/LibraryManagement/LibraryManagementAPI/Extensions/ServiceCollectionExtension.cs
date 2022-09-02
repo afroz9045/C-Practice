@@ -26,10 +26,13 @@ namespace LibraryManagementAPI.Extensions
             option.UseSqlServer(configuration.GetConnectionString("LibraryManagementDbContext")));
 
             services.AddScoped<IBookRepository, BookRepository>();
+
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
+            services.AddTransient<IIssueRepository, IssueRepository>();
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));
         }

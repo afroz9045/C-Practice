@@ -23,7 +23,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
             builder.Property(e => e.Gender)
                 .HasMaxLength(15)
                 .IsUnicode(false)
-            .HasColumnName("gender");
+                .HasColumnName("gender");
 
             builder.Property(e => e.StudentDepartment)
                 .HasMaxLength(30)

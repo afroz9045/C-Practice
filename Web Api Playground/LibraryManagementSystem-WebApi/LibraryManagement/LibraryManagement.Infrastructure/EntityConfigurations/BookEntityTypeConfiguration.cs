@@ -25,7 +25,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
 
             builder.Property(e => e.BookName)
                 .HasMaxLength(15)
-            .HasColumnName("bookName");
+                .HasColumnName("bookName");
 
             builder.Property(e => e.Isbn).HasColumnName("isbn");
 

@@ -1,4 +1,7 @@
-﻿namespace LibraryManagement.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace LibraryManagement.Core.Entities
 {
     public partial class Designation
     {
@@ -7,11 +10,9 @@
             staff = new HashSet<Staff>();
         }
 
-        public Guid DesignationId { get; set; }
+        public string DesignationId { get; set; } = null!;
         public string DesignationName { get; set; } = null!;
-        public Guid StaffId { get; set; }
 
-        public virtual Staff? Staff { get; set; }
         public virtual ICollection<Staff> staff { get; set; }
     }
 }
