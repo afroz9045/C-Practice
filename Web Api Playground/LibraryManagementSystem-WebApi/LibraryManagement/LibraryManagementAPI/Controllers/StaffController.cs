@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    public class StaffController : CommonController
+    public class StaffController : ApiController
     {
         private readonly IStaffRepository _staffRepository;
         private readonly IMapper _mapper;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    public class BooksController : CommonController
+    public class BooksController : ApiController
     {
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;

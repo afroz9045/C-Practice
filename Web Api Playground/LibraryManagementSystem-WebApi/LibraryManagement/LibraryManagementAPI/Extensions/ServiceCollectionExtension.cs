@@ -3,7 +3,6 @@ using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 
 namespace LibraryManagementAPI.Extensions
@@ -33,6 +32,7 @@ namespace LibraryManagementAPI.Extensions
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
             services.AddTransient<IIssueRepository, IssueRepository>();
+            services.AddTransient<IReturnRepository, ReturnRepository>();
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));
         }

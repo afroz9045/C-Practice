@@ -65,7 +65,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookIssuedRecord;
         }
 
-        public async Task<Issue> DeleteDepartmentAsync(short IssueId)
+        public async Task<Issue> DeleteIssueAsync(short IssueId)
         {
             var issueRecord = await GetBookIssuedByIdAsync(IssueId);
             _libraryDbContext.Issues?.Remove(issueRecord);

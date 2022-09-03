@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    public class StudentsController : CommonController
+    public class StudentsController : ApiController
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IMapper _mapper;

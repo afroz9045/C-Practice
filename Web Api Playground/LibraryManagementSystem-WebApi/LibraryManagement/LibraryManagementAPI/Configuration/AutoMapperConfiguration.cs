@@ -14,6 +14,7 @@ namespace LibraryManagementAPI.Configuration
             CreateMap<StaffVm, Staff>();
             CreateMap<DesignationVm, Designation>();
             CreateMap<IssueVm, Issue>();
+            CreateMap<ReturnVm, Return>();
         }
     }
 }

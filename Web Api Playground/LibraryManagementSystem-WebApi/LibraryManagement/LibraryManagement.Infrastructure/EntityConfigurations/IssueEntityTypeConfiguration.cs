@@ -1,7 +1,6 @@
 ﻿using LibraryManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Dapper.SqlMapper;
 
 namespace LibraryManagement.Infrastructure.EntityConfigurations
 {
@@ -23,10 +22,10 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
                 .HasColumnType("date")
                 .HasColumnName("issueDate");
 
-            builder.HasOne(d => d.Book)
-                .WithMany(p => p.Issues)
-                .HasForeignKey(d => d.BookId)
-                .HasConstraintName("FK__issue__bookId__4222D4EF");
+            //builder.HasOne(d => d.Book)
+            //    //.WithMany(p => p.Issues)
+            //    //.HasForeignKey(d => d.BookId)
+            //    .HasConstraintName("FK__issue__bookId__4222D4EF");
         }
     }
 }

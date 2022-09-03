@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    public class DepartmentsController : CommonController
+    public class DepartmentsController : ApiController
     {
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
