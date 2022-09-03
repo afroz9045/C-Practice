@@ -11,5 +11,6 @@ namespace LibraryManagement.Core.Contracts
         Task<Issue> GetBookIssuedByIdAsync(short issueId);
 
         Task<Issue> UpdateBookIssuedAsync(short issueId, Issue issue);
+        Task<Issue> DeleteIssueAsync(short IssueId);
     }
 }

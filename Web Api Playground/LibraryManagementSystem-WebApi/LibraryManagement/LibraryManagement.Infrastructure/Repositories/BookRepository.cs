@@ -9,10 +9,6 @@ namespace LibraryManagement.Infrastructure.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        public BookRepository()
-        {
-        }
-
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
         private readonly IDbConnection _dapperConnection;
         private readonly IMapper _mapper;
@@ -37,11 +33,11 @@ namespace LibraryManagement.Infrastructure.Repositories
                 var bookRecord = new Book()
                 {
                     AuthorName = book.AuthorName,
-                    BookEdition = book.BookEdition,
+                    BookEdition = book.BookEdition ?? "Default",
                     BookId = book.BookId,
                     BookName = book.BookName,
                     Isbn = book.Isbn,
-                    StockAvailable = 1,
+                    StockAvailable = 1
                 };
                 _libraryDbContext.Books.Add(bookRecord);
                 await _libraryDbContext.SaveChangesAsync();
@@ -63,8 +59,12 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookData;
         }
 
-        public async Task<Book> GetBookById(int bookId)
+        public async Task<Book?> GetBookById(int bookId)
         {
+            if (bookId == 0)
+            {
+                return null;
+            }
             var getBookByIdQuery = "select * from [Books] where bookId=@bookId";
             return await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId = bookId });
         }

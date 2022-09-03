@@ -8,7 +8,7 @@ namespace LibraryManagement.Core.Contracts
 
         Task<IEnumerable<Book>> GetBooksAsync();
 
-        Task<Book> GetBookById(int bookId);
+        Task<Book?> GetBookById(int bookId);
 
         Task<Book> UpdateBookAsync(Book book, int id);
 

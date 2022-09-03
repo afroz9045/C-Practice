@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Repositories;
 using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
-    public class IssueController : CommonController
+    public class IssueController : ApiController
     {
         private readonly IIssueRepository _issueRepository;
         private readonly IMapper _mapper;
@@ -32,7 +31,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{bookIssuedId}")]
-        public async Task<ActionResult> GetIssueBookByIdDetails([FromBody] short bookIssuedId)
+        public async Task<ActionResult> GetIssueBookByIdDetails(short bookIssuedId)
         {
             return Ok(await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId));
         }
@@ -44,6 +43,14 @@ namespace LibraryManagementAPI.Controllers
             if (result != null)
                 return Ok(result);
             return BadRequest();
+        }
+        [HttpDelete("{issueId}")]
+        public async Task<ActionResult> DeleteIssue(short issueid)
+        {
+            var issueDelete = await _issueRepository.DeleteIssueAsync(issueid);
+            if (issueDelete != null)
+                return Ok(issueDelete);
+            return NotFound();
         }
     }
 }

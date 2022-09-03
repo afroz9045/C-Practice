@@ -4,7 +4,7 @@ namespace LibraryManagementAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class CommonController : ControllerBase
+    public class ApiController : ControllerBase
     {
     }
 }
