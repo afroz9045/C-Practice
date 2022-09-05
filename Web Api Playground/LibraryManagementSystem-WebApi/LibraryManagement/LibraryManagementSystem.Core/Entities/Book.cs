@@ -2,11 +2,11 @@
 {
     public partial class Book
     {
-        public Book()
-        {
-            //Issues = new HashSet<Issue>();
-            Returns = new HashSet<Return>();
-        }
+        //public Book()
+        //{
+        //    //Issues = new HashSet<Issue>();
+        //    // Returns = new HashSet<Return>();
+        //}
 
         public int BookId { get; set; }
         public string BookName { get; set; } = null!;
@@ -15,7 +15,7 @@
         public string? BookEdition { get; set; }
         public int? StockAvailable { get; set; }
 
-        //public virtual ICollection<Issue> Issues { get; set; }
-        public virtual ICollection<Return> Returns { get; set; }
+        public ICollection<Issue>? Issues { get; set; }
+        public ICollection<Return>? Returns { get; set; }
     }
 }

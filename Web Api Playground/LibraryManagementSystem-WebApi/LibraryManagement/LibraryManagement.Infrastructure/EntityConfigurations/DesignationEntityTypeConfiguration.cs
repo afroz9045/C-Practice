@@ -17,7 +17,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
 
             builder.Property(e => e.DesignationName)
                 .HasMaxLength(20)
-                .HasColumnName("designation");
+                .HasColumnName("designationName");
         }
     }
 }

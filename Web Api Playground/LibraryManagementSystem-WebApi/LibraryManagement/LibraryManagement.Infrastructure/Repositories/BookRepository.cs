@@ -66,7 +66,8 @@ namespace LibraryManagement.Infrastructure.Repositories
                 return null;
             }
             var getBookByIdQuery = "select * from [Books] where bookId=@bookId";
-            return await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId = bookId });
+            var bookResult = await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId = bookId });
+            return bookResult;
         }
 
         public async Task<Book> UpdateBookAsync(Book book, int id)

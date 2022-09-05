@@ -21,7 +21,12 @@ namespace LibraryManagementAPI.Controllers
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
             var issuedBook = _mapper.Map<IssueVm, Issue>(issueVm);
-            return Ok(await _issueRepository.AddBookIssueAsync(issuedBook));
+            var bookIssueResult = await _issueRepository.AddBookIssueAsync(issuedBook);
+            if (bookIssueResult.IssueId != 0)
+            {
+                return Ok(bookIssueResult);
+            }
+            return NotFound("Sorry, book not found!");
         }
 
         [HttpGet]
@@ -44,6 +49,7 @@ namespace LibraryManagementAPI.Controllers
                 return Ok(result);
             return BadRequest();
         }
+
         [HttpDelete("{issueId}")]
         public async Task<ActionResult> DeleteIssue(short issueid)
         {

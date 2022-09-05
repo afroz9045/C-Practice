@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Repositories;
 using LibraryManagementAPI.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
@@ -19,11 +17,11 @@ namespace LibraryManagementAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
+        [HttpPost("{issueId}")]
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, short issueId)
         {
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
-            return Ok(await _returnRepository.AddReturnAsync(returnBook,issueId));
+            return Ok(await _returnRepository.AddReturnAsync(returnBook, issueId));
         }
 
         [HttpGet]
@@ -31,11 +29,13 @@ namespace LibraryManagementAPI.Controllers
         {
             return Ok(await _returnRepository.GetReturnAsync());
         }
+
         [HttpGet("{bookReturnId}")]
-        public async Task<ActionResult>  GetBookReturnById(int bookReturnId)
+        public async Task<ActionResult> GetBookReturnById(int bookReturnId)
         {
             return Ok(await _returnRepository.GetReturnByIdAsync(bookReturnId));
         }
+
         [HttpPut("{bookReturnId}")]
         public async Task<ActionResult> UpdateReturnBookDetails(int bookReturnId, [FromBody] ReturnVm returnVm)
         {
@@ -45,6 +45,14 @@ namespace LibraryManagementAPI.Controllers
                 return Ok(result);
             return BadRequest();
         }
-        [HttpDelete]
+
+        [HttpDelete("{issueId}")]
+        public async Task<ActionResult> DeleteReturnBook(int returnId)
+        {
+            var returnDelete = await _returnRepository.DeleteReturnAsync(returnId);
+            if (returnDelete != null)
+                return Ok(returnDelete);
+            return NotFound();
+        }
     }
 }

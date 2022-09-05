@@ -23,13 +23,16 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Issue> AddBookIssueAsync(Issue issue)
         {
             var issuedBook = new Issue();
+
             issuedBook.BookId = issue.BookId;
             var bookIdResult = await _bookRepository.GetBookById(issuedBook.BookId);
-            if (bookIdResult != null)
+
+            if (bookIdResult != null && bookIdResult.StockAvailable > 0)
             {
                 issuedBook.IssueDate = DateTime.Today;
                 issuedBook.ExpiryDate = DateTime.Today.AddDays(30);
                 bookIdResult.StockAvailable -= 1;
+
                 _libraryDbContext.Update(bookIdResult);
                 _libraryDbContext.Issues.Add(issuedBook);
                 await _libraryDbContext.SaveChangesAsync();
