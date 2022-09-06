@@ -20,8 +20,8 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<IEnumerable<Designation>> GetDesignationAsync()
         {
             var getDesignationQuery = "select * from [designation]";
-            var departmentData = await _dapperConnection.QueryAsync<Designation>(getDesignationQuery);
-            return departmentData;
+            var designationData = await _dapperConnection.QueryAsync<Designation>(getDesignationQuery);
+            return designationData;
         }
 
         public async Task<Designation> GetDesignationByIdAsync(string designationId)

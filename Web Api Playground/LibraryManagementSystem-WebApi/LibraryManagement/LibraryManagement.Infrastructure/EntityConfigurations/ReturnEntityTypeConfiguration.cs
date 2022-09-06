@@ -28,6 +28,10 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
                 .HasColumnType("date")
                 .HasColumnName("issueDate");
 
+            builder.Property(e => e.ReturnDate)
+                .HasColumnType("date")
+                .HasColumnName("returnDate");
+
             builder.HasOne(d => d.Book)
                 .WithMany(p => p.Returns)
                 .HasForeignKey(d => d.BookId)

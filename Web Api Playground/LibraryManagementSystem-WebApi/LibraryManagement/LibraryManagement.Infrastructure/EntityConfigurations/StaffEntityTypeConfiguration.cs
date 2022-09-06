@@ -11,7 +11,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.Property(e => e.StaffId)
                     .HasMaxLength(50)
-            .HasColumnName("staffId");
+                    .HasColumnName("staffId");
 
             builder.Property(e => e.DesignationId)
                 .HasMaxLength(50)

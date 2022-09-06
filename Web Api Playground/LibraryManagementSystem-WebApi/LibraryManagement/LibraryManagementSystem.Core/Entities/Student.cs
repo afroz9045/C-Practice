@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
-    public partial class Student
+    [Table("student")]
+    public class Student
     {
+        public Student()
+        {
+            Issues = new HashSet<Issue>();
+        }
+
         public int StudentId { get; set; }
         public string StudentName { get; set; } = null!;
         public string Gender { get; set; } = null!;
         public string StudentDepartment { get; set; } = null!;
+
+        [ForeignKey("Department")]
         public short? DepartmentId { get; set; }
 
         public virtual Department? Department { get; set; }
+        public virtual ICollection<Issue> Issues { get; set; }
     }
 }

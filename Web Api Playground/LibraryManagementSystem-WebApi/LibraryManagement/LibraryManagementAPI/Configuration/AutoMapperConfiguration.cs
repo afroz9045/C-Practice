@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagementAPI.ViewModels;
 
@@ -15,6 +16,7 @@ namespace LibraryManagementAPI.Configuration
             CreateMap<DesignationVm, Designation>();
             CreateMap<IssueVm, Issue>();
             CreateMap<ReturnVm, Return>();
+            CreateMap<BookIssuedToVm, BookIssuedTo>();
         }
     }
 }

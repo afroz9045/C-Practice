@@ -11,30 +11,35 @@ namespace LibraryManagement.Infrastructure.Repositories
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
         private readonly IDbConnection _dapperConnection;
         private readonly IIssueRepository _issueRepository;
+        private readonly IBookRepository _bookRepository;
 
-        public ReturnRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IIssueRepository issueRepository)
+        public ReturnRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IIssueRepository issueRepository, IBookRepository bookRepository)
         {
             _libraryDbContext = libraryDbContext;
             _dapperConnection = dapperConnection;
             _issueRepository = issueRepository;
+            _bookRepository = bookRepository;
         }
 
         public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
         {
             var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
+            var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
             if (issueDetails == null)
             {
                 return null;
             }
             var returnRecord = new Return()
             {
-                ReturnId = returnDetails.ReturnId,
                 ExpiryDate = issueDetails.ExpiryDate,
                 IssueDate = issueDetails.IssueDate,
-                BookId = issueDetails.BookId
+                BookId = issueDetails.BookId,
+                ReturnDate = DateTime.UtcNow
             };
-            await _issueRepository.DeleteDepartmentAsync(issueId);
+            await _issueRepository.DeleteIssueAsync(issueId);
             _libraryDbContext.Returns.Add(returnRecord);
+            bookDetails.StockAvailable += 1;
+            _libraryDbContext.Books.Update(bookDetails);
             await _libraryDbContext.SaveChangesAsync();
             return returnRecord;
         }
@@ -60,6 +65,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             returnRecord.ExpiryDate = returnDetails.ExpiryDate;
             returnRecord.IssueDate = returnDetails.IssueDate;
             returnRecord.BookId = returnDetails.BookId;
+            returnRecord.ReturnDate = DateTime.UtcNow;
 
             _libraryDbContext.Update(returnRecord);
             await _libraryDbContext.SaveChangesAsync();
