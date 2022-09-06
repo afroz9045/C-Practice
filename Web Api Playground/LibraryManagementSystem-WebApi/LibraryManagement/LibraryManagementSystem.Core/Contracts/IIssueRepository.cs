@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Dtos;
+using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Contracts
 {
@@ -7,6 +8,8 @@ namespace LibraryManagement.Core.Contracts
         Task<Issue> AddBookIssueAsync(Issue issue);
 
         Task<IEnumerable<Issue>> GetBookIssuedAsync();
+
+        Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int? studentId = 0, string? staffId = null);
 
         Task<Issue> GetBookIssuedByIdAsync(short issueId);
 

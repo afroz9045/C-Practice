@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
+using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Infrastructure.Repositories
 {
@@ -40,8 +40,12 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Staff> GetStaffByIDAsync(string staffId)
         {
-            var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
-            return (await _dapperConnection.QueryFirstAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
+            if (staffId != null)
+            {
+                var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
+                return (await _dapperConnection.QueryFirstAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
+            }
+            return null;
         }
 
         public async Task<Staff> UpdateStaffAsync(Staff staff, string staffId)

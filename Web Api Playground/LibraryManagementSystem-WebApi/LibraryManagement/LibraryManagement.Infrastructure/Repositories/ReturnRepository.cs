@@ -34,6 +34,7 @@ namespace LibraryManagement.Infrastructure.Repositories
                 ExpiryDate = issueDetails.ExpiryDate,
                 IssueDate = issueDetails.IssueDate,
                 BookId = issueDetails.BookId,
+                ReturnDate = DateTime.UtcNow
             };
             await _issueRepository.DeleteIssueAsync(issueId);
             _libraryDbContext.Returns.Add(returnRecord);
@@ -64,6 +65,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             returnRecord.ExpiryDate = returnDetails.ExpiryDate;
             returnRecord.IssueDate = returnDetails.IssueDate;
             returnRecord.BookId = returnDetails.BookId;
+            returnRecord.ReturnDate = DateTime.UtcNow;
 
             _libraryDbContext.Update(returnRecord);
             await _libraryDbContext.SaveChangesAsync();

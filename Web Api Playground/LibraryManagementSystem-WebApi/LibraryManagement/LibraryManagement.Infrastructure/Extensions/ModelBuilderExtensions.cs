@@ -13,6 +13,7 @@ namespace LibraryManagement.Infrastructure.Extensions
             modelBuilder.ApplyConfiguration(new IssueEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ReturnEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new StaffEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PenaltyEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new StudentEntityTypeConfiguration());
         }
     }

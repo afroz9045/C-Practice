@@ -25,10 +25,14 @@ namespace LibraryManagement.Infrastructure.Repositories
             return studentData;
         }
 
-        public async Task<Student> GetStudentByIdAsync(int studentId)
+        public async Task<Student?> GetStudentByIdAsync(int studentId)
         {
-            var getStudentByIdQuery = "select * from [student] where studentId=@studentId";
-            return await _dapperConnection.QueryFirstAsync<Student>(getStudentByIdQuery, new { studentId = studentId });
+            if (studentId != 0)
+            {
+                var getStudentByIdQuery = "select * from [student] where studentId=@studentId";
+                return await _dapperConnection.QueryFirstAsync<Student>(getStudentByIdQuery, new { studentId = studentId });
+            }
+            return null;
         }
 
         public async Task<Student> AddStudentAsync(Student student)

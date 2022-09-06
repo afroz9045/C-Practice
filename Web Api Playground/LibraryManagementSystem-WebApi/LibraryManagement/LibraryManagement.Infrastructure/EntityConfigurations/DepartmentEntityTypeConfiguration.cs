@@ -10,7 +10,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.HasKey(e => e.DeptId)
-                    .HasName("PK__departme__BE2D26B6D0D236DC");
+                   .HasName("PK__departme__BE2D26B6D0D236DC");
 
             builder.ToTable("department");
 

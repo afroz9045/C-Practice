@@ -46,7 +46,7 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{issueId}")]
+        [HttpDelete]
         public async Task<ActionResult> DeleteReturnBook(int returnId)
         {
             var returnDelete = await _returnRepository.DeleteReturnAsync(returnId);

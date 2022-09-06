@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LibraryManagement.Core.Entities
 {
-    public partial class Designation
+    public class Designation
     {
         public Designation()
         {
