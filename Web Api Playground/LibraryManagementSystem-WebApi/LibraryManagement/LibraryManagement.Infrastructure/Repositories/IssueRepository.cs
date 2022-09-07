@@ -38,7 +38,7 @@ namespace LibraryManagement.Infrastructure.Repositories
                 {
                     if (bookIdResult != null && bookIdResult.StockAvailable > 0)
                     {
-                        issuedBook.BookId = bookIdResult.BookId;
+                        //issuedBook.BookId = bookIdResult.BookId;
                         issuedBook.IssueDate = DateTime.Today;
                         issuedBook.ExpiryDate = DateTime.Today.AddDays(30);
                         issuedBook.StaffId = issue.StaffId;
@@ -60,7 +60,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             if (staffId != null && studentId == 0)
             {
                 var bookIssuedEntityStaff = await (from issuedStaff in _libraryDbContext.Issues
-                                                   join staff in _libraryDbContext.staff on issuedStaff.StaffId equals staffId
+                                                   join staff in _libraryDbContext.Staffs on issuedStaff.StaffId equals staffId
                                                    where staff.StaffId == staffId
                                                    select new BookIssuedTo
                                                    {

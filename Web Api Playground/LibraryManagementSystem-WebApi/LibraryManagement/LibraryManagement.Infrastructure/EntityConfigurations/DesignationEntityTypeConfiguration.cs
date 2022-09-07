@@ -1,7 +1,6 @@
 ﻿using LibraryManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Dapper.SqlMapper;
 
 namespace LibraryManagement.Infrastructure.EntityConfigurations
 {

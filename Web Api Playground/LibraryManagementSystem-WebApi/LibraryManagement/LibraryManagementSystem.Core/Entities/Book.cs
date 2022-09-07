@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
+    [Table("books")]
     public class Book
     {
         public Book()
@@ -15,7 +15,7 @@ namespace LibraryManagement.Core.Entities
         public string BookName { get; set; } = null!;
         public int Isbn { get; set; }
         public string AuthorName { get; set; } = null!;
-        public string BookEdition { get; set; } = null!;
+        public string BookEdition { get; set; } = "Default";
         public int? StockAvailable { get; set; }
 
         public virtual ICollection<Issue> Issues { get; set; }

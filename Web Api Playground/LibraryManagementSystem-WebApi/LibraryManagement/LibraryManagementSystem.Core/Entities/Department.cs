@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
+    [Table("department")]
     public class Department
     {
         public Department()
@@ -9,9 +10,7 @@ namespace LibraryManagement.Core.Entities
             Students = new HashSet<Student>();
         }
 
-        [Key]
         public short DeptId { get; set; }
-
         public string DepartmentName { get; set; } = null!;
 
         public virtual ICollection<Student> Students { get; set; }

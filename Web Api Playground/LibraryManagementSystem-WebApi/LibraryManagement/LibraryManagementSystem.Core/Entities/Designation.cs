@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
+    [Table("designation")]
     public class Designation
     {
         public Designation()

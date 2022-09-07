@@ -25,7 +25,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             if (_libraryDbContext.Books.Count() == 0)
             {
                 var identityResetQuery = "DBCC CHECKIDENT ('[books]',RESEED,0)";
-                await _dapperConnection.QueryAsync(identityResetQuery);
+                await _dapperConnection.QueryAsync<Book>(identityResetQuery);
             }
             var bookDetails = await GetBookById(book.BookId);
             if (bookDetails == null)
@@ -43,13 +43,10 @@ namespace LibraryManagement.Infrastructure.Repositories
                 await _libraryDbContext.SaveChangesAsync();
                 return bookRecord;
             }
-            else
-            {
-                bookDetails.StockAvailable += 1;
-                _libraryDbContext.Books.Update(bookDetails);
-                await _libraryDbContext.SaveChangesAsync();
-                return bookDetails;
-            }
+            bookDetails.StockAvailable += 1;
+            _libraryDbContext.Books.Update(bookDetails);
+            await _libraryDbContext.SaveChangesAsync();
+            return bookDetails;
         }
 
         public async Task<IEnumerable<Book>> GetBooksAsync()

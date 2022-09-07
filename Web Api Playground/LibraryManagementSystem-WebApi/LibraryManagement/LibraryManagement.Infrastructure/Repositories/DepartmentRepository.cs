@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;

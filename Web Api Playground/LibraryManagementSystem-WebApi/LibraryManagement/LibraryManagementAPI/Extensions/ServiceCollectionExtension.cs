@@ -35,6 +35,7 @@ namespace LibraryManagementAPI.Extensions
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
             services.AddTransient<IIssueRepository, IssueRepository>();
+            services.AddTransient<IPenaltyRepository, PenaltyRepository>();
             services.AddTransient<IReturnRepository, ReturnRepository>();
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));

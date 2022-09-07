@@ -21,7 +21,12 @@ namespace LibraryManagementAPI.Controllers
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, short issueId)
         {
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
-            return Ok(await _returnRepository.AddReturnAsync(returnBook, issueId));
+            var returnResult = await _returnRepository.AddReturnAsync(returnBook, issueId);
+            if (returnResult.ReturnId > 0 && returnResult != null)
+            {
+                return Ok(returnResult);
+            }
+            return NotFound("Please Check with your Issued Books and Penalty!");
         }
 
         [HttpGet]

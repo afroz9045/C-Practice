@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using LibraryManagement.Core.Contracts;
-using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;

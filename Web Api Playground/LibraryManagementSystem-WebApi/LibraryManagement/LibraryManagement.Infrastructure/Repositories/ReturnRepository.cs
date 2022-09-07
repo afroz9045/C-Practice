@@ -12,13 +12,15 @@ namespace LibraryManagement.Infrastructure.Repositories
         private readonly IDbConnection _dapperConnection;
         private readonly IIssueRepository _issueRepository;
         private readonly IBookRepository _bookRepository;
+        private readonly IPenaltyRepository _penaltyRepository;
 
-        public ReturnRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IIssueRepository issueRepository, IBookRepository bookRepository)
+        public ReturnRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IIssueRepository issueRepository, IBookRepository bookRepository, IPenaltyRepository penaltyRepository)
         {
             _libraryDbContext = libraryDbContext;
             _dapperConnection = dapperConnection;
             _issueRepository = issueRepository;
             _bookRepository = bookRepository;
+            _penaltyRepository = penaltyRepository;
         }
 
         public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
@@ -29,19 +31,38 @@ namespace LibraryManagement.Infrastructure.Repositories
             {
                 return null;
             }
-            var returnRecord = new Return()
+            //var penaltyData = await (from penalty in _libraryDbContext.Penalties
+            //                         join issue in _libraryDbContext.Issues
+            //                         on penalty.IssueId equals issue.IssueId
+            //                         where issue.IssueId == issueId
+            //                         select new PenaltyCalculationDto
+            //                         {
+            //                             //IssueId = penalty.IssueId,
+            //                             //PenaltyId = penalty.PenaltyId,
+            //                             PenaltyPaidStatus = penalty.PenaltyPaidStatus,
+            //                             PenaltyAmount = penalty.PenaltyAmount,
+            //                             //IssueDate = issue.IssueDate,
+            //                             ExpiryDate = issue.ExpiryDate
+            //                         }).FirstOrDefaultAsync();
+            var isPenalty = await _penaltyRepository.IsPenalty(issueId);
+            var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
+            if (penaltyData.PenaltyAmount == 0 && penaltyData.PenaltyPaidStatus == true || penaltyData == null)
             {
-                ExpiryDate = issueDetails.ExpiryDate,
-                IssueDate = issueDetails.IssueDate,
-                BookId = issueDetails.BookId,
-                ReturnDate = DateTime.UtcNow
-            };
-            await _issueRepository.DeleteIssueAsync(issueId);
-            _libraryDbContext.Returns.Add(returnRecord);
-            bookDetails.StockAvailable += 1;
-            _libraryDbContext.Books.Update(bookDetails);
-            await _libraryDbContext.SaveChangesAsync();
-            return returnRecord;
+                var returnRecord = new Return()
+                {
+                    ExpiryDate = issueDetails.ExpiryDate,
+                    IssueDate = issueDetails.IssueDate,
+                    BookId = issueDetails.BookId,
+                    ReturnDate = DateTime.UtcNow
+                };
+                await _issueRepository.DeleteIssueAsync(issueId);
+                _libraryDbContext.Returns.Add(returnRecord);
+                bookDetails.StockAvailable += 1;
+                _libraryDbContext.Books.Update(bookDetails);
+                await _libraryDbContext.SaveChangesAsync();
+                return returnRecord;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Return>> GetReturnAsync()
