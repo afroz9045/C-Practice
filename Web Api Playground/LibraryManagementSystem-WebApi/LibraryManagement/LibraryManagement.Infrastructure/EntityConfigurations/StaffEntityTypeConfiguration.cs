@@ -1,7 +1,6 @@
 ﻿using LibraryManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Dapper.SqlMapper;
 
 namespace LibraryManagement.Infrastructure.EntityConfigurations
 {
@@ -10,8 +9,8 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Staff> builder)
         {
             builder.Property(e => e.StaffId)
-                    .HasMaxLength(50)
-                    .HasColumnName("staffId");
+                     .HasMaxLength(50)
+                     .HasColumnName("staffId");
 
             builder.Property(e => e.DesignationId)
                 .HasMaxLength(50)

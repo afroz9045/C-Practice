@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
-using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Infrastructure.Repositories
 {

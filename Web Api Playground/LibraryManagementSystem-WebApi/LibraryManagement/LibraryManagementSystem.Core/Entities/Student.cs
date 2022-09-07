@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
@@ -16,8 +14,6 @@ namespace LibraryManagement.Core.Entities
         public string StudentName { get; set; } = null!;
         public string Gender { get; set; } = null!;
         public string StudentDepartment { get; set; } = null!;
-
-        [ForeignKey("Department")]
         public short? DepartmentId { get; set; }
 
         public virtual Department? Department { get; set; }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Repositories;
 using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,7 +52,7 @@ namespace LibraryManagementAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDesignation(string id)
         {
-            var designation = await _designationRepository.DeleteDepartmentAsync(id);
+            var designation = await _designationRepository.DeleteDesignationAsync(id);
             if (designation != null)
                 return Ok(designation);
             return NotFound();

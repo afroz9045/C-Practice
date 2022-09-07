@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagement.Core.Entities
 {
@@ -11,10 +10,7 @@ namespace LibraryManagement.Core.Entities
             Penalties = new HashSet<Penalty>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public short IssueId { get; set; }
-
+        public short? IssueId { get; set; }
         public int BookId { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime ExpiryDate { get; set; }

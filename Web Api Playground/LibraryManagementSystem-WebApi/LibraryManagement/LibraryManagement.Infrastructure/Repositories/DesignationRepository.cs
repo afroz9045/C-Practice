@@ -54,7 +54,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             return designationRecord;
         }
 
-        public async Task<Designation> DeleteDepartmentAsync(string designationId)
+        public async Task<Designation> DeleteDesignationAsync(string designationId)
         {
             var designationRecord = await GetDesignationByIdAsync(designationId);
             _libraryDbContext.Designations?.Remove(designationRecord);

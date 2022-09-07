@@ -48,7 +48,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDepartment(string id)
+        public async Task<ActionResult> DeleteStaff(string id)
         {
             var result = _staffRepository.DeleteStaffAsync(id);
             if (result != null)

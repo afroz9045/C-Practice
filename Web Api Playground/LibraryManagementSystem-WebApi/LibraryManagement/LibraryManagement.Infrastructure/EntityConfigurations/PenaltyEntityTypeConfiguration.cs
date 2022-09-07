@@ -1,12 +1,6 @@
 ﻿using LibraryManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Dapper.SqlMapper;
 
 namespace LibraryManagement.Infrastructure.EntityConfigurations
 {
@@ -19,6 +13,10 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
             builder.Property(e => e.PenaltyId).HasColumnName("penaltyId");
 
             builder.Property(e => e.IssueId).HasColumnName("issueId");
+
+            builder.Property(e => e.PenaltyAmount)
+                .HasColumnName("penaltyAmount")
+                .HasDefaultValueSql("((0))");
 
             builder.Property(e => e.PenaltyPaidStatus)
                 .HasColumnName("penaltyPaidStatus")
