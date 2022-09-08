@@ -19,21 +19,31 @@ namespace LibraryManagement.Infrastructure.Repositories
             _issueRepository = issueRepository;
         }
 
-        public async Task<Penalty> IsPenalty(short issueId)
+        public async Task<Penalty?> IsPenalty(short issueId)
         {
-            var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
-            if (issueDetails != null && (issueDetails.ExpiryDate - DateTime.Now).TotalDays > 30)
+            var isPenaltyAlreadyExits = await GetPenaltyByIdAsync(issueId);
+            if (isPenaltyAlreadyExits == null)
             {
-                var penalty = new Penalty()
+                var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
+                TimeSpan expiredDate = DateTime.UtcNow.Subtract(issueDetails.ExpiryDate);
+                if (issueDetails != null && expiredDate.Days > 0)
                 {
-                    IssueId = issueDetails.IssueId,
-                    PenaltyAmount = Convert.ToInt32((issueDetails.ExpiryDate - DateTime.Now).TotalDays * 2),
-                    PenaltyPaidStatus = false
-                };
-                await _libraryDbContext.Penalties.AddAsync(penalty);
-                await _libraryDbContext.SaveChangesAsync();
-                return penalty;
+                    var penalty = new Penalty()
+                    {
+                        IssueId = issueDetails.IssueId,
+                        PenaltyAmount = expiredDate.Days * 2,
+                        PenaltyPaidStatus = false
+                    };
+                    await _libraryDbContext.Penalties.AddAsync(penalty);
+                    await _libraryDbContext.SaveChangesAsync();
+                    return penalty;
+                }
             }
+            else if (isPenaltyAlreadyExits != null)
+            {
+                return isPenaltyAlreadyExits;
+            }
+
             return null;
         }
 
