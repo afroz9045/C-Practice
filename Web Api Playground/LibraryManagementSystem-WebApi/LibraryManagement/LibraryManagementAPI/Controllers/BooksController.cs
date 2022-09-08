@@ -12,16 +12,19 @@ namespace LibraryManagementAPI.Controllers
     {
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<BooksController> _logger;
 
-        public BooksController(IBookRepository bookRepository, IMapper mapper)
+        public BooksController(IBookRepository bookRepository, IMapper mapper, ILogger<BooksController> logger)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost]
         public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
         {
+            _logger.LogInformation("Adding a Book");
             var book = _mapper.Map<BookVm, Book>(bookVm);
             return Ok(await _bookRepository.AddBookAsync(book));
         }
@@ -29,32 +32,36 @@ namespace LibraryManagementAPI.Controllers
         [HttpGet]
         public async Task<ActionResult> GetBooks()
         {
+            _logger.LogInformation("Getting Available Books Details");
             return Ok(await _bookRepository.GetBooksAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetBookById(int id)
+        public async Task<ActionResult> GetBookById(int bookId)
         {
-            var result = _bookRepository.GetBookById(id);
+            _logger.LogInformation($"Getting Available Book Detail by Book Id: {bookId}");
+            var result = _bookRepository.GetBookById(bookId);
             if (result != null)
                 return Ok(await result);
             return NotFound();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int id)
+        public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int bookId)
         {
             var book = _mapper.Map<BookVm, Book>(bookVm);
-            var result = _bookRepository.UpdateBookAsync(book, id);
+            _logger.LogInformation($"Updating a Book details with bookId: {bookId}");
+            var result = _bookRepository.UpdateBookAsync(book, bookId);
             if (result != null)
                 return Ok(await result);
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteBook(int id)
+        public async Task<ActionResult> DeleteBook(int bookId)
         {
-            var result = _bookRepository.DeleteBookAsync(id);
+            _logger.LogInformation($"Deleting a Book with {bookId}");
+            var result = _bookRepository.DeleteBookAsync(bookId);
             if (result != null)
                 return Ok(await result);
             return NotFound();

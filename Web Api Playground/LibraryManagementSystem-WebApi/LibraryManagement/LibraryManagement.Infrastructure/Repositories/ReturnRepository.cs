@@ -31,19 +31,6 @@ namespace LibraryManagement.Infrastructure.Repositories
             {
                 return null;
             }
-            //var penaltyData = await (from penalty in _libraryDbContext.Penalties
-            //                         join issue in _libraryDbContext.Issues
-            //                         on penalty.IssueId equals issue.IssueId
-            //                         where issue.IssueId == issueId
-            //                         select new PenaltyCalculationDto
-            //                         {
-            //                             //IssueId = penalty.IssueId,
-            //                             //PenaltyId = penalty.PenaltyId,
-            //                             PenaltyPaidStatus = penalty.PenaltyPaidStatus,
-            //                             PenaltyAmount = penalty.PenaltyAmount,
-            //                             //IssueDate = issue.IssueDate,
-            //                             ExpiryDate = issue.ExpiryDate
-            //                         }).FirstOrDefaultAsync();
             var isPenalty = await _penaltyRepository.IsPenalty(issueId);
             var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
             if (penaltyData.PenaltyAmount == 0 && penaltyData.PenaltyPaidStatus == true || penaltyData == null)

@@ -1,8 +1,12 @@
 using AutoMapper;
 using LibraryManagementAPI.Configuration;
 using LibraryManagementAPI.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
+builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration)));
 
 #region Configure and Register AutoMapper
 

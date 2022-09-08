@@ -4,7 +4,7 @@ namespace LibraryManagement.Core.Contracts
 {
     public interface IPenaltyRepository
     {
-        Task<Penalty> IsPenalty(short issueId);
+        Task<Penalty?> IsPenalty(short issueId);
 
         Task<IEnumerable<Penalty>> GetPenaltiesAsync();
 
