@@ -1,6 +1,6 @@
 using AutoMapper;
-using LibraryManagementAPI.Configuration;
-using LibraryManagementAPI.Extensions;
+using LibraryManagement.Api.Configuration;
+using LibraryManagement.Api.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

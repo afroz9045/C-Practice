@@ -12,11 +12,11 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
 
             builder.Property(e => e.DesignationId)
                 .HasMaxLength(50)
-                .HasColumnName("designationId");
+                .HasColumnName("DesignationId");
 
             builder.Property(e => e.DesignationName)
                 .HasMaxLength(20)
-                .HasColumnName("designationName");
+                .HasColumnName("DesignationName");
         }
     }
 }

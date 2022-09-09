@@ -1,8 +1,7 @@
-﻿namespace LibraryManagementAPI.ViewModels
+﻿namespace LibraryManagement.Api.ViewModels
 {
     public class BookVm
     {
-        public int? BookId { get; set; }
         public string BookName { get; set; } = null!;
 
         public int Isbn { get; set; }

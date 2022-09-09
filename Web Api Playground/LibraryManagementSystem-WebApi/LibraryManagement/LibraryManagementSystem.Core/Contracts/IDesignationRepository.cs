@@ -6,6 +6,10 @@ namespace LibraryManagement.Core.Contracts
     {
         Task<Designation> AddDesignationAsync(Designation designation);
 
+        Task<Designation?> GetRecentInsertedDesignation();
+
+        Task<string?> GenerateDesignationId();
+
         Task<Designation> DeleteDesignationAsync(string designationId);
 
         Task<IEnumerable<Designation>> GetDesignationAsync();

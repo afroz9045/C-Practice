@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
     public class IssueController : ApiController
     {
@@ -20,6 +21,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
             if (issueVm.StudentId != null && issueVm.StaffId == null)
@@ -35,6 +37,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssueBookDetails()
         {
             _logger.LogInformation("Getting books issued details");
@@ -42,6 +45,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{bookIssuedId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssueBookByIdDetails(short bookIssuedId)
         {
             _logger.LogInformation($"Getting book issued details by book id: {bookIssuedId} ");
@@ -49,6 +53,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("staff/{bookIssuedToStaff}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] string bookIssuedToStaff)
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
@@ -61,6 +66,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("students/{bookIssuedToStudent}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] int bookIssuedToStudent)
         {
             _logger.LogInformation($"Getting Book issued to student with student id: {bookIssuedToStudent}");
@@ -73,6 +79,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPut("{bookIssuedId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] Issue issue)
         {
             _logger.LogInformation($"Updating book issued details with book issued id: {bookIssuedId}");
@@ -82,11 +89,12 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{issueId}")]
-        public async Task<ActionResult> DeleteIssue(short issueid)
+        [HttpDelete("{bookIssuedId}")]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        public async Task<ActionResult> DeleteIssue(short bookIssuedId)
         {
-            _logger.LogInformation($"Deleting book issed details with book issued id: {issueid}");
-            var issueDelete = await _issueRepository.DeleteIssueAsync(issueid);
+            _logger.LogInformation($"Deleting book issed details with book issued id: {bookIssuedId}");
+            var issueDelete = await _issueRepository.DeleteIssueAsync(bookIssuedId);
             if (issueDelete != null)
                 return Ok(issueDelete);
             return NotFound();

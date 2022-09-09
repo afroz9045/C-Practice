@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
     public class StaffController : ApiController
     {
@@ -20,6 +21,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddStaff([FromBody] StaffVm staffVm)
         {
             _logger.LogInformation($"Adding Staff details");
@@ -28,13 +30,15 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetStaff()
         {
             _logger.LogInformation("Getting staff details");
             return Ok(await _staffRepository.GetStaffAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{staffId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetStaffById(string staffId)
         {
             _logger.LogInformation($"Getting staff details with staff id {staffId}");
@@ -42,7 +46,8 @@ namespace LibraryManagementAPI.Controllers
             return result;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{staffId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateStaff([FromBody] StaffVm staffVm, string staffId)
         {
             _logger.LogInformation($"Updating staff details with staff id {staffId}");
@@ -53,7 +58,8 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{staffId}")]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteStaff(string staffId)
         {
             _logger.LogInformation($"Updating staff details with staff id {staffId}");

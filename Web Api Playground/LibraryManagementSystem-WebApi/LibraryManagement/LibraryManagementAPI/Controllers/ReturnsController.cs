@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
     public class ReturnsController : ApiController
     {
@@ -20,6 +21,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost("{issueId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, short issueId)
         {
             _logger.LogInformation($"Adding Book return with issue id : {issueId}");
@@ -33,6 +35,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookReturn()
         {
             _logger.LogInformation($"Getting Books returns");
@@ -40,6 +43,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{bookReturnId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookReturnById(int bookReturnId)
         {
             _logger.LogInformation($"Getting Book return by return id {bookReturnId}");
@@ -47,6 +51,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPut("{bookReturnId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateReturnBookDetails(int bookReturnId, [FromBody] ReturnVm returnVm)
         {
             _logger.LogInformation($"Updating book return details with book return id {bookReturnId}");
@@ -58,6 +63,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteReturnBook(int returnId)
         {
             _logger.LogInformation($"Deleting Book Return details with return id : {returnId}");

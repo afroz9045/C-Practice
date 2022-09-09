@@ -10,21 +10,21 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.ToTable("issue");
 
-            builder.Property(e => e.IssueId).HasColumnName("issueId");
+            builder.Property(e => e.IssueId).HasColumnName("IssueId");
 
-            builder.Property(e => e.BookId).HasColumnName("bookId");
+            builder.Property(e => e.BookId).HasColumnName("BookId");
 
             builder.Property(e => e.ExpiryDate)
                 .HasColumnType("date")
-                .HasColumnName("expiryDate");
+                .HasColumnName("ExpiryDate");
 
             builder.Property(e => e.IssueDate)
                 .HasColumnType("date")
-                .HasColumnName("issueDate");
+                .HasColumnName("IssueDate");
 
             builder.Property(e => e.StaffId)
                 .HasMaxLength(50)
-                .HasColumnName("staffId");
+                .HasColumnName("StaffId");
 
             builder.Property(e => e.StudentId).HasColumnName("studentId");
 

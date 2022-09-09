@@ -10,19 +10,19 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.Property(e => e.StaffId)
                      .HasMaxLength(50)
-                     .HasColumnName("staffId");
+                     .HasColumnName("StaffId");
 
             builder.Property(e => e.DesignationId)
                 .HasMaxLength(50)
-                .HasColumnName("designationId");
+                .HasColumnName("DesignationId");
 
             builder.Property(e => e.Gender)
                 .HasMaxLength(10)
-                .HasColumnName("gender");
+                .HasColumnName("Gender");
 
             builder.Property(e => e.StaffName)
                 .HasMaxLength(20)
-                .HasColumnName("staffName");
+                .HasColumnName("StaffName");
 
             builder.HasOne(d => d.Designation)
                 .WithMany(p => p.staff)

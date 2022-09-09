@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace LibraryManagement.Core.Entities
+﻿namespace LibraryManagement.Core.Entities
 {
-    [Table("issue")]
     public class Issue
     {
         public Issue()

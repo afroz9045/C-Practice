@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class BooksController : ApiController
     {
         private readonly IBookRepository _bookRepository;
@@ -22,6 +24,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
         {
             _logger.LogInformation("Adding a Book");
@@ -30,13 +33,15 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBooks()
         {
             _logger.LogInformation("Getting Available Books Details");
             return Ok(await _bookRepository.GetBooksAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{bookId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookById(int bookId)
         {
             _logger.LogInformation($"Getting Available Book Detail by Book Id: {bookId}");
@@ -46,7 +51,8 @@ namespace LibraryManagementAPI.Controllers
             return NotFound();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{bookId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int bookId)
         {
             var book = _mapper.Map<BookVm, Book>(bookVm);
@@ -57,7 +63,8 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{bookId}")]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteBook(int bookId)
         {
             _logger.LogInformation($"Deleting a Book with {bookId}");

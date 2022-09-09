@@ -10,21 +10,21 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.ToTable("return");
 
-            builder.Property(e => e.ReturnId).HasColumnName("returnId");
+            builder.Property(e => e.ReturnId).HasColumnName("ReturnId");
 
-            builder.Property(e => e.BookId).HasColumnName("bookId");
+            builder.Property(e => e.BookId).HasColumnName("BookId");
 
             builder.Property(e => e.ExpiryDate)
                 .HasColumnType("date")
-                .HasColumnName("expiryDate");
+                .HasColumnName("ExpiryDate");
 
             builder.Property(e => e.IssueDate)
                 .HasColumnType("date")
-                .HasColumnName("issueDate");
+                .HasColumnName("IssueDate");
 
             builder.Property(e => e.ReturnDate)
                 .HasColumnType("date")
-                .HasColumnName("returnDate");
+                .HasColumnName("ReturnDate");
 
             builder.HasOne(d => d.Book)
                 .WithMany(p => p.Returns)

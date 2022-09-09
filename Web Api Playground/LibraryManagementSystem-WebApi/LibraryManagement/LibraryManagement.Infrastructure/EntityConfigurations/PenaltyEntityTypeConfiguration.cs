@@ -10,16 +10,16 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.ToTable("penalty");
 
-            builder.Property(e => e.PenaltyId).HasColumnName("penaltyId");
+            builder.Property(e => e.PenaltyId).HasColumnName("PenaltyId");
 
-            builder.Property(e => e.IssueId).HasColumnName("issueId");
+            builder.Property(e => e.IssueId).HasColumnName("IssueId");
 
             builder.Property(e => e.PenaltyAmount)
-                .HasColumnName("penaltyAmount")
+                .HasColumnName("PenaltyAmount")
                 .HasDefaultValueSql("((0))");
 
             builder.Property(e => e.PenaltyPaidStatus)
-                .HasColumnName("penaltyPaidStatus")
+                .HasColumnName("PenaltyPaidStatus")
                 .HasDefaultValueSql("((0))");
 
             builder.HasOne(d => d.Issue)

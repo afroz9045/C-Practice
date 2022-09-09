@@ -10,6 +10,8 @@ namespace LibraryManagement.Core.Contracts
 
         Task<Book?> GetBookById(int bookId);
 
+        Task<Book?> GetBookByBookName(string bookName);
+
         Task<Book> UpdateBookAsync(Book book, int id);
 
         Task<Book> DeleteBookAsync(int id);
