@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 
-namespace LibraryManagementAPI.Configuration
+namespace LibraryManagement.Api.Configuration
 {
     internal class AutoMapperConfiguration : Profile
     {

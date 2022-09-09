@@ -1,4 +1,4 @@
-﻿namespace LibraryManagementAPI.ViewModels
+﻿namespace LibraryManagement.Api.ViewModels
 {
     public class ReturnVm
     {

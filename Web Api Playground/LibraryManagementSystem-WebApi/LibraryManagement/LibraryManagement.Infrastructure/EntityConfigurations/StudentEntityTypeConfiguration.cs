@@ -10,24 +10,24 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.ToTable("student");
 
-            builder.Property(e => e.StudentId).HasColumnName("studentId");
+            builder.Property(e => e.StudentId).HasColumnName("StudentId");
 
-            builder.Property(e => e.DepartmentId).HasColumnName("departmentId");
+            builder.Property(e => e.DepartmentId).HasColumnName("DepartmentId");
 
             builder.Property(e => e.Gender)
                 .HasMaxLength(15)
                 .IsUnicode(false)
-                .HasColumnName("gender");
+                .HasColumnName("Gender");
 
             builder.Property(e => e.StudentDepartment)
                 .HasMaxLength(30)
                 .IsUnicode(false)
-                .HasColumnName("studentDepartment");
+                .HasColumnName("StudentDepartment");
 
             builder.Property(e => e.StudentName)
                 .HasMaxLength(30)
                 .IsUnicode(false)
-                .HasColumnName("studentName");
+                .HasColumnName("StudentName");
 
             builder.HasOne(d => d.Department)
                 .WithMany(p => p.Students)

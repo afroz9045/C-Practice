@@ -3,6 +3,7 @@ using Dapper;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace LibraryManagement.Infrastructure.Repositories
@@ -27,7 +28,8 @@ namespace LibraryManagement.Infrastructure.Repositories
                 var identityResetQuery = "DBCC CHECKIDENT ('[books]',RESEED,0)";
                 await _dapperConnection.QueryAsync<Book>(identityResetQuery);
             }
-            var bookDetails = await GetBookById(book.BookId);
+            var bookDetails = await GetBookByBookName(book.BookName);
+
             if (bookDetails == null)
             {
                 var bookRecord = new Book()
@@ -47,6 +49,16 @@ namespace LibraryManagement.Infrastructure.Repositories
             _libraryDbContext.Books.Update(bookDetails);
             await _libraryDbContext.SaveChangesAsync();
             return bookDetails;
+        }
+
+        public async Task<Book?> GetBookByBookName(string bookName)
+        {
+            var bookRecord = await (from book in _libraryDbContext.Books
+                                    where book.BookName == bookName
+                                    select book).FirstOrDefaultAsync();
+            if (bookRecord != null)
+                return bookRecord;
+            return null;
         }
 
         public async Task<IEnumerable<Book>> GetBooksAsync()

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Text.Json.Serialization;
 
-namespace LibraryManagementAPI.Extensions
+namespace LibraryManagement.Api.Extensions
 {
     public static class ServiceCollectionExtension
     {

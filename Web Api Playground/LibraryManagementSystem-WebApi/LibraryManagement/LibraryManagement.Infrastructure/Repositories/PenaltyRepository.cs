@@ -38,6 +38,7 @@ namespace LibraryManagement.Infrastructure.Repositories
                     await _libraryDbContext.SaveChangesAsync();
                     return penalty;
                 }
+                return null;
             }
             else if (isPenaltyAlreadyExits != null)
             {
@@ -58,15 +59,18 @@ namespace LibraryManagement.Infrastructure.Repositories
             return null;
         }
 
-        public async Task<Penalty?> GetPenaltyByIdAsync(short issueId)
+        public async Task<Penalty> GetPenaltyByIdAsync(short issueId)
         {
             var penaltyQuery = "select * from [penalty] where issueId = @issueId";
-            var penaltyIssuedData = (await _dapperConnection.QueryFirstAsync<Penalty>(penaltyQuery, new { issueId }));
-            if (penaltyIssuedData != null)
+            var penaltyIssuedData = await _dapperConnection.QueryFirstOrDefaultAsync<Penalty?>(penaltyQuery, new { issueId });
+            if (penaltyIssuedData == null)
+            {
+                return null;
+            }
+            else
             {
                 return penaltyIssuedData;
             }
-            return null;
         }
 
         public async Task<bool> PayPenaltyAsync(short issueId, int penaltyAmount)

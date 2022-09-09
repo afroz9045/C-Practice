@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
     public class DesignationsController : ApiController
     {
@@ -22,6 +23,7 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddDesignation([FromBody] DesignationVm designationVm)
         {
             _logger.LogInformation("Adding designation");
@@ -30,13 +32,15 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDesignations()
         {
             _logger.LogInformation("Getting designations details");
             return Ok(await _designationRepository.GetDesignationAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{designationId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDesignationById(string designationId)
         {
             _logger.LogInformation($"Getting designation by designation id: {designationId}");
@@ -44,7 +48,8 @@ namespace LibraryManagementAPI.Controllers
             return result;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{designationId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateDesignation([FromBody] DesignationVm designationVm, string designationId)
         {
             _logger.LogInformation($"Update designation details by designation id: {designationId}");
@@ -55,7 +60,8 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{designationId}")]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteDesignation(string designationId)
         {
             _logger.LogInformation($"Deleting designation details by designation id: {designationId}");

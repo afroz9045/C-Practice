@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementAPI.Extensions
+﻿using Serilog;
+
+namespace LibraryManagement.Api.Extensions
 {
     public static class WebAppExtension
     {
@@ -11,7 +13,7 @@
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
-
+            app.UseSerilogRequestLogging();
             app.UseAuthorization();
 
             app.MapControllers();

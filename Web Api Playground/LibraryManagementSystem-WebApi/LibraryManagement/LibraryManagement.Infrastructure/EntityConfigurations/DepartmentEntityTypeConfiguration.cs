@@ -13,11 +13,11 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
 
             builder.ToTable("department");
 
-            builder.Property(e => e.DeptId).HasColumnName("deptId");
+            builder.Property(e => e.DeptId).HasColumnName("DeptId");
 
             builder.Property(e => e.DepartmentName)
                 .HasMaxLength(50)
-                .HasColumnName("departmentName");
+                .HasColumnName("DepartmentName");
         }
     }
 }

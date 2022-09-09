@@ -32,16 +32,16 @@ namespace LibraryManagement.Infrastructure.Repositories
                 return null;
             }
             var isPenalty = await _penaltyRepository.IsPenalty(issueId);
+            var returnRecord = new Return();
             var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
-            if (penaltyData.PenaltyAmount == 0 && penaltyData.PenaltyPaidStatus == true || penaltyData == null)
+
+            if (penaltyData == null || penaltyData.PenaltyPaidStatus == true)
             {
-                var returnRecord = new Return()
-                {
-                    ExpiryDate = issueDetails.ExpiryDate,
-                    IssueDate = issueDetails.IssueDate,
-                    BookId = issueDetails.BookId,
-                    ReturnDate = DateTime.UtcNow
-                };
+                returnRecord.ExpiryDate = issueDetails.ExpiryDate;
+                returnRecord.IssueDate = issueDetails.IssueDate;
+                returnRecord.BookId = issueDetails.BookId;
+                returnRecord.ReturnDate = DateTime.UtcNow;
+
                 await _issueRepository.DeleteIssueAsync(issueId);
                 _libraryDbContext.Returns.Add(returnRecord);
                 bookDetails.StockAvailable += 1;
@@ -49,7 +49,7 @@ namespace LibraryManagement.Infrastructure.Repositories
                 await _libraryDbContext.SaveChangesAsync();
                 return returnRecord;
             }
-            return null;
+            return returnRecord = null;
         }
 
         public async Task<IEnumerable<Return>> GetReturnAsync()

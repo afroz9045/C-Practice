@@ -10,25 +10,25 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
         {
             builder.ToTable("books");
 
-            builder.Property(e => e.BookId).UseIdentityColumn().HasColumnName("bookId");
+            builder.Property(e => e.BookId).UseIdentityColumn().HasColumnName("BookId");
 
             builder.Property(e => e.AuthorName)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("authorName");
+                .HasColumnName("AuthorName");
 
             builder.Property(e => e.BookEdition)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("bookEdition");
+                .HasColumnName("BookEdition");
 
             builder.Property(e => e.BookName)
                 .HasMaxLength(15)
-                .HasColumnName("bookName");
+                .HasColumnName("BookName");
 
-            builder.Property(e => e.Isbn).HasColumnName("isbn");
+            builder.Property(e => e.Isbn).HasColumnName("Isbn");
 
-            builder.Property(e => e.StockAvailable).HasColumnName("stockAvailable");
+            builder.Property(e => e.StockAvailable).HasColumnName("StockAvailable");
         }
     }
 }

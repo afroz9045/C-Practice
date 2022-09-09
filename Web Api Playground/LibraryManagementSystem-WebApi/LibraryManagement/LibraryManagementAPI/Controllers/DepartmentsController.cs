@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts;
 using LibraryManagement.Core.Entities;
-using LibraryManagementAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManagementAPI.Controllers
+namespace LibraryManagement.Api.Controllers
 {
     public class DepartmentsController : ApiController
     {
@@ -19,22 +20,8 @@ namespace LibraryManagementAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetDepartments()
-        {
-            _logger.LogInformation("Getting Departments details");
-            return Ok(await _departmentRepository.GetDepartmentsAsync());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetDepartmentById(short departmentId)
-        {
-            _logger.LogInformation($"Getting Department details by id: {departmentId}");
-            var result = Ok(await _departmentRepository.GetDepartmentByIdAsync(departmentId));
-            return result;
-        }
-
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddDepartment([FromBody] DepartmentVm departmentVm)
         {
             _logger.LogInformation("Adding Department");
@@ -42,7 +29,25 @@ namespace LibraryManagementAPI.Controllers
             return Ok(await _departmentRepository.AddDepartmentAsync(department));
         }
 
-        [HttpPut("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetDepartments()
+        {
+            _logger.LogInformation("Getting Departments details");
+            return Ok(await _departmentRepository.GetDepartmentsAsync());
+        }
+
+        [HttpGet("{departmentId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetDepartmentById(short departmentId)
+        {
+            _logger.LogInformation($"Getting Department details by id: {departmentId}");
+            var result = Ok(await _departmentRepository.GetDepartmentByIdAsync(departmentId));
+            return result;
+        }
+
+        [HttpPut("{departmentId}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short departmentId)
         {
             _logger.LogInformation($"Updating Department with department id: {departmentId}");
@@ -53,7 +58,8 @@ namespace LibraryManagementAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{departmentId}")]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteDepartment(short departmentId)
         {
             _logger.LogInformation($"Deleting Department with department id: {departmentId}");
