@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -17,49 +17,64 @@ namespace LibraryManagement.Infrastructure.Repositories
             _dapperConnection = dapperConnection;
         }
 
-        public async Task<IEnumerable<Department>> GetDepartmentsAsync()
+        public async Task<IEnumerable<Department>?> GetDepartmentsAsync()
         {
             var getDepartmentQuery = "select * from [department]";
             var departmentData = await _dapperConnection.QueryAsync<Department>(getDepartmentQuery);
-            return departmentData;
+            if (departmentData != null)
+                return departmentData;
+            return null;
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(short deptId)
+        public async Task<Department?> GetDepartmentByIdAsync(short deptId)
         {
             var getDepartmentByIdQuery = "select * from [department] where deptId = @deptId";
-            return (await _dapperConnection.QueryFirstAsync<Department>(getDepartmentByIdQuery, new { deptId = deptId }));
+            var department = await _dapperConnection.QueryFirstOrDefaultAsync<Department>(getDepartmentByIdQuery, new { deptId = deptId });
+            if (department != null)
+                return department;
+            return null;
         }
 
-        public async Task<Department> AddDepartmentAsync(Department department)
+        public async Task<Department?> GetDepartmentByNameAsync(string departmentName)
         {
-            var departmentRecord = new Department()
+            var getDepartmentByNameQuery = "select * from [department] where DepartmentName = @departmentName";
+            var department = await _dapperConnection.QueryFirstOrDefaultAsync<Department>(getDepartmentByNameQuery, new { departmentName });
+            if (department != null)
+                return department;
+            return null;
+        }
+
+        public async Task<Department?> AddDepartmentAsync(Department department)
+        {
+            var addedDepartment = _libraryDbContext.Departments.Add(department);
+            if (addedDepartment != null)
             {
-                DepartmentName = department.DepartmentName,
-                DeptId = department.DeptId
-            };
-            _libraryDbContext.Departments.Add(departmentRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return departmentRecord;
+                await _libraryDbContext.SaveChangesAsync();
+                return department;
+            }
+            return null;
         }
 
-        public async Task<Department> UpdateDepartmentAsync(short departmentId, Department department)
+        public async Task<Department?> UpdateDepartmentAsync(Department department)
         {
-            var departmentRecord = await GetDepartmentByIdAsync(departmentId);
-
-            departmentRecord.DeptId = departmentId;
-            departmentRecord.DepartmentName = department.DepartmentName;
-
-            _libraryDbContext.Update(departmentRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return departmentRecord;
+            var updatedDepartment = _libraryDbContext.Update(department);
+            if (updatedDepartment != null)
+            {
+                await _libraryDbContext.SaveChangesAsync();
+                return department;
+            }
+            return null;
         }
 
-        public async Task<Department> DeleteDepartmentAsync(short departmentId)
+        public async Task<Department?> DeleteDepartmentAsync(Department department)
         {
-            var departmentRecord = await GetDepartmentByIdAsync(departmentId);
-            _libraryDbContext.Departments?.Remove(departmentRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return departmentRecord;
+            var deletedDepartment = _libraryDbContext.Departments?.Remove(department);
+            if (deletedDepartment != null)
+            {
+                await _libraryDbContext.SaveChangesAsync();
+                return department;
+            }
+            return null;
         }
     }
 }

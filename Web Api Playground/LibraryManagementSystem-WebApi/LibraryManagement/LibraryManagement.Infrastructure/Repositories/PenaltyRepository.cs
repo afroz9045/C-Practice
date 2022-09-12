@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -19,33 +19,18 @@ namespace LibraryManagement.Infrastructure.Repositories
             _issueRepository = issueRepository;
         }
 
-        public async Task<Penalty?> IsPenalty(short issueId)
+        public async Task<Penalty?> IsPenalty(Penalty penalty)
         {
-            var isPenaltyAlreadyExits = await GetPenaltyByIdAsync(issueId);
-            if (isPenaltyAlreadyExits == null)
+            if (penalty != null)
             {
-                var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
-                TimeSpan expiredDate = DateTime.UtcNow.Subtract(issueDetails.ExpiryDate);
-                if (issueDetails != null && expiredDate.Days > 0)
-                {
-                    var penalty = new Penalty()
-                    {
-                        IssueId = issueDetails.IssueId,
-                        PenaltyAmount = expiredDate.Days * 2,
-                        PenaltyPaidStatus = false
-                    };
-                    await _libraryDbContext.Penalties.AddAsync(penalty);
-                    await _libraryDbContext.SaveChangesAsync();
-                    return penalty;
-                }
+                await _libraryDbContext.Penalties.AddAsync(penalty);
+                await _libraryDbContext.SaveChangesAsync();
+                return penalty;
+            }
+            else
+            {
                 return null;
             }
-            else if (isPenaltyAlreadyExits != null)
-            {
-                return isPenaltyAlreadyExits;
-            }
-
-            return null;
         }
 
         public async Task<IEnumerable<Penalty>?> GetPenaltiesAsync()
@@ -59,40 +44,28 @@ namespace LibraryManagement.Infrastructure.Repositories
             return null;
         }
 
-        public async Task<Penalty> GetPenaltyByIdAsync(short issueId)
+        public async Task<Penalty?> GetPenaltyByIdAsync(short issueId)
         {
             var penaltyQuery = "select * from [penalty] where issueId = @issueId";
             var penaltyIssuedData = await _dapperConnection.QueryFirstOrDefaultAsync<Penalty?>(penaltyQuery, new { issueId });
-            if (penaltyIssuedData == null)
-            {
-                return null;
-            }
-            else
-            {
+            if (penaltyIssuedData != null)
                 return penaltyIssuedData;
-            }
+            return null;
         }
 
-        public async Task<bool> PayPenaltyAsync(short issueId, int penaltyAmount)
+        public async Task<bool> PayPenaltyAsync(Penalty penalty)
         {
-            var penalty = await IsPenalty(issueId);
-            if (penalty != null && penaltyAmount == penalty.PenaltyAmount)
+            if (penalty != null && penalty.PenaltyPaidStatus == true)
             {
-                //penalty.PenaltyAmount -= penaltyAmount;
-                penalty.PenaltyPaidStatus = true;
                 _libraryDbContext.Penalties.Update(penalty);
                 await _libraryDbContext.SaveChangesAsync();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public async Task<Penalty?> DeletePenaltyAsync(short issueId)
+        public async Task<Penalty?> DeletePenaltyAsync(Penalty penalty)
         {
-            var penalty = await GetPenaltyByIdAsync(issueId);
             if (penalty != null)
             {
                 _libraryDbContext.Penalties.Remove(penalty);

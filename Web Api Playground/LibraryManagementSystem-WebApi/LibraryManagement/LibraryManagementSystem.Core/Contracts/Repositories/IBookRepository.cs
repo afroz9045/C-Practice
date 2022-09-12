@@ -1,10 +1,10 @@
 ﻿using LibraryManagement.Core.Entities;
 
-namespace LibraryManagement.Core.Contracts
+namespace LibraryManagement.Core.Contracts.Repositories
 {
     public interface IBookRepository
     {
-        Task<Book> AddBookAsync(Book book);
+        Task<Book?> AddBookAsync(Book? book);
 
         Task<IEnumerable<Book>> GetBooksAsync();
 
@@ -12,8 +12,8 @@ namespace LibraryManagement.Core.Contracts
 
         Task<Book?> GetBookByBookName(string bookName);
 
-        Task<Book> UpdateBookAsync(Book book, int id);
+        Task<Book> UpdateBookAsync(Book book);
 
-        Task<Book> DeleteBookAsync(int id);
+        Task<Book?> DeleteBookAsync(Book book);
     }
 }

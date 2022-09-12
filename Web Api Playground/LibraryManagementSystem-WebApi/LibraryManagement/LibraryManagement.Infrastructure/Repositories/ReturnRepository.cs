@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -23,33 +23,16 @@ namespace LibraryManagement.Infrastructure.Repositories
             _penaltyRepository = penaltyRepository;
         }
 
-        public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
+        public async Task<Return?> AddReturnAsync(Return returnDetails, Book book)
         {
-            var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
-            var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
-            if (issueDetails == null)
+            if (returnDetails != null && book != null)
             {
-                return null;
-            }
-            var isPenalty = await _penaltyRepository.IsPenalty(issueId);
-            var returnRecord = new Return();
-            var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
-
-            if (penaltyData == null || penaltyData.PenaltyPaidStatus == true)
-            {
-                returnRecord.ExpiryDate = issueDetails.ExpiryDate;
-                returnRecord.IssueDate = issueDetails.IssueDate;
-                returnRecord.BookId = issueDetails.BookId;
-                returnRecord.ReturnDate = DateTime.UtcNow;
-
-                await _issueRepository.DeleteIssueAsync(issueId);
-                _libraryDbContext.Returns.Add(returnRecord);
-                bookDetails.StockAvailable += 1;
-                _libraryDbContext.Books.Update(bookDetails);
+                _libraryDbContext.Returns.Add(returnDetails);
+                _libraryDbContext.Books.Update(book);
                 await _libraryDbContext.SaveChangesAsync();
-                return returnRecord;
+                return returnDetails;
             }
-            return returnRecord = null;
+            return null;
         }
 
         public async Task<IEnumerable<Return>> GetReturnAsync()
@@ -62,30 +45,21 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Return> GetReturnByIdAsync(int returnId)
         {
             var getReturnByIdQuery = "select * from [return] where returnId = @returnId";
-            return (await _dapperConnection.QueryFirstAsync<Return>(getReturnByIdQuery, new { returnId = returnId }));
+            return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId = returnId }));
         }
 
-        public async Task<Return> UpdateReturnAsync(int returnId, Return returnDetails)
+        public async Task<Return> UpdateReturnAsync(Return returnDetails)
         {
-            var returnRecord = await GetReturnByIdAsync(returnId);
-
-            returnRecord.ReturnId = returnId;
-            returnRecord.ExpiryDate = returnDetails.ExpiryDate;
-            returnRecord.IssueDate = returnDetails.IssueDate;
-            returnRecord.BookId = returnDetails.BookId;
-            returnRecord.ReturnDate = DateTime.UtcNow;
-
-            _libraryDbContext.Update(returnRecord);
+            _libraryDbContext.Update(returnDetails);
             await _libraryDbContext.SaveChangesAsync();
-            return returnRecord;
+            return returnDetails;
         }
 
-        public async Task<Return> DeleteReturnAsync(int returnId)
+        public async Task<Return> DeleteReturnAsync(Return bookReturn)
         {
-            var returnRecord = await GetReturnByIdAsync(returnId); ;
-            _libraryDbContext.Returns?.Remove(returnRecord);
+            _libraryDbContext.Returns?.Remove(bookReturn);
             await _libraryDbContext.SaveChangesAsync();
-            return returnRecord;
+            return bookReturn;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -19,16 +19,9 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Staff> AddStaffAsync(Staff staff)
         {
-            var staffRecord = new Staff()
-            {
-                StaffId = staff.StaffId,
-                StaffName = staff.StaffName,
-                Gender = staff.Gender,
-                DesignationId = staff.DesignationId
-            };
-            _libraryDbContext.Add(staffRecord);
+            _libraryDbContext.Add(staff);
             await _libraryDbContext.SaveChangesAsync();
-            return staffRecord;
+            return staff;
         }
 
         public async Task<IEnumerable<Staff>> GetStaffAsync()
@@ -38,35 +31,28 @@ namespace LibraryManagement.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<Staff> GetStaffByIDAsync(string staffId)
+        public async Task<Staff?> GetStaffByIdAsync(string staffId)
         {
             if (staffId != null)
             {
                 var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
-                return (await _dapperConnection.QueryFirstAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
+                return (await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
             }
             return null;
         }
 
-        public async Task<Staff> UpdateStaffAsync(Staff staff, string staffId)
+        public async Task<Staff> UpdateStaffAsync(Staff staff)
         {
-            var staffRecord = await GetStaffByIDAsync(staffId);
-            staffRecord.StaffId = staffId;
-            staffRecord.StaffName = staff.StaffName;
-            staffRecord.Gender = staff.Gender;
-            staffRecord.DesignationId = staff.DesignationId;
-
-            _libraryDbContext.Update(staffRecord);
+            _libraryDbContext.Update(staff);
             await _libraryDbContext.SaveChangesAsync();
-            return staffRecord;
+            return staff;
         }
 
-        public async Task<Staff> DeleteStaffAsync(string staffId)
+        public async Task<Staff> DeleteStaffAsync(Staff staff)
         {
-            var staffRecord = await GetStaffByIDAsync(staffId);
-            _libraryDbContext.Remove(staffRecord);
+            _libraryDbContext.Remove(staff);
             await _libraryDbContext.SaveChangesAsync();
-            return staffRecord;
+            return staff;
         }
     }
 }
