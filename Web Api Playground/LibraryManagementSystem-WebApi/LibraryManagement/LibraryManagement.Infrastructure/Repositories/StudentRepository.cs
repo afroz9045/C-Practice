@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +18,10 @@ namespace LibraryManagement.Infrastructure.Repositories
             _dapperConnection = dapperConnection;
         }
 
-        public async Task<dynamic> GetStudentsAsync()
+        public async Task<IEnumerable<Student>> GetStudentsAsync()
         {
             var getStudentQuery = "select * from [student]";
-            var studentData = await _dapperConnection.QueryAsync(getStudentQuery);
+            var studentData = await _dapperConnection.QueryAsync<Student>(getStudentQuery);
             return studentData;
         }
 
@@ -30,45 +30,30 @@ namespace LibraryManagement.Infrastructure.Repositories
             if (studentId != 0)
             {
                 var getStudentByIdQuery = "select * from [student] where studentId=@studentId";
-                return await _dapperConnection.QueryFirstAsync<Student>(getStudentByIdQuery, new { studentId = studentId });
+                return await _dapperConnection.QueryFirstOrDefaultAsync<Student>(getStudentByIdQuery, new { studentId = studentId });
             }
             return null;
         }
 
         public async Task<Student> AddStudentAsync(Student student)
         {
-            Student studentRecord = new Student()
-            {
-                DepartmentId = student.DepartmentId,
-                StudentName = student.StudentName,
-                Gender = student.Gender,
-                StudentDepartment = await (from department in _libraryDbContext.Departments
-                                           where student.DepartmentId == department.DeptId
-                                           select department.DepartmentName).FirstOrDefaultAsync()
-            };
-            await _libraryDbContext.Students.AddAsync(studentRecord);
+            await _libraryDbContext.Students.AddAsync(student);
             await _libraryDbContext.SaveChangesAsync();
-            return studentRecord;
+            return student;
         }
 
-        public async Task<Student> updateStudentAsync(Student student, int studentId)
+        public async Task<Student?> updateStudentAsync(Student student)
         {
-            var studentRecord = await GetStudentByIdAsync(studentId);
-            studentRecord.DepartmentId = student.DepartmentId;
-            studentRecord.StudentName = student.StudentName;
-            studentRecord.Gender = student.Gender;
-
-            _libraryDbContext.Update(studentRecord);
+            _libraryDbContext.Update(student);
             await _libraryDbContext.SaveChangesAsync();
-            return studentRecord;
+            return student;
         }
 
-        public async Task<Student> DeleteStudentAsync(int studentId)
+        public async Task<Student?> DeleteStudentAsync(Student student)
         {
-            var studentRecord = await GetStudentByIdAsync(studentId);
-            _libraryDbContext.Students.Remove(studentRecord);
+            _libraryDbContext.Students.Remove(student);
             await _libraryDbContext.SaveChangesAsync();
-            return studentRecord;
+            return student;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -17,30 +17,42 @@ namespace LibraryManagement.Infrastructure.Repositories
             _dapperConnection = dapperConnection;
         }
 
-        public async Task<IEnumerable<Designation>> GetDesignationAsync()
+        public async Task<IEnumerable<Designation>?> GetDesignationAsync()
         {
             var getDesignationQuery = "select * from [designation]";
             var designationData = await _dapperConnection.QueryAsync<Designation>(getDesignationQuery);
-            return designationData;
+            if (designationData != null)
+                return designationData;
+            return null;
         }
 
-        public async Task<Designation> GetDesignationByIdAsync(string designationId)
+        public async Task<Designation?> GetDesignationByIdAsync(string designationId)
         {
-            var getDesignationByIdQuery = "select * from [designation] where designationId = @designationId";
-            return (await _dapperConnection.QueryFirstAsync<Designation>(getDesignationByIdQuery, new { designationId = designationId }));
+            var getDesignationByIdQuery = "select * from [designation] where DesignationId = @designationId";
+            var designation = await _dapperConnection.QueryFirstOrDefaultAsync<Designation>(getDesignationByIdQuery, new { designationId });
+            if (designation != null)
+                return designation;
+            return null;
         }
 
-        public async Task<Designation> AddDesignationAsync(Designation designation)
+        public async Task<Designation?> GetDesignationByNameAsync(string designationName)
         {
-            var designationId = await GenerateDesignationId();
-            var designationRecord = new Designation()
+            var getDesignationByIdQuery = "select * from [designation] where DesignationName = @designationName";
+            var designation = await _dapperConnection.QueryFirstOrDefaultAsync<Designation>(getDesignationByIdQuery, new { designationName });
+            if (designation != null)
+                return designation;
+            return null;
+        }
+
+        public async Task<Designation?> AddDesignationAsync(Designation designation)
+        {
+            var designationAdded = _libraryDbContext.Designations.Add(designation);
+            if (designationAdded != null)
             {
-                DesignationId = designationId,
-                DesignationName = designation.DesignationName
-            };
-            _libraryDbContext.Designations.Add(designationRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return designationRecord;
+                await _libraryDbContext.SaveChangesAsync();
+                return designation;
+            }
+            return null;
         }
 
         public async Task<Designation?> GetRecentInsertedDesignation()
@@ -52,37 +64,26 @@ namespace LibraryManagement.Infrastructure.Repositories
             return null;
         }
 
-        public async Task<string?> GenerateDesignationId()
+        public async Task<Designation?> UpdateDesignationAsync(Designation designation)
         {
-            var recentDesignationRecord = await GetRecentInsertedDesignation();
-            if (recentDesignationRecord != null && recentDesignationRecord.DesignationId != null)
+            var updatedDesignation = _libraryDbContext.Update(designation);
+            if (updatedDesignation != null)
             {
-                var firstCharacter = recentDesignationRecord.DesignationId.Substring(0, 1);
-                var remainingNumber = Convert.ToInt32(recentDesignationRecord.DesignationId.Substring(1));
-                var resultantDesignationId = Convert.ToString(firstCharacter + (remainingNumber + 1));
-                return resultantDesignationId;
+                await _libraryDbContext.SaveChangesAsync();
+                return designation;
             }
-            return "A100";
+            return null;
         }
 
-        public async Task<Designation> UpdateDesignationAsync(string designationId, Designation designation)
+        public async Task<Designation?> DeleteDesignationAsync(Designation designation)
         {
-            var designationRecord = await GetDesignationByIdAsync(designationId);
-
-            designationRecord.DesignationId = designationId;
-            designationRecord.DesignationName = designation.DesignationName;
-
-            _libraryDbContext.Update(designationRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return designationRecord;
-        }
-
-        public async Task<Designation> DeleteDesignationAsync(string designationId)
-        {
-            var designationRecord = await GetDesignationByIdAsync(designationId);
-            _libraryDbContext.Designations?.Remove(designationRecord);
-            await _libraryDbContext.SaveChangesAsync();
-            return designationRecord;
+            var deletedDesignation = _libraryDbContext.Designations?.Remove(designation);
+            if (deletedDesignation != null)
+            {
+                await _libraryDbContext.SaveChangesAsync();
+                return designation;
+            }
+            return null;
         }
     }
 }

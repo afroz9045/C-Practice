@@ -1,4 +1,6 @@
-﻿using LibraryManagement.Core.Contracts;
+﻿using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Services;
 using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
@@ -27,16 +29,19 @@ namespace LibraryManagement.Api.Extensions
             services.AddDbContext<LibraryManagementSystemDbContext>(option =>
             option.UseSqlServer(configuration.GetConnectionString("LibraryManagementDbContext")));
 
-            services.AddScoped<IBookRepository, BookRepository>();
+            // Resolving dependencies for services
+            services.AddScoped<IBookService, BookService>();
 
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            // Resolving dependencies for repositories
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
             services.AddTransient<IIssueRepository, IssueRepository>();
             services.AddTransient<IPenaltyRepository, PenaltyRepository>();
             services.AddTransient<IReturnRepository, ReturnRepository>();
+
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));
         }

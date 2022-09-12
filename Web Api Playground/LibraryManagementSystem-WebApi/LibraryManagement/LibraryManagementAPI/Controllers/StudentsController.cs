@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,13 @@ namespace LibraryManagement.Api.Controllers
     public class StudentsController : ApiController
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IStudentService _studentService;
         private readonly IMapper _mapper;
         private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentRepository studentRepository, IMapper mapper, ILogger<StudentsController> logger)
+        public StudentsController(IStudentService studentService, IMapper mapper, ILogger<StudentsController> logger)
         {
-            _studentRepository = studentRepository;
+            _studentService = studentService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -26,7 +28,10 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Adding Student details");
             var student = _mapper.Map<StudentVm, Student>(studentVm);
-            return Ok(await _studentRepository.AddStudentAsync(student));
+            var result = await _studentService.AddStudentAsync(student);
+            if (result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpGet]
@@ -34,7 +39,10 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudents()
         {
             _logger.LogInformation("Getting Students details");
-            return Ok(await _studentRepository.GetStudentsAsync());
+            var result = await _studentService.GetStudentsAsync();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
         }
 
         [HttpGet("{studentId}")]
@@ -42,8 +50,10 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudentById(int studentId)
         {
             _logger.LogInformation($"Getting student details with student id: {studentId}");
-            var result = Ok(await _studentRepository.GetStudentByIdAsync(studentId));
-            return result;
+            var result = await _studentService.GetStudentByIdAsync(studentId);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
         }
 
         [HttpPut("{studentId}")]
@@ -52,9 +62,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Updating student details with student id:{studentId}");
             var student = _mapper.Map<StudentVm, Student>(studentVm);
-            var result = _studentRepository.updateStudentAsync(student, studentId);
+            var result = await _studentService.updateStudentAsync(student, studentId);
             if (result != null)
-                return Ok(await result);
+                return Ok(result);
             return BadRequest();
         }
 
@@ -63,10 +73,10 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> DeleteStudent(int studentId)
         {
             _logger.LogInformation($"Deleting student details with student id: {studentId} ");
-            var result = _studentRepository.DeleteStudentAsync(studentId);
+            var result = await _studentService.DeleteStudentAsync(studentId);
             if (result != null)
-                return Ok(await result);
-            return NotFound();
+                return NoContent();
+            return BadRequest();
         }
     }
 }

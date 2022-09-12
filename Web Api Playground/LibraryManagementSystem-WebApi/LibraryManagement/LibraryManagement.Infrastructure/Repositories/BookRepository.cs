@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Dapper;
-using LibraryManagement.Core.Contracts;
+using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -21,34 +22,26 @@ namespace LibraryManagement.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<Book> AddBookAsync(Book book)
+        public async Task<Book?> AddBookAsync(Book? book)
         {
             if (_libraryDbContext.Books.Count() == 0)
             {
                 var identityResetQuery = "DBCC CHECKIDENT ('[books]',RESEED,0)";
                 await _dapperConnection.QueryAsync<Book>(identityResetQuery);
             }
-            var bookDetails = await GetBookByBookName(book.BookName);
-
-            if (bookDetails == null)
+            if (book != null && book.StockAvailable == 1)
             {
-                var bookRecord = new Book()
-                {
-                    AuthorName = book.AuthorName,
-                    BookEdition = book.BookEdition ?? "Default",
-                    BookId = book.BookId,
-                    BookName = book.BookName,
-                    Isbn = book.Isbn,
-                    StockAvailable = 1
-                };
-                _libraryDbContext.Books.Add(bookRecord);
+                _libraryDbContext.Books.Add(book);
                 await _libraryDbContext.SaveChangesAsync();
-                return bookRecord;
+                return book;
             }
-            bookDetails.StockAvailable += 1;
-            _libraryDbContext.Books.Update(bookDetails);
-            await _libraryDbContext.SaveChangesAsync();
-            return bookDetails;
+            else if (book != null && book.StockAvailable > 1)
+            {
+                _libraryDbContext.Books.Update(book);
+                await _libraryDbContext.SaveChangesAsync();
+                return book;
+            }
+            return null;
         }
 
         public async Task<Book?> GetBookByBookName(string bookName)
@@ -70,35 +63,27 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Book?> GetBookById(int bookId)
         {
-            if (bookId == 0)
-            {
-                return null;
-            }
-            var getBookByIdQuery = "select * from [Books] where bookId=@bookId";
-            var bookResult = await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId = bookId });
+            var getBookByIdQuery = "select * from [Books] where BookId=@bookId";
+            var bookResult = await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId });
             return bookResult;
         }
 
-        public async Task<Book> UpdateBookAsync(Book book, int id)
+        public async Task<Book> UpdateBookAsync(Book book)
         {
-            var bookToBeUpdated = await GetBookById(id);
-            bookToBeUpdated.BookId = book.BookId;
-            bookToBeUpdated.AuthorName = book.AuthorName;
-            bookToBeUpdated.BookEdition = book.BookEdition;
-            bookToBeUpdated.BookName = book.BookName;
-            bookToBeUpdated.Isbn = book.Isbn;
-
-            _libraryDbContext.Update(bookToBeUpdated);
+            _libraryDbContext.Update(book);
             await _libraryDbContext.SaveChangesAsync();
-            return bookToBeUpdated;
+            return book;
         }
 
-        public async Task<Book> DeleteBookAsync(int id)
+        public async Task<Book?> DeleteBookAsync(Book book)
         {
-            var bookToBeUpdated = await GetBookById(id);
-            _libraryDbContext.Books?.Remove(bookToBeUpdated);
-            await _libraryDbContext.SaveChangesAsync();
-            return bookToBeUpdated;
+            if (book != null)
+            {
+                _libraryDbContext.Books?.Remove(book);
+                await _libraryDbContext.SaveChangesAsync();
+                return book;
+            }
+            return null;
         }
     }
 }
