@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
-using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class ReturnsController : ApiController
     {
-        private readonly IReturnRepository _returnRepository;
         private readonly IReturnService _returnService;
         private readonly IMapper _mapper;
         private readonly ILogger<ReturnsController> _logger;
@@ -24,7 +24,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost("{issueId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, short issueId)
+        public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, [Required] short issueId)
         {
             _logger.LogInformation($"Adding Book return with issue id : {issueId}");
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);

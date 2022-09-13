@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class PenaltiesController : ApiController
     {
         private readonly IPenaltyService _penaltyService;
         private readonly ILogger<PenaltiesController> _logger;
-        private object penalties;
 
         public PenaltiesController(IPenaltyService penaltyService, ILogger<PenaltiesController> logger)
         {
@@ -16,7 +16,7 @@ namespace LibraryManagement.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost("PayPenalty/{bookIssuedId}")]
+        [HttpPost("pay/{bookIssuedId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> PayPenalty(short bookIssuedId, [FromBody] int penaltyAmount)
         {

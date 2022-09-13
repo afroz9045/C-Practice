@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
-using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class StaffController : ApiController
     {
-        private readonly IStaffRepository _staffRepository;
         private readonly IStaffService _staffService;
         private readonly IMapper _mapper;
         private readonly ILogger<StaffController> _logger;
@@ -50,9 +49,20 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStaffById(string staffId)
         {
             _logger.LogInformation($"Getting staff details with staff id {staffId}");
-            var result = Ok(await _staffService.GetStaffByIdAsync(staffId));
+            var result = await _staffService.GetStaffByIdAsync(staffId);
             if (result != null)
-                return result;
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet("{staffName}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetStaffByName(string staffName)
+        {
+            _logger.LogInformation($"Getting staff details with staff name {staffName}");
+            var result = await _staffService.GetStaffByName(staffName);
+            if (result != null)
+                return Ok(result);
             return NotFound();
         }
 

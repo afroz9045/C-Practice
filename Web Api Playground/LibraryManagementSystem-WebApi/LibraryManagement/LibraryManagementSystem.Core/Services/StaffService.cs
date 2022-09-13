@@ -15,17 +15,42 @@ namespace LibraryManagement.Core.Services
 
         public async Task<Staff?> AddStaffAsync(Staff staff)
         {
-            var staffRecord = new Staff()
+            var staffDetails = await GetStaffByName(staff.StaffName);
+            if (staffDetails == null)
             {
-                StaffId = staff.StaffId,
-                StaffName = staff.StaffName,
-                Gender = staff.Gender,
-                DesignationId = staff.DesignationId
-            };
-            var staffAddedResult = await _staffRepository.AddStaffAsync(staffRecord);
-            if (staffAddedResult != null)
-                return staffAddedResult;
+                var staffId = await GenerateStaffId();
+
+                var staffRecord = new Staff()
+                {
+                    StaffId = staffId,
+                    StaffName = staff.StaffName,
+                    Gender = staff.Gender,
+                    DesignationId = staff.DesignationId
+                };
+                var staffAddedResult = await _staffRepository.AddStaffAsync(staffRecord);
+                if (staffAddedResult != null)
+                    return staffAddedResult;
+            }
             return null;
+        }
+
+        public async Task<string?> GenerateStaffId()
+        {
+            var recentStaffRecord = await _staffRepository.GetRecentInsertedStaff();
+            if (recentStaffRecord != null && recentStaffRecord.DesignationId != null)
+            {
+                var firstCharacter = recentStaffRecord.StaffId.Substring(0, 1);
+                var remainingNumber = Convert.ToInt32(recentStaffRecord.StaffId.Substring(1));
+                var resultantStaffId = Convert.ToString(firstCharacter + (remainingNumber + 1));
+                return resultantStaffId;
+            }
+            return "S1001";
+        }
+
+        public async Task<Staff?> GetStaffByName(string staffName)
+        {
+            var staffRecord = await _staffRepository.GetStaffByName(staffName);
+            return staffRecord;
         }
 
         public async Task<IEnumerable<Staff>?> GetStaffAsync()

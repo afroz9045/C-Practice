@@ -1,8 +1,10 @@
-﻿namespace LibraryManagement.Api.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.Api.ViewModels
 {
     public class DesignationVm
     {
-        //public string DesignationId { get; set; }
+        [StringLength(20), Required]
         public string DesignationName { get; set; } = null!;
     }
 }

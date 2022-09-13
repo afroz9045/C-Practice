@@ -8,6 +8,7 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Staff> builder)
         {
+            builder.ToTable("Staff");
             builder.Property(e => e.StaffId)
                      .HasMaxLength(50)
                      .HasColumnName("StaffId");

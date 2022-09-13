@@ -25,14 +25,10 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Return?> AddReturnAsync(Return returnDetails, Book book)
         {
-            if (returnDetails != null && book != null)
-            {
-                _libraryDbContext.Returns.Add(returnDetails);
-                _libraryDbContext.Books.Update(book);
-                await _libraryDbContext.SaveChangesAsync();
-                return returnDetails;
-            }
-            return null;
+            _libraryDbContext.Returns.Add(returnDetails);
+            _libraryDbContext.Books.Update(book);
+            await _libraryDbContext.SaveChangesAsync();
+            return returnDetails;
         }
 
         public async Task<IEnumerable<Return>> GetReturnAsync()

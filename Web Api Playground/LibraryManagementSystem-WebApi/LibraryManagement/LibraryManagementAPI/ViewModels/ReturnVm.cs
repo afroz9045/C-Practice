@@ -1,7 +1,10 @@
-﻿namespace LibraryManagement.Api.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.Api.ViewModels
 {
     public class ReturnVm
     {
-        public int? BookId { get; set; }
+        [Required]
+        public int BookId { get; set; }
     }
 }

@@ -10,7 +10,11 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<IEnumerable<Staff>> GetStaffAsync();
 
+        Task<Staff?> GetRecentInsertedStaff();
+
         Task<Staff?> GetStaffByIdAsync(string staffId);
+
+        Task<Staff?> GetStaffByName(string staffName);
 
         Task<Staff> UpdateStaffAsync(Staff staff);
     }

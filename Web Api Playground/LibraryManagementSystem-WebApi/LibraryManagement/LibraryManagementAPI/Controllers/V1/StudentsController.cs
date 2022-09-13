@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
-using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class StudentsController : ApiController
     {
-        private readonly IStudentRepository _studentRepository;
         private readonly IStudentService _studentService;
         private readonly IMapper _mapper;
         private readonly ILogger<StudentsController> _logger;

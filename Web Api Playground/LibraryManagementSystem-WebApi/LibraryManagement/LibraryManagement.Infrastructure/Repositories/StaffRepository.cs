@@ -31,14 +31,23 @@ namespace LibraryManagement.Infrastructure.Repositories
             return result;
         }
 
+        public async Task<Staff?> GetRecentInsertedStaff()
+        {
+            var recentQuery = "SELECT TOP 1 * FROM staff ORDER BY StaffId DESC";
+            var staffData = await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(recentQuery);
+            return staffData;
+        }
+
         public async Task<Staff?> GetStaffByIdAsync(string staffId)
         {
-            if (staffId != null)
-            {
-                var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
-                return (await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(getStaffByIdQuery, new { staffId = staffId }));
-            }
-            return null;
+            var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
+            return (await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(getStaffByIdQuery, new { staffId }));
+        }
+
+        public async Task<Staff?> GetStaffByName(string staffName)
+        {
+            var getStaffByNameQuery = "select * from [staff] where StaffName = @staffName";
+            return (await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(getStaffByNameQuery, new { staffName }));
         }
 
         public async Task<Staff> UpdateStaffAsync(Staff staff)

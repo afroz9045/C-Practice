@@ -1,4 +1,6 @@
-﻿namespace LibraryManagement.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.Core.Entities
 {
     public class Book
     {

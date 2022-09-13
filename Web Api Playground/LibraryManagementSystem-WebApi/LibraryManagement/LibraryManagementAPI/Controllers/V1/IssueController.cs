@@ -2,13 +2,13 @@
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class IssueController : ApiController
     {
         private readonly IIssueRepository _issueRepository;

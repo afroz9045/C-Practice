@@ -2,7 +2,7 @@
 
 namespace LibraryManagement.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ApiController : ControllerBase
     {
