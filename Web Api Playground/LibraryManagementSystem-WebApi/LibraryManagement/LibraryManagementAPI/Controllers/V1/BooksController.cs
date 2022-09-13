@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace LibraryManagement.Api.Controllers
+namespace LibraryManagement.Api.Controllers.V1
 {
-    [ApiConventionType(typeof(DefaultApiConventions))]
+    [ApiVersion("1.0")]
     public class BooksController : ApiController
     {
         private readonly IBookRepository _bookRepository;
@@ -31,6 +31,7 @@ namespace LibraryManagement.Api.Controllers
         /// </summary>
         /// <param name="bookVm">book</param>
         /// <returns>it returns response code 201 or else it return response code 400</returns>
+        ///
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
@@ -54,7 +55,7 @@ namespace LibraryManagement.Api.Controllers
             return NotFound("Books not found");
         }
 
-        [HttpGet("/bookid/{bookId}")]
+        [HttpGet("/bookbyid/{bookId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookById(int bookId)
         {
@@ -69,7 +70,7 @@ namespace LibraryManagement.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet("/bookname/{bookName}")]
+        [HttpGet("{bookName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookByName(string bookName)
         {

@@ -53,7 +53,7 @@ namespace LibraryManagement.Core.Services
         public async Task<Designation?> AddDesignationAsync(Designation designation)
         {
             var designationRecord = await GetDesignationByNameAsync(designation.DesignationName);
-            if (designationRecord != null)
+            if (designationRecord == null)
             {
                 var designationId = await GenerateDesignationId();
                 var designationGenerate = new Designation()

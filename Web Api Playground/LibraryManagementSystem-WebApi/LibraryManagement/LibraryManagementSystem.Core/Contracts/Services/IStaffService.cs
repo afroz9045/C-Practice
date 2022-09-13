@@ -8,6 +8,7 @@ namespace LibraryManagement.Core.Contracts.Services
         Task<Staff?> DeleteStaffAsync(string staffId);
         Task<IEnumerable<Staff>?> GetStaffAsync();
         Task<Staff?> GetStaffByIdAsync(string staffId);
+        Task<Staff?> GetStaffByName(string staffName);
         Task<Staff?> UpdateStaffAsync(Staff staff, string staffId);
     }
 }

@@ -21,69 +21,49 @@ namespace LibraryManagement.Infrastructure.Repositories
         {
             var getDesignationQuery = "select * from [designation]";
             var designationData = await _dapperConnection.QueryAsync<Designation>(getDesignationQuery);
-            if (designationData != null)
-                return designationData;
-            return null;
+            return designationData;
         }
 
         public async Task<Designation?> GetDesignationByIdAsync(string designationId)
         {
             var getDesignationByIdQuery = "select * from [designation] where DesignationId = @designationId";
             var designation = await _dapperConnection.QueryFirstOrDefaultAsync<Designation>(getDesignationByIdQuery, new { designationId });
-            if (designation != null)
-                return designation;
-            return null;
+            return designation;
         }
 
         public async Task<Designation?> GetDesignationByNameAsync(string designationName)
         {
             var getDesignationByIdQuery = "select * from [designation] where DesignationName = @designationName";
             var designation = await _dapperConnection.QueryFirstOrDefaultAsync<Designation>(getDesignationByIdQuery, new { designationName });
-            if (designation != null)
-                return designation;
-            return null;
+            return designation;
         }
 
         public async Task<Designation?> AddDesignationAsync(Designation designation)
         {
             var designationAdded = _libraryDbContext.Designations.Add(designation);
-            if (designationAdded != null)
-            {
-                await _libraryDbContext.SaveChangesAsync();
-                return designation;
-            }
-            return null;
+            await _libraryDbContext.SaveChangesAsync();
+            return designation;
         }
 
         public async Task<Designation?> GetRecentInsertedDesignation()
         {
             var recentQuery = "SELECT TOP 1 * FROM designation ORDER BY DesignationId DESC";
             var designationData = await _dapperConnection.QueryFirstOrDefaultAsync<Designation>(recentQuery);
-            if (designationData != null)
-                return designationData;
-            return null;
+            return designationData;
         }
 
         public async Task<Designation?> UpdateDesignationAsync(Designation designation)
         {
             var updatedDesignation = _libraryDbContext.Update(designation);
-            if (updatedDesignation != null)
-            {
-                await _libraryDbContext.SaveChangesAsync();
-                return designation;
-            }
-            return null;
+            await _libraryDbContext.SaveChangesAsync();
+            return designation;
         }
 
         public async Task<Designation?> DeleteDesignationAsync(Designation designation)
         {
             var deletedDesignation = _libraryDbContext.Designations?.Remove(designation);
-            if (deletedDesignation != null)
-            {
-                await _libraryDbContext.SaveChangesAsync();
-                return designation;
-            }
-            return null;
+            await _libraryDbContext.SaveChangesAsync();
+            return designation;
         }
     }
 }

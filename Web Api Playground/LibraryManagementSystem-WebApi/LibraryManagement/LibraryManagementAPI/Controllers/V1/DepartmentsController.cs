@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class DepartmentsController : ApiController
     {
         private readonly IDepartmentRepository _departmentRepository;
@@ -68,13 +69,13 @@ namespace LibraryManagement.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{departmentId}")]
+        [HttpPut("{deptId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short departmentId)
+        public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short deptId)
         {
-            _logger.LogInformation($"Updating Department with department id: {departmentId}");
+            _logger.LogInformation($"Updating Department with department id: {deptId}");
             var department = _mapper.Map<DepartmentVm, Department>(departmentVm);
-            var result = await _departmentService.UpdateDepartmentAsync(departmentId, department);
+            var result = await _departmentService.UpdateDepartmentAsync(deptId, department);
             if (result != null)
                 return Ok(result);
             return BadRequest();

@@ -49,9 +49,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             var bookRecord = await (from book in _libraryDbContext.Books
                                     where book.BookName == bookName
                                     select book).FirstOrDefaultAsync();
-            if (bookRecord != null)
-                return bookRecord;
-            return null;
+            return bookRecord;
         }
 
         public async Task<IEnumerable<Book>> GetBooksAsync()
@@ -64,7 +62,7 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Book?> GetBookById(int bookId)
         {
             var getBookByIdQuery = "select * from [Books] where BookId=@bookId";
-            var bookResult = await _dapperConnection.QueryFirstAsync<Book>(getBookByIdQuery, new { bookId });
+            var bookResult = await _dapperConnection.QueryFirstOrDefaultAsync<Book>(getBookByIdQuery, new { bookId });
             return bookResult;
         }
 
@@ -77,13 +75,9 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Book?> DeleteBookAsync(Book book)
         {
-            if (book != null)
-            {
-                _libraryDbContext.Books?.Remove(book);
-                await _libraryDbContext.SaveChangesAsync();
-                return book;
-            }
-            return null;
+            _libraryDbContext.Books?.Remove(book);
+            await _libraryDbContext.SaveChangesAsync();
+            return book;
         }
     }
 }

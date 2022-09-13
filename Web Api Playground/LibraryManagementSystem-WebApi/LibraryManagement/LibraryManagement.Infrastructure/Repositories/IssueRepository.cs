@@ -27,14 +27,10 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Issue?> AddBookIssueAsync(Issue issue, Book book)
         {
-            if (issue != null && book != null)
-            {
-                _libraryDbContext.Update(book);
-                _libraryDbContext.Issues.Add(issue);
-                await _libraryDbContext.SaveChangesAsync();
-                return issue;
-            }
-            return null;
+            _libraryDbContext.Update(book);
+            _libraryDbContext.Issues.Add(issue);
+            await _libraryDbContext.SaveChangesAsync();
+            return issue;
         }
 
         public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int? studentId = 0, string? staffId = null)
@@ -42,7 +38,8 @@ namespace LibraryManagement.Infrastructure.Repositories
             if (staffId != null && studentId == 0)
             {
                 var bookIssuedEntityStaff = await (from issuedStaff in _libraryDbContext.Issues
-                                                   join staff in _libraryDbContext.Staffs on issuedStaff.StaffId equals staffId
+                                                   join staff in _libraryDbContext.Staffs
+                                                   on issuedStaff.StaffId equals staff.StaffId
                                                    where staff.StaffId == staffId
                                                    select new BookIssuedTo
                                                    {
@@ -72,29 +69,21 @@ namespace LibraryManagement.Infrastructure.Repositories
         {
             var getBookIssueQuery = "select * from [issue]";
             var bookIssuedData = await _dapperConnection.QueryAsync<Issue>(getBookIssueQuery);
-            if (bookIssuedData != null)
-                return bookIssuedData;
-            return null;
+            return bookIssuedData;
         }
 
         public async Task<Issue?> GetBookIssuedByIdAsync(short issueId)
         {
             var getBookIssuedByIdQuery = "select * from [issue] where IssueId = @issueId";
             var bookIssuedData = await _dapperConnection.QueryFirstOrDefaultAsync<Issue>(getBookIssuedByIdQuery, new { issueId });
-            if (bookIssuedData != null)
-                return bookIssuedData;
-            return null;
+            return bookIssuedData;
         }
 
         public async Task<Issue?> UpdateBookIssuedAsync(Issue issue)
         {
-            if (issue != null)
-            {
-                _libraryDbContext.Update(issue);
-                await _libraryDbContext.SaveChangesAsync();
-                return issue;
-            }
-            return null;
+            _libraryDbContext.Update(issue);
+            await _libraryDbContext.SaveChangesAsync();
+            return issue;
         }
 
         public async Task<Issue> DeleteIssueAsync(Issue issuedRecord)

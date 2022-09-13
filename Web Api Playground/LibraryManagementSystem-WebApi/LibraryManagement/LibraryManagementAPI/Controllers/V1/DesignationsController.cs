@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
+    [ApiVersion("1.0")]
     public class DesignationsController : ApiController
     {
         private readonly IDesignationRepository _designationRepository;
