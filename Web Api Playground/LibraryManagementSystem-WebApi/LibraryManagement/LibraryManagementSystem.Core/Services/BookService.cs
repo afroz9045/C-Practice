@@ -20,7 +20,7 @@ namespace LibraryManagement.Core.Services
         /// <returns>Book</returns>
         public async Task<Book?> AddBookAsync(Book book)
         {
-            Book? bookToBeAdd = await _bookRepository.GetBookByBookName(book.BookName);
+            Book? bookToBeAdd = await GetBookByNameAsync(book.BookName);
             if (book != null && bookToBeAdd != null && book.BookName == bookToBeAdd.BookName)
             {
                 var incrementResult = IncrementBookStock(bookToBeAdd);
@@ -30,7 +30,7 @@ namespace LibraryManagement.Core.Services
             {
                 bookToBeAdd = AddInitialBookStock(book);
             }
-            if (bookToBeAdd != null)
+            else if (bookToBeAdd != null)
             {
                 var bookAddedDetails = await _bookRepository.AddBookAsync(bookToBeAdd);
                 return bookAddedDetails;

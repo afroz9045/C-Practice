@@ -13,14 +13,12 @@ namespace LibraryManagement.Api.Controllers.V1
     [ApiVersion("1.0")]
     public class BooksController : ApiController
     {
-        private readonly IBookRepository _bookRepository;
         private readonly IBookService _bookService;
         private readonly IMapper _mapper;
         private readonly ILogger<BooksController> _logger;
 
-        public BooksController(IBookRepository bookRepository, IBookService bookService, IMapper mapper, ILogger<BooksController> logger)
+        public BooksController(IBookService bookService, IMapper mapper, ILogger<BooksController> logger)
         {
-            _bookRepository = bookRepository;
             _bookService = bookService;
             _mapper = mapper;
             _logger = logger;
@@ -55,7 +53,7 @@ namespace LibraryManagement.Api.Controllers.V1
             return NotFound("Books not found");
         }
 
-        [HttpGet("/bookbyid/{bookId}")]
+        [HttpGet("{bookId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookById(int bookId)
         {

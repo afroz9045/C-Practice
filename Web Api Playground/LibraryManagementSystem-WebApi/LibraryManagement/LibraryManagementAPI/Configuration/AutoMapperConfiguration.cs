@@ -5,7 +5,7 @@ using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Api.Configuration
 {
-    internal class AutoMapperConfiguration : Profile
+    public class AutoMapperConfiguration : Profile
     {
         internal AutoMapperConfiguration()
         {
