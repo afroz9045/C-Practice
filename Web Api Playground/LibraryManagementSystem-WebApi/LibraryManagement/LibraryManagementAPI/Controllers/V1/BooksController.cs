@@ -14,12 +14,14 @@ namespace LibraryManagement.Api.Controllers.V1
     public class BooksController : ApiController
     {
         private readonly IBookService _bookService;
+        private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<BooksController> _logger;
 
-        public BooksController(IBookService bookService, IMapper mapper, ILogger<BooksController> logger)
+        public BooksController(IBookService bookService, IBookRepository bookRepository, IMapper mapper, ILogger<BooksController> logger)
         {
             _bookService = bookService;
+            _bookRepository = bookRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -36,9 +38,18 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             _logger.LogInformation("Adding a Book");
             var book = _mapper.Map<BookVm, Book>(bookVm);
-            var bookAddedResult = await _bookService.AddBookAsync(book);
-            if (bookAddedResult != null)
+            var existingBook = await _bookRepository.GetBookByBookName(bookVm.BookName);
+            var bookResult = _bookService.AddBookAsync(book, existingBook);
+            if (bookResult != null && bookResult.StockAvailable == 1)
+            {
+                var bookAddedResult = await _bookRepository.AddBookAsync(bookResult);
                 return Ok(bookAddedResult);
+            }
+            else if (bookResult != null && bookResult.StockAvailable > 1)
+            {
+                var bookAddedResult = await _bookRepository.AddBookAsync(bookResult);
+                return Ok($"Book stock updated with book id: {bookResult.BookId}");
+            }
             return BadRequest("Book is not added,check details and try again");
         }
 
@@ -47,13 +58,13 @@ namespace LibraryManagement.Api.Controllers.V1
         public async Task<ActionResult> GetBooks()
         {
             _logger.LogInformation("Getting Available Books Details");
-            var booksResult = await _bookService.GetBooksAsync();
-            if (booksResult != null)
-                return Ok(booksResult);
+            var booksFromRepo = await _bookRepository.GetBooksAsync();
+            if (booksFromRepo != null)
+                return Ok(booksFromRepo);
             return NotFound("Books not found");
         }
 
-        [HttpGet("{bookId}")]
+        [HttpGet("{bookId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookById(int bookId)
         {
@@ -62,9 +73,9 @@ namespace LibraryManagement.Api.Controllers.V1
                 return BadRequest($"Invalid book id {bookId}");
             }
             _logger.LogInformation($"Getting Available Book Detail by Book Id: {bookId}");
-            var result = _bookService.GetBookByBookId(bookId);
-            if (result != null)
-                return Ok(await result);
+            var bookByBookId = await _bookRepository.GetBookById(bookId);
+            if (bookByBookId != null)
+                return Ok(bookByBookId);
             return NotFound();
         }
 
@@ -73,9 +84,9 @@ namespace LibraryManagement.Api.Controllers.V1
         public async Task<ActionResult> GetBookByName(string bookName)
         {
             _logger.LogInformation($"Getting Book by book name {bookName}");
-            var result = await _bookService.GetBookByNameAsync(bookName);
-            if (result != null)
-                return Ok(result);
+            var bookByBookName = await _bookRepository.GetBookByBookName(bookName);
+            if (bookByBookName != null)
+                return Ok(bookByBookName);
             return NotFound();
         }
 
@@ -85,9 +96,11 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             var book = _mapper.Map<BookVm, Book>(bookVm);
             _logger.LogInformation($"Updating a Book details with bookId: {bookId}");
-            var result = await _bookService.UpdateBooksAsync(book, bookId);
-            if (result != null)
-                return Ok(result);
+            var existingBook = await _bookRepository.GetBookById(bookId);
+            var result = _bookService.UpdateBooksAsync(book, existingBook);
+            var updatedBookDetails = await _bookRepository.UpdateBookAsync(result!);
+            if (updatedBookDetails != null)
+                return Ok(updatedBookDetails);
             return BadRequest();
         }
 
@@ -96,7 +109,8 @@ namespace LibraryManagement.Api.Controllers.V1
         public async Task<ActionResult> DeleteBook(int bookId)
         {
             _logger.LogInformation($"Deleting a Book with {bookId}");
-            var result = await _bookService.DeleteBookAsync(bookId);
+            var existingBook = await _bookRepository.GetBookById(bookId);
+            var result = await _bookRepository.DeleteBookAsync(existingBook!);
             if (result != null)
                 return NoContent();
             return BadRequest();

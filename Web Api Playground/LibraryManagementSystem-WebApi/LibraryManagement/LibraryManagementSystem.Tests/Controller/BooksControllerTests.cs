@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentAssertions;
 using LibraryManagement.Api.Controllers.V1;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
@@ -23,19 +22,18 @@ namespace LibraryManagementSystem.Tests.Controller
             _logger = new NullLogger<BooksController>();
         }
 
-        [Fact]
-        public async Task GetBooks_ShouldReturnOkResult()
-        {
-            //var books = new BooksController();
-            var mockData = _booksService.Setup(x => x.GetBooksAsync()).Returns(Task.FromResult<IEnumerable<Book>>(new List<Book>()));
+        //[Fact]
+        //public async Task GetBooks_ShouldReturnOkResult()
+        //{
+        //    var mockData = _booksService.Setup(x => x.GetBooksAsync()).Returns(Task.FromResult<IEnumerable<Book>>(new List<Book>()));
 
-            //Act
-            BooksController booksController = new BooksController(_booksService.Object, _mapper, _logger);
-            IActionResult result = await booksController.GetBooks();
+        //    Act
+        //     BooksController booksController = new BooksController(_booksService.Object, _mapper, _logger);
+        //    IActionResult result = await booksController.GetBooks();
 
-            //Assert
-            //Assert.NotEmpty(((result as OkObjectResult).Value as IEnumerable<Book>));
-            Assert.Equal(0, ((result as OkObjectResult).Value as IEnumerable<Book>).Count());
-        }
+        //    Assert
+        //    Assert.NotEmpty(((result as OkObjectResult).Value as IEnumerable<Book>));
+        //    Assert.Equal(0, ((result as OkObjectResult).Value as IEnumerable<Book>).Count());
+        //}
     }
 }

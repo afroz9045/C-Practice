@@ -52,14 +52,14 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookRecord;
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<Book>?> GetBooksAsync()
         {
             var gettingBooksQuery = "select * from [books]";
             var bookData = await _dapperConnection.QueryAsync<Book>(gettingBooksQuery);
             return bookData;
         }
 
-        public async Task<Book?> GetBookById(int bookId)
+        public async Task<Book?> GetBookById(int? bookId)
         {
             var getBookByIdQuery = "select * from [Books] where BookId=@bookId";
             var bookResult = await _dapperConnection.QueryFirstOrDefaultAsync<Book>(getBookByIdQuery, new { bookId });

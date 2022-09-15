@@ -13,71 +13,23 @@ namespace LibraryManagement.Core.Contracts.Services
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<IEnumerable<Department>?> GetDepartmentsAsync()
+        public Department? AddDepartmentAsync(Department department)
         {
-            var departments = await _departmentRepository.GetDepartmentsAsync();
-            if (departments != null)
-                return departments;
-            return null;
-        }
-
-        public async Task<Department?> GetDepartmentByIdAsync(short deptId)
-        {
-            var department = await _departmentRepository.GetDepartmentByIdAsync(deptId);
-            if (department != null)
-                return department;
-            return null;
-        }
-
-        public async Task<Department?> GetDepartmentByNameAsync(string departmentName)
-        {
-            var department = await _departmentRepository.GetDepartmentByNameAsync(departmentName);
-            if (department != null)
-                return department;
-            return null;
-        }
-
-        public async Task<Department?> AddDepartmentAsync(Department department)
-        {
-            var isDepartmentAlreadyAvailable = await GetDepartmentByNameAsync(department.DepartmentName);
-            if (isDepartmentAlreadyAvailable == null)
+            var departmentRecord = new Department()
             {
-                var departmentRecord = new Department()
-                {
-                    DepartmentName = department.DepartmentName,
-                    DeptId = department.DeptId
-                };
-                var addedDepartment = await _departmentRepository.AddDepartmentAsync(departmentRecord);
-                if (addedDepartment != null)
-                    return addedDepartment;
-            }
-            return null;
+                DepartmentName = department.DepartmentName,
+                DeptId = department.DeptId
+            };
+            return departmentRecord;
         }
 
-        public async Task<Department?> UpdateDepartmentAsync(short departmentId, Department department)
+        public Department? UpdateDepartmentAsync(Department? existingDepartment, Department departmentToBeUpdate)
         {
-            var departmentRecord = await GetDepartmentByIdAsync(departmentId);
-            if (departmentRecord != null)
+            if (existingDepartment != null)
             {
-                departmentRecord.DeptId = departmentId;
-                departmentRecord.DepartmentName = department.DepartmentName;
-                var updatedDepartmentRecord = await _departmentRepository.UpdateDepartmentAsync(departmentRecord);
-                if (updatedDepartmentRecord != null)
-                    return updatedDepartmentRecord;
+                existingDepartment.DepartmentName = departmentToBeUpdate.DepartmentName;
             }
-            return null;
-        }
-
-        public async Task<Department?> DeleteDepartmentAsync(short departmentId)
-        {
-            var departmentToBeDelete = await GetDepartmentByIdAsync(departmentId);
-            if (departmentToBeDelete != null)
-            {
-                var deletedDepartment = await _departmentRepository.DeleteDepartmentAsync(departmentToBeDelete);
-                if (deletedDepartment != null)
-                    return deletedDepartment;
-            }
-            return null;
+            return existingDepartment;
         }
     }
 }

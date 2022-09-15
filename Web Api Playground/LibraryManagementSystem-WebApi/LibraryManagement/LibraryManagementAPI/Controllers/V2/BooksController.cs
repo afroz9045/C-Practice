@@ -29,9 +29,9 @@ namespace LibraryManagement.Api.Controllers.V2
         {
             _logger.LogInformation($"Getting Book by book name {bookName}");
             _logger.LogInformation($"Getting Book by book name {bookName}");
-            var result = await _bookService.GetBookByNameAsync(bookName);
-            if (result != null)
-                return Ok(result);
+            var bookByNameFromRepo = await _bookRepository.GetBookByBookName(bookName);
+            if (bookByNameFromRepo != null)
+                return Ok(bookByNameFromRepo);
             return NotFound();
         }
     }

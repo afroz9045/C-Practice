@@ -10,7 +10,7 @@ namespace LibraryManagement.Core.Entities
             Returns = new HashSet<Return>();
         }
 
-        public int BookId { get; set; }
+        public int? BookId { get; set; }
         public string BookName { get; set; } = null!;
         public int Isbn { get; set; }
         public string AuthorName { get; set; } = null!;

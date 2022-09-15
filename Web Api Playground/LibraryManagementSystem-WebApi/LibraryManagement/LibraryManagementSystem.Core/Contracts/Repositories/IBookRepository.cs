@@ -6,9 +6,9 @@ namespace LibraryManagement.Core.Contracts.Repositories
     {
         Task<Book?> AddBookAsync(Book? book);
 
-        Task<IEnumerable<Book>> GetBooksAsync();
+        Task<IEnumerable<Book>?> GetBooksAsync();
 
-        Task<Book?> GetBookById(int bookId);
+        Task<Book?> GetBookById(int? bookId);
 
         Task<Book?> GetBookByBookName(string bookName);
 

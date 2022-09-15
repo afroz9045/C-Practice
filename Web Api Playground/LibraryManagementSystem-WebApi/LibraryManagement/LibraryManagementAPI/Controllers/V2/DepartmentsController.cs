@@ -25,8 +25,12 @@ namespace LibraryManagement.Api.Controllers.V2
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDepartmentByName(string departmentName)
         {
+            if (departmentName == null)
+            {
+                return BadRequest(new ArgumentNullException(nameof(departmentName)));
+            }
             _logger.LogInformation($"Getting Department details by department name: {departmentName}");
-            var departmentResult = await _departmentService.GetDepartmentByNameAsync(departmentName);
+            var departmentResult = await _departmentRepository.GetDepartmentByNameAsync(departmentName);
             if (departmentResult != null)
                 return Ok(departmentResult);
             return BadRequest();

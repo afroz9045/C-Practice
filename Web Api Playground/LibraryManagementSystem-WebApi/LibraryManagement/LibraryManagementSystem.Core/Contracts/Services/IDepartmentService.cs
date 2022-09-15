@@ -4,11 +4,8 @@ namespace LibraryManagement.Core.Contracts.Services
 {
     public interface IDepartmentService
     {
-        Task<Department?> AddDepartmentAsync(Department department);
-        Task<Department?> DeleteDepartmentAsync(short departmentId);
-        Task<Department?> GetDepartmentByIdAsync(short deptId);
-        Task<Department?> GetDepartmentByNameAsync(string departmentName);
-        Task<IEnumerable<Department>?> GetDepartmentsAsync();
-        Task<Department?> UpdateDepartmentAsync(short departmentId, Department department);
+        Department? AddDepartmentAsync(Department department);
+
+        Department? UpdateDepartmentAsync(Department? existingDepartment, Department updatedDepartment);
     }
 }
