@@ -4,7 +4,7 @@ namespace LibraryManagement.Api.ViewModels
 {
     public class BookVm
     {
-        [StringLength(15), Required]
+        [StringLength(50), Required]
         public string BookName { get; set; } = null!;
 
         [Range(0, 9999999)]

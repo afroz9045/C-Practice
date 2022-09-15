@@ -7,13 +7,15 @@ namespace LibraryManagement.Core.Services
     public class ReturnService : IReturnService
     {
         private readonly IReturnRepository _returnRepository;
+        private readonly IBookRepository _bookRepository;
         private readonly IIssueService _issueService;
         private readonly IBookService _bookService;
         private readonly IPenaltyService _penaltyService;
 
-        public ReturnService(IReturnRepository returnRepository, IIssueService issueService, IBookService bookService, IPenaltyService penaltyService)
+        public ReturnService(IReturnRepository returnRepository, IBookRepository bookRepository, IIssueService issueService, IBookService bookService, IPenaltyService penaltyService)
         {
             _returnRepository = returnRepository;
+            _bookRepository = bookRepository;
             _issueService = issueService;
             _bookService = bookService;
             _penaltyService = penaltyService;
@@ -22,7 +24,7 @@ namespace LibraryManagement.Core.Services
         public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
         {
             var issueDetails = await _issueService.GetBookIssuedByIdAsync(issueId);
-            var bookDetails = await _bookService.GetBookByBookId(issueDetails.BookId);
+            var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
             if (issueDetails == null)
             {
                 return null;

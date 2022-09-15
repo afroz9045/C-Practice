@@ -30,7 +30,13 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Adding Department");
             var department = _mapper.Map<DepartmentVm, Department>(departmentVm);
-            var addedDepartment = await _departmentService.AddDepartmentAsync(department);
+            var isDepartmentAlreadyAvailable = await _departmentRepository.GetDepartmentByNameAsync(department.DepartmentName);
+            if (isDepartmentAlreadyAvailable != null)
+            {
+                return BadRequest("Department already exist");
+            }
+            var departmentToBeAdd = _departmentService.AddDepartmentAsync(department);
+            var addedDepartment = await _departmentRepository.AddDepartmentAsync(departmentToBeAdd!);
             if (addedDepartment != null)
                 return Ok(addedDepartment);
             return BadRequest();
@@ -41,7 +47,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDepartments()
         {
             _logger.LogInformation("Getting Departments details");
-            var departments = await _departmentService.GetDepartmentsAsync();
+            var departments = await _departmentRepository.GetDepartmentsAsync();
             if (departments != null)
                 return Ok(departments);
             return NotFound();
@@ -52,7 +58,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDepartmentById(short departmentId)
         {
             _logger.LogInformation($"Getting Department details by id: {departmentId}");
-            var departmentResult = await _departmentService.GetDepartmentByIdAsync(departmentId);
+            var departmentResult = await _departmentRepository.GetDepartmentByIdAsync(departmentId);
             if (departmentResult != null)
                 return Ok(departmentResult);
             return BadRequest();
@@ -63,7 +69,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDepartmentByName(string departmentName)
         {
             _logger.LogInformation($"Getting Department details by department name: {departmentName}");
-            var departmentResult = await _departmentService.GetDepartmentByNameAsync(departmentName);
+            var departmentResult = await _departmentRepository.GetDepartmentByNameAsync(departmentName);
             if (departmentResult != null)
                 return Ok(departmentResult);
             return BadRequest();
@@ -73,11 +79,17 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short deptId)
         {
+            var existingDepartment = await _departmentRepository.GetDepartmentByIdAsync(deptId);
+            if (existingDepartment == null)
+            {
+                return BadRequest("Department not found!");
+            }
             _logger.LogInformation($"Updating Department with department id: {deptId}");
-            var department = _mapper.Map<DepartmentVm, Department>(departmentVm);
-            var result = await _departmentService.UpdateDepartmentAsync(deptId, department);
-            if (result != null)
-                return Ok(result);
+            var departmentToBeUpdate = _mapper.Map<DepartmentVm, Department>(departmentVm);
+            var result = _departmentService.UpdateDepartmentAsync(existingDepartment, departmentToBeUpdate);
+            var updatedDepartment = await _departmentRepository.UpdateDepartmentAsync(result!);
+            if (updatedDepartment != null)
+                return Ok(updatedDepartment);
             return BadRequest();
         }
 
@@ -85,8 +97,13 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteDepartment(short departmentId)
         {
+            var departmentToBeDelete = await _departmentRepository.GetDepartmentByIdAsync(departmentId);
+            if (departmentToBeDelete == null)
+            {
+                return BadRequest("Department not found");
+            }
             _logger.LogInformation($"Deleting Department with department id: {departmentId}");
-            var result = await _departmentService.DeleteDepartmentAsync(departmentId);
+            var result = await _departmentRepository.DeleteDepartmentAsync(departmentToBeDelete);
             if (result != null)
                 return NoContent();
             return BadRequest();
