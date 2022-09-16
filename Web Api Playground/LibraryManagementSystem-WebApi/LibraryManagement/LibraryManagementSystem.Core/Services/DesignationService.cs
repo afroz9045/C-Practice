@@ -13,30 +13,6 @@ namespace LibraryManagement.Core.Services
             _designationRepository = designationRepository;
         }
 
-        public async Task<IEnumerable<Designation>?> GetDesignationAsync()
-        {
-            var designations = await _designationRepository.GetDesignationAsync();
-            if (designations != null)
-                return designations;
-            return null;
-        }
-
-        public async Task<Designation?> GetDesignationByIdAsync(string designationId)
-        {
-            var designation = await _designationRepository.GetDesignationByIdAsync(designationId);
-            if (designation != null)
-                return designation;
-            return null;
-        }
-
-        public async Task<Designation?> GetDesignationByNameAsync(string designationName)
-        {
-            var designation = await _designationRepository.GetDesignationByNameAsync(designationName);
-            if (designation != null)
-                return designation;
-            return null;
-        }
-
         public async Task<string?> GenerateDesignationId()
         {
             var recentDesignationRecord = await _designationRepository.GetRecentInsertedDesignation();
@@ -50,49 +26,22 @@ namespace LibraryManagement.Core.Services
             return "A100";
         }
 
-        public async Task<Designation?> AddDesignationAsync(Designation designation)
+        public async Task<Designation?> AddDesignationAsync(Designation designation, Designation? existingDesignation)
         {
-            var designationRecord = await GetDesignationByNameAsync(designation.DesignationName);
-            if (designationRecord == null)
+            var designationId = await GenerateDesignationId();
+            var designationGenerate = new Designation()
             {
-                var designationId = await GenerateDesignationId();
-                var designationGenerate = new Designation()
-                {
-                    DesignationId = designationId,
-                    DesignationName = designation.DesignationName
-                };
-                var addedDesignation = await _designationRepository.AddDesignationAsync(designationGenerate);
-                if (addedDesignation != null)
-                    return addedDesignation;
-            }
-            return null;
+                DesignationId = designationId,
+                DesignationName = designation.DesignationName
+            };
+            return designationGenerate;
         }
 
-        public async Task<Designation?> UpdateDesignationAsync(string designationId, Designation designation)
+        public Designation? UpdateDesignationAsync(string designationId, Designation designation, Designation existingDesignation)
         {
-            var designationRecord = await GetDesignationByIdAsync(designationId);
-            if (designationRecord != null)
-            {
-                designationRecord.DesignationId = designationId;
-                designationRecord.DesignationName = designation.DesignationName;
-                var updatedDesignation = await _designationRepository.UpdateDesignationAsync(designation);
-                return updatedDesignation;
-            }
-            return null;
-        }
-
-        public async Task<Designation?> DeleteDesignationAsync(string designationId)
-        {
-            var designationRecord = await GetDesignationByIdAsync(designationId);
-            if (designationRecord != null)
-            {
-                var deletedDesignation = await _designationRepository.DeleteDesignationAsync(designationRecord);
-                if (deletedDesignation != null)
-                {
-                    return deletedDesignation;
-                }
-            }
-            return null;
+            existingDesignation.DesignationId = designationId;
+            existingDesignation.DesignationName = designation.DesignationName;
+            return existingDesignation;
         }
     }
 }

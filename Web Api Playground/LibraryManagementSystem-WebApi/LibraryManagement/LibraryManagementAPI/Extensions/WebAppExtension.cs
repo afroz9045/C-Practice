@@ -23,7 +23,6 @@ namespace LibraryManagement.Api.Extensions
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseAuthorization();
-
             app.MapControllers();
         }
     }

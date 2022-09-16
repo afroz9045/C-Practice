@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
 using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

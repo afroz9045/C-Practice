@@ -53,7 +53,7 @@ namespace LibraryManagement.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet("{departmentId}")]
+        [HttpGet("{departmentId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDepartmentById(short departmentId)
         {

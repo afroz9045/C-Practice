@@ -26,7 +26,7 @@ namespace LibraryManagement.Api.Controllers.V2
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] string bookIssuedToStaff)
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
-            var bookIssuedToRecords = await _issueService.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
+            var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
             if (bookIssuedToRecords != null)
             {
                 return Ok(bookIssuedToRecords);
@@ -39,7 +39,7 @@ namespace LibraryManagement.Api.Controllers.V2
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] int bookIssuedToStudent)
         {
             _logger.LogInformation($"Getting Book issued to student with student id: {bookIssuedToStudent}");
-            var bookIssuedToRecords = await _issueService.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent, staffId: null);
+            var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent, staffId: null);
             if (bookIssuedToRecords != null)
             {
                 return Ok(bookIssuedToRecords);

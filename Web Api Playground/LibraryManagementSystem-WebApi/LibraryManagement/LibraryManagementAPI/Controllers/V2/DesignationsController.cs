@@ -27,8 +27,8 @@ namespace LibraryManagement.Api.Controllers.V2
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDesignationByName(string designationName)
         {
-            _logger.LogInformation($"Getting designation by designation designation name: {designationName}");
-            var result = await _designationService.GetDesignationByNameAsync(designationName);
+            _logger.LogInformation($"Getting designation by designation name: {designationName}");
+            var result = await _designationRepository.GetDesignationByNameAsync(designationName);
             if (result != null)
                 return Ok(result);
             return NotFound();

@@ -2,7 +2,6 @@
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace LibraryManagement.Infrastructure.Repositories

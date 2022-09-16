@@ -47,17 +47,16 @@ namespace LibraryManagement.Core.Services
         /// <returns>updated book</returns>
         public Book? UpdateBooksAsync(Book book, Book? existingBook)
         {
-            Book? updatedBookDetails = null;
             if (existingBook != null)
             {
-                existingBook.BookId = book.BookId;
+                existingBook.BookId = existingBook.BookId;
                 existingBook.AuthorName = book.AuthorName;
                 existingBook.BookEdition = book.BookEdition;
                 existingBook.BookName = book.BookName;
                 existingBook.Isbn = book.Isbn;
-                return updatedBookDetails;
+                return existingBook;
             }
-            return updatedBookDetails;
+            return null;
         }
 
         /// <summary>
