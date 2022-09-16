@@ -1,6 +1,4 @@
 ﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
-using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
@@ -46,14 +44,6 @@ namespace LibraryManagement.Core.Services
                     }
                 }
             }
-            return null;
-        }
-
-        public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int? studentId = 0, string? staffId = null)
-        {
-            var bookIssuedToEntity = await _issueRepository.GetBookIssuedToEntityDetails(studentId, staffId);
-            if (bookIssuedToEntity != null)
-                return bookIssuedToEntity;
             return null;
         }
 

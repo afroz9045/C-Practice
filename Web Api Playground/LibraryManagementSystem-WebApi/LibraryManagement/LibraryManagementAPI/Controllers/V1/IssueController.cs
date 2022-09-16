@@ -45,18 +45,18 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetIssueBookDetails()
         {
             _logger.LogInformation("Getting books issued details");
-            var booksIssued = await _issueService.GetBookIssuedAsync();
+            var booksIssued = await _issueRepository.GetBookIssuedAsync();
             if (booksIssued != null)
                 return Ok(booksIssued);
             return NotFound();
         }
 
-        [HttpGet("{bookIssuedId}")]
+        [HttpGet("{bookIssuedId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssueBookByIdDetails(short bookIssuedId)
         {
             _logger.LogInformation($"Getting book issued details by book id: {bookIssuedId} ");
-            var bookIssued = await _issueService.GetBookIssuedByIdAsync(bookIssuedId);
+            var bookIssued = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
             if (bookIssued != null)
                 return Ok(bookIssued);
             return NotFound();
@@ -67,7 +67,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] string bookIssuedToStaff)
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
-            var bookIssuedToRecords = await _issueService.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
+            var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
             if (bookIssuedToRecords != null)
             {
                 return Ok(bookIssuedToRecords);
@@ -75,12 +75,16 @@ namespace LibraryManagement.Api.Controllers
             return BadRequest("Data not Found!");
         }
 
-        [HttpGet("students/{bookIssuedToStudent}")]
+        [HttpGet("students/{bookIssuedToStudent:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] int bookIssuedToStudent)
         {
+            if (bookIssuedToStudent <= 0)
+            {
+                return BadRequest("Invalid student id");
+            }
             _logger.LogInformation($"Getting Book issued to student with student id: {bookIssuedToStudent}");
-            var bookIssuedToRecords = await _issueService.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent, staffId: null);
+            var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent);
             if (bookIssuedToRecords != null)
             {
                 return Ok(bookIssuedToRecords);

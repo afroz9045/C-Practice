@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using LibraryManagement.Api.Controllers.V1;
 using LibraryManagement.Core.Contracts.Services;
-using LibraryManagement.Core.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;

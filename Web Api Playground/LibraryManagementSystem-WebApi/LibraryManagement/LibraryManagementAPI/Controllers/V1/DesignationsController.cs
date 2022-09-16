@@ -30,11 +30,17 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddDesignation([FromBody] DesignationVm designationVm)
         {
+            var designationRecord = await _designationRepository.GetDesignationByNameAsync(designationVm.DesignationName);
+            if (designationRecord != null)
+            {
+                return BadRequest("Designation already available");
+            }
             _logger.LogInformation("Adding designation");
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
-            var designationAdded = await _designationService.AddDesignationAsync(designation);
-            if (designationAdded != null)
-                return Ok(designationAdded);
+            var designationToBeAdd = await _designationService.AddDesignationAsync(designation, designationRecord);
+            var addedDesignation = await _designationRepository.AddDesignationAsync(designationToBeAdd!);
+            if (addedDesignation != null)
+                return Ok(addedDesignation);
             return BadRequest();
         }
 
@@ -43,18 +49,18 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDesignations()
         {
             _logger.LogInformation("Getting designations details");
-            var designations = await _designationService.GetDesignationAsync();
+            var designations = await _designationRepository.GetDesignationAsync();
             if (designations != null)
                 return Ok(designations);
             return NotFound();
         }
 
-        [HttpGet("{designationId}")]
+        [HttpGet("id/{designationId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDesignationById(string designationId)
         {
             _logger.LogInformation($"Getting designation by designation id: {designationId}");
-            var result = await _designationService.GetDesignationByIdAsync(designationId);
+            var result = await _designationRepository.GetDesignationByIdAsync(designationId);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -65,7 +71,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDesignationByName(string designationName)
         {
             _logger.LogInformation($"Getting designation by designation designation name: {designationName}");
-            var result = await _designationService.GetDesignationByNameAsync(designationName);
+            var result = await _designationRepository.GetDesignationByNameAsync(designationName);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -75,11 +81,17 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateDesignation([FromBody] DesignationVm designationVm, string designationId)
         {
+            var designationRecord = await _designationRepository.GetDesignationByIdAsync(designationId);
+            if (designationRecord == null)
+            {
+                return BadRequest("Designation is not exist!");
+            }
             _logger.LogInformation($"Update designation details by designation id: {designationId}");
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
-            var result = await _designationService.UpdateDesignationAsync(designationId, designation);
-            if (result != null)
-                return Ok(result);
+            var designationToBeUpdate = _designationService.UpdateDesignationAsync(designationId, designation, designationRecord);
+            var updatedDesignation = await _designationRepository.UpdateDesignationAsync(designationToBeUpdate!);
+            if (updatedDesignation != null)
+                return Ok(updatedDesignation);
             return BadRequest();
         }
 
@@ -87,9 +99,14 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteDesignation(string designationId)
         {
+            var designationRecord = await _designationRepository.GetDesignationByIdAsync(designationId);
+            if (designationRecord == null)
+            {
+                return BadRequest("Designation is not exist");
+            }
             _logger.LogInformation($"Deleting designation details by designation id: {designationId}");
-            var designation = await _designationService.DeleteDesignationAsync(designationId);
-            if (designation != null)
+            var deletedDesignation = await _designationRepository.DeleteDesignationAsync(designationRecord);
+            if (deletedDesignation != null)
                 return NoContent();
             return BadRequest();
         }

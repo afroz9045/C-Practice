@@ -9,7 +9,7 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<IEnumerable<Issue>?> GetBookIssuedAsync();
 
-        Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int? studentId = 0, string? staffId = null);
+        Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null);
 
         Task<Issue?> GetBookIssuedByIdAsync(short issueId);
 

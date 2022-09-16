@@ -97,6 +97,10 @@ namespace LibraryManagement.Api.Controllers.V1
             var book = _mapper.Map<BookVm, Book>(bookVm);
             _logger.LogInformation($"Updating a Book details with bookId: {bookId}");
             var existingBook = await _bookRepository.GetBookById(bookId);
+            if (existingBook == null)
+            {
+                return BadRequest("Book is not exist!");
+            }
             var result = _bookService.UpdateBooksAsync(book, existingBook);
             var updatedBookDetails = await _bookRepository.UpdateBookAsync(result!);
             if (updatedBookDetails != null)
@@ -110,6 +114,10 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             _logger.LogInformation($"Deleting a Book with {bookId}");
             var existingBook = await _bookRepository.GetBookById(bookId);
+            if (existingBook == null)
+            {
+                return BadRequest("Book is not exist!");
+            }
             var result = await _bookRepository.DeleteBookAsync(existingBook!);
             if (result != null)
                 return NoContent();

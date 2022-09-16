@@ -4,12 +4,10 @@ namespace LibraryManagement.Core.Contracts.Services
 {
     public interface IDesignationService
     {
-        Task<Designation?> AddDesignationAsync(Designation designation);
-        Task<Designation?> DeleteDesignationAsync(string designationId);
+        Task<Designation?> AddDesignationAsync(Designation designation, Designation? existingDesignation);
+
         Task<string?> GenerateDesignationId();
-        Task<IEnumerable<Designation>?> GetDesignationAsync();
-        Task<Designation?> GetDesignationByIdAsync(string designationId);
-        Task<Designation?> GetDesignationByNameAsync(string designationName);
-        Task<Designation?> UpdateDesignationAsync(string designationId, Designation designation);
+
+        Designation? UpdateDesignationAsync(string designationId, Designation designation, Designation existingDesignation);
     }
 }

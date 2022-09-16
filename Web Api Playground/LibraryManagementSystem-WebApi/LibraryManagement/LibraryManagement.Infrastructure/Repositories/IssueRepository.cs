@@ -33,36 +33,27 @@ namespace LibraryManagement.Infrastructure.Repositories
             return issue;
         }
 
-        public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int? studentId = 0, string? staffId = null)
+        public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null)
         {
-            if (staffId != null && studentId == 0)
-            {
-                var bookIssuedEntityStaff = await (from issuedStaff in _libraryDbContext.Issues
-                                                   join staff in _libraryDbContext.Staffs
-                                                   on issuedStaff.StaffId equals staff.StaffId
-                                                   where staff.StaffId == staffId
-                                                   select new BookIssuedTo
-                                                   {
-                                                       BookId = issuedStaff.BookId,
-                                                       StaffId = staff.StaffId,
-                                                       StaffName = staff.StaffName
-                                                   }).ToListAsync();
-                return bookIssuedEntityStaff;
-            }
-            else if (staffId == null && studentId != 0)
-            {
-                var bookIssuedEntityStudent = await (from issuedStudent in _libraryDbContext.Issues
-                                                     join student in _libraryDbContext.Students on issuedStudent.StudentId equals student.StudentId
-                                                     where student.StudentId == studentId
-                                                     select new BookIssuedTo
-                                                     {
-                                                         BookId = issuedStudent.BookId,
-                                                         StudentId = student.StudentId,
-                                                         StudentName = student.StudentName
-                                                     }).ToListAsync();
-                return bookIssuedEntityStudent;
-            }
-            return null;
+            var bookIssuedEntityStaff = await (from issued in _libraryDbContext.Issues.Include(x => x.Book)
+                                               join staff in _libraryDbContext.Staffs
+                                               on issued.StaffId equals staff.StaffId into st
+                                               from staffRecord in st.DefaultIfEmpty()
+                                               join student in _libraryDbContext.Students
+                                               on issued.StudentId equals student.StudentId into stu
+                                               from studentRecord in stu.DefaultIfEmpty()
+                                               where (staffId == null || issued.StaffId == staffId)
+                                               && (studentId <= 0 || issued.StudentId == studentId)
+                                               select new BookIssuedTo
+                                               {
+                                                   BookId = issued.BookId,
+                                                   BookName = issued.Book.BookName,
+                                                   StaffId = staffRecord.StaffId,
+                                                   StaffName = staffRecord.StaffName,
+                                                   StudentId = studentRecord.StudentId,
+                                                   StudentName = studentRecord.StudentName
+                                               }).ToListAsync();
+            return bookIssuedEntityStaff;
         }
 
         public async Task<IEnumerable<Issue>?> GetBookIssuedAsync()
