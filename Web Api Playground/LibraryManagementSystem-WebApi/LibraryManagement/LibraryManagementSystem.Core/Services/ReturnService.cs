@@ -9,21 +9,23 @@ namespace LibraryManagement.Core.Services
         private readonly IReturnRepository _returnRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IIssueService _issueService;
+        private readonly IIssueRepository _issueRepository;
         private readonly IBookService _bookService;
         private readonly IPenaltyService _penaltyService;
 
-        public ReturnService(IReturnRepository returnRepository, IBookRepository bookRepository, IIssueService issueService, IBookService bookService, IPenaltyService penaltyService)
+        public ReturnService(IReturnRepository returnRepository, IBookRepository bookRepository, IIssueService issueService, IIssueRepository issueRepository, IBookService bookService, IPenaltyService penaltyService)
         {
             _returnRepository = returnRepository;
             _bookRepository = bookRepository;
             _issueService = issueService;
+            _issueRepository = issueRepository;
             _bookService = bookService;
             _penaltyService = penaltyService;
         }
 
         public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
         {
-            var issueDetails = await _issueService.GetBookIssuedByIdAsync(issueId);
+            var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
             var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
             if (issueDetails == null)
             {
@@ -40,7 +42,7 @@ namespace LibraryManagement.Core.Services
                 returnRecord.BookId = issueDetails.BookId;
                 returnRecord.ReturnDate = DateTime.UtcNow;
 
-                await _issueService.DeleteIssueAsync(issueId);
+                await _issueRepository.DeleteIssueAsync(issueDetails);
                 bookDetails.StockAvailable += 1;
                 var returnRecordResult = await _returnRepository.AddReturnAsync(returnRecord, bookDetails);
                 if (returnRecordResult != null)

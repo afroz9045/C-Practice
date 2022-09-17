@@ -18,15 +18,13 @@ namespace LibraryManagement.Core.Services
             _studentRepository = studentRepository;
         }
 
-        public async Task<Issue?> AddBookIssueAsync(Issue issue)
+        public Issue? AddBookIssueAsync(Issue issue, Book? bookIdResult, Staff? staffIdValidate, Student? studentIdValidate)
         {
             var issuedBook = new Issue();
             if (issue.StaffId != null || issue.StudentId != null)
             {
                 issuedBook.BookId = issue.BookId;
-                var bookIdResult = await _bookRepository.GetBookById(issuedBook.BookId);
-                var staffIdValidate = await _staffRepository.GetStaffByIdAsync(issue.StaffId);
-                var studentIdValidate = await _studentRepository.GetStudentByIdAsync(issue.StudentId ?? 0);
+
                 if (staffIdValidate != null || studentIdValidate != null)
                 {
                     if (bookIdResult != null && bookIdResult.StockAvailable > 0)
@@ -37,56 +35,21 @@ namespace LibraryManagement.Core.Services
                         issuedBook.StudentId = issue.StudentId;
 
                         bookIdResult.StockAvailable -= 1;
-
-                        var bookIssuedResult = await _issueRepository.AddBookIssueAsync(issuedBook, bookIdResult);
-                        if (bookIssuedResult != null)
-                            return bookIssuedResult;
+                        return issuedBook;
                     }
                 }
             }
             return null;
         }
 
-        public async Task<IEnumerable<Issue>?> GetBookIssuedAsync()
+        public Issue? UpdateBookIssuedAsync(short issueId, Issue existingIssue, Issue issue)
         {
-            var bookIssued = await _issueRepository.GetBookIssuedAsync();
-            if (bookIssued != null)
-                return bookIssued;
-            return null;
-        }
+            existingIssue.IssueId = issueId;
+            existingIssue.IssueDate = issue.IssueDate;
+            existingIssue.ExpiryDate = issue.ExpiryDate;
+            existingIssue.BookId = issue.BookId;
 
-        public async Task<Issue?> GetBookIssuedByIdAsync(short issueId)
-        {
-            var bookIssue = await _issueRepository.GetBookIssuedByIdAsync(issueId);
-            if (bookIssue != null)
-                return bookIssue;
-            return null;
-        }
-
-        public async Task<Issue?> UpdateBookIssuedAsync(short issueId, Issue issue)
-        {
-            var bookIssuedRecord = await GetBookIssuedByIdAsync(issueId);
-            if (bookIssuedRecord != null)
-            {
-                bookIssuedRecord.IssueId = issueId;
-                bookIssuedRecord.IssueDate = issue.IssueDate;
-                bookIssuedRecord.ExpiryDate = issue.ExpiryDate;
-                bookIssuedRecord.BookId = issue.BookId;
-
-                var updatedIssuedDetails = await _issueRepository.UpdateBookIssuedAsync(bookIssuedRecord);
-                if (updatedIssuedDetails != null)
-                    return updatedIssuedDetails;
-            }
-            return null;
-        }
-
-        public async Task<Issue?> DeleteIssueAsync(short issueId)
-        {
-            var issuedRecord = await GetBookIssuedByIdAsync(issueId);
-            var deletedBookIssued = await _issueRepository.DeleteIssueAsync(issuedRecord);
-            if (deletedBookIssued != null)
-                return deletedBookIssued;
-            return null;
+            return existingIssue;
         }
     }
 }

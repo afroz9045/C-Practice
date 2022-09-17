@@ -7,11 +7,13 @@ namespace LibraryManagement.Core.Services
     public class PenaltyService : IPenaltyService
     {
         private readonly IPenaltyRepository _penaltyRepository;
+        private readonly IIssueRepository _issueRepository;
         private readonly IIssueService _issueService;
 
-        public PenaltyService(IPenaltyRepository penaltyRepository, IIssueService issueService)
+        public PenaltyService(IPenaltyRepository penaltyRepository, IIssueRepository issueRepository, IIssueService issueService)
         {
             _penaltyRepository = penaltyRepository;
+            _issueRepository = issueRepository;
             _issueService = issueService;
         }
 
@@ -36,7 +38,7 @@ namespace LibraryManagement.Core.Services
             var isPenaltyAlreadyExits = await GetPenaltyByIdAsync(issueId);
             if (isPenaltyAlreadyExits == null)
             {
-                var issueDetails = await _issueService.GetBookIssuedByIdAsync(issueId);
+                var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
                 TimeSpan expiredDate = DateTime.UtcNow.Subtract(issueDetails.ExpiryDate);
                 if (issueDetails != null && expiredDate.Days > 0)
                 {

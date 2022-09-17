@@ -5,7 +5,7 @@ namespace LibraryManagement.Core.Contracts.Repositories
 {
     public interface IIssueRepository
     {
-        Task<Issue?> AddBookIssueAsync(Issue issue, Book book);
+        Task<Issue?> AddBookIssueAsync(Issue? issue, Book? book);
 
         Task<IEnumerable<Issue>?> GetBookIssuedAsync();
 
@@ -13,8 +13,10 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<Issue?> GetBookIssuedByIdAsync(short issueId);
 
-        Task<Issue?> UpdateBookIssuedAsync(Issue issue);
+        Task<IEnumerable<Issue>?> GetBookIssuedByBookId(int bookId);
 
-        Task<Issue> DeleteIssueAsync(Issue issuedRecord);
+        Task<Issue?> UpdateBookIssuedAsync(Issue? issue);
+
+        Task<Issue?> DeleteIssueAsync(Issue issuedRecord);
     }
 }

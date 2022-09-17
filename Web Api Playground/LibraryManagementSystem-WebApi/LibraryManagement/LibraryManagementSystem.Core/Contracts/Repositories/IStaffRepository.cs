@@ -12,7 +12,7 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<Staff?> GetRecentInsertedStaff();
 
-        Task<Staff?> GetStaffByIdAsync(string staffId);
+        Task<Staff?> GetStaffByIdAsync(string? staffId);
 
         Task<Staff?> GetStaffByName(string staffName);
 
