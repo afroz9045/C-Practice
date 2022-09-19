@@ -4,13 +4,13 @@ namespace LibraryManagement.Core.Contracts.Repositories
 {
     public interface IReturnRepository
     {
-        Task<Return?> AddReturnAsync(Return returnDetails, Book book);
+        Task<Return?> AddReturnAsync(Return returnDetails, Book book, Issue bookIssue);
 
         Task<Return> DeleteReturnAsync(Return bookReturn);
 
-        Task<IEnumerable<Return>> GetReturnAsync();
+        Task<IEnumerable<Return?>> GetReturnAsync();
 
-        Task<Return> GetReturnByIdAsync(int returnId);
+        Task<Return?> GetReturnByIdAsync(int returnId);
 
         Task<Return> UpdateReturnAsync(Return returnDetails);
     }

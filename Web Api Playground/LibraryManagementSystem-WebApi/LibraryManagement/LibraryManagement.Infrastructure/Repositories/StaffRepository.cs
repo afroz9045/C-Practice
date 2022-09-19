@@ -38,7 +38,7 @@ namespace LibraryManagement.Infrastructure.Repositories
             return staffData;
         }
 
-        public async Task<Staff?> GetStaffByIdAsync(string staffId)
+        public async Task<Staff?> GetStaffByIdAsync(string? staffId)
         {
             var getStaffByIdQuery = "select * from [staff] where staffId = @staffId";
             return (await _dapperConnection.QueryFirstOrDefaultAsync<Staff>(getStaffByIdQuery, new { staffId }));

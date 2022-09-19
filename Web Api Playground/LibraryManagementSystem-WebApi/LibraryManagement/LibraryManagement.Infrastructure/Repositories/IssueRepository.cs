@@ -25,12 +25,16 @@ namespace LibraryManagement.Infrastructure.Repositories
             _studentRepository = studentRepository;
         }
 
-        public async Task<Issue?> AddBookIssueAsync(Issue issue, Book book)
+        public async Task<Issue?> AddBookIssueAsync(Issue? issue, Book? book)
         {
-            _libraryDbContext.Update(book);
-            _libraryDbContext.Issues.Add(issue);
-            await _libraryDbContext.SaveChangesAsync();
-            return issue;
+            if (issue != null && book != null)
+            {
+                _libraryDbContext.Update(book);
+                var addedBookIssued = await _libraryDbContext.Issues.AddAsync(issue);
+                await _libraryDbContext.SaveChangesAsync();
+                return issue;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null)
@@ -56,6 +60,13 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookIssuedEntityStaff;
         }
 
+        public async Task<IEnumerable<Issue>?> GetBookIssuedByBookId(int bookId)
+        {
+            var bookIssuedRecordsByBookIdQuery = "select * from issue where BookId = @bookId";
+            var bookIssuedData = await _dapperConnection.QueryAsync<Issue>(bookIssuedRecordsByBookIdQuery, new { bookId });
+            return bookIssuedData;
+        }
+
         public async Task<IEnumerable<Issue>?> GetBookIssuedAsync()
         {
             var getBookIssueQuery = "select * from [issue]";
@@ -70,14 +81,18 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookIssuedData;
         }
 
-        public async Task<Issue?> UpdateBookIssuedAsync(Issue issue)
+        public async Task<Issue?> UpdateBookIssuedAsync(Issue? issue)
         {
-            _libraryDbContext.Update(issue);
-            await _libraryDbContext.SaveChangesAsync();
-            return issue;
+            if (issue != null)
+            {
+                _libraryDbContext.Update(issue);
+                await _libraryDbContext.SaveChangesAsync();
+                return issue;
+            }
+            return null;
         }
 
-        public async Task<Issue> DeleteIssueAsync(Issue issuedRecord)
+        public async Task<Issue?> DeleteIssueAsync(Issue issuedRecord)
         {
             _libraryDbContext.Issues?.Remove(issuedRecord);
             await _libraryDbContext.SaveChangesAsync();

@@ -9,30 +9,25 @@ namespace LibraryManagement.Core.Services
         private readonly IReturnRepository _returnRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IIssueService _issueService;
+        private readonly IIssueRepository _issueRepository;
         private readonly IBookService _bookService;
         private readonly IPenaltyService _penaltyService;
+        private readonly IPenaltyRepository _penaltyRepository;
 
-        public ReturnService(IReturnRepository returnRepository, IBookRepository bookRepository, IIssueService issueService, IBookService bookService, IPenaltyService penaltyService)
+        public ReturnService(IReturnRepository returnRepository, IBookRepository bookRepository, IIssueService issueService, IIssueRepository issueRepository, IBookService bookService, IPenaltyService penaltyService, IPenaltyRepository penaltyRepository)
         {
             _returnRepository = returnRepository;
             _bookRepository = bookRepository;
             _issueService = issueService;
+            _issueRepository = issueRepository;
             _bookService = bookService;
             _penaltyService = penaltyService;
+            _penaltyRepository = penaltyRepository;
         }
 
-        public async Task<Return?> AddReturnAsync(Return returnDetails, short issueId)
+        public (Return?, Book?) AddReturn(Return returnDetails, short issueId, Penalty? isPenalty, Book? bookDetails, Issue issueDetails)
         {
-            var issueDetails = await _issueService.GetBookIssuedByIdAsync(issueId);
-            var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
-            if (issueDetails == null)
-            {
-                return null;
-            }
-            var isPenalty = await _penaltyService.IsPenalty(issueId);
-            var penaltyData = await _penaltyService.GetPenaltyByIdAsync(issueId);
-
-            if (penaltyData == null || penaltyData.PenaltyPaidStatus == true)
+            if (isPenalty == null || isPenalty.PenaltyPaidStatus == true)
             {
                 var returnRecord = new Return();
                 returnRecord.ExpiryDate = issueDetails.ExpiryDate;
@@ -40,57 +35,23 @@ namespace LibraryManagement.Core.Services
                 returnRecord.BookId = issueDetails.BookId;
                 returnRecord.ReturnDate = DateTime.UtcNow;
 
-                await _issueService.DeleteIssueAsync(issueId);
-                bookDetails.StockAvailable += 1;
-                var returnRecordResult = await _returnRepository.AddReturnAsync(returnRecord, bookDetails);
-                if (returnRecordResult != null)
-                    return returnRecord;
+                bookDetails!.StockAvailable += 1;
+                return (returnRecord, bookDetails);
             }
-            return null;
+            return (null, null);
         }
 
-        public async Task<IEnumerable<Return>?> GetReturnAsync()
+        public Return? UpdateReturnAsync(int returnId, Return? existingReturnDetails, Return returnDetailsToBeUpdate)
         {
-            var booksReturns = await _returnRepository.GetReturnAsync();
-            if (booksReturns != null)
-                return booksReturns;
-            return null;
-        }
-
-        public async Task<Return?> GetReturnByIdAsync(int returnId)
-        {
-            var bookReturn = await _returnRepository.GetReturnByIdAsync(returnId);
-            if (bookReturn != null)
-                return bookReturn;
-            return null;
-        }
-
-        public async Task<Return?> UpdateReturnAsync(int returnId, Return returnDetails)
-        {
-            var returnRecord = await GetReturnByIdAsync(returnId);
-            if (returnRecord != null)
+            if (existingReturnDetails != null)
             {
-                returnRecord.ReturnId = returnId;
-                returnRecord.ExpiryDate = returnDetails.ExpiryDate;
-                returnRecord.IssueDate = returnDetails.IssueDate;
-                returnRecord.BookId = returnDetails.BookId;
-                returnRecord.ReturnDate = DateTime.UtcNow;
+                existingReturnDetails.ReturnId = returnId;
+                existingReturnDetails.ExpiryDate = returnDetailsToBeUpdate.ExpiryDate;
+                existingReturnDetails.IssueDate = returnDetailsToBeUpdate.IssueDate;
+                existingReturnDetails.BookId = returnDetailsToBeUpdate.BookId;
+                existingReturnDetails.ReturnDate = DateTime.UtcNow;
 
-                var updatedBookReturns = await _returnRepository.UpdateReturnAsync(returnRecord);
-                if (updatedBookReturns != null)
-                    return updatedBookReturns;
-            }
-            return null;
-        }
-
-        public async Task<Return?> DeleteReturnAsync(int returnId)
-        {
-            var returnRecord = await GetReturnByIdAsync(returnId);
-            if (returnRecord != null)
-            {
-                var deletedBookReturn = await _returnRepository.DeleteReturnAsync(returnRecord);
-                if (deletedBookReturn != null)
-                    return deletedBookReturn;
+                return existingReturnDetails;
             }
             return null;
         }

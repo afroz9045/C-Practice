@@ -12,13 +12,19 @@ namespace LibraryManagement.Api.Controllers
     public class IssueController : ApiController
     {
         private readonly IIssueRepository _issueRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IStaffRepository _staffRepository;
+        private readonly IStudentRepository _studentRepository;
         private readonly IIssueService _issueService;
         private readonly IMapper _mapper;
         private readonly ILogger<IssueController> _logger;
 
-        public IssueController(IIssueRepository issueRepository, IIssueService issueService, IMapper mapper, ILogger<IssueController> logger)
+        public IssueController(IIssueRepository issueRepository, IBookRepository bookRepository, IStaffRepository staffRepository, IStudentRepository studentRepository, IIssueService issueService, IMapper mapper, ILogger<IssueController> logger)
         {
             _issueRepository = issueRepository;
+            _bookRepository = bookRepository;
+            _staffRepository = staffRepository;
+            _studentRepository = studentRepository;
             _issueService = issueService;
             _mapper = mapper;
             _logger = logger;
@@ -28,16 +34,35 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
-            if (issueVm.StudentId != null && issueVm.StaffId == null)
-                _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
-            _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
-            var issuedBook = _mapper.Map<IssueVm, Issue>(issueVm);
-            var bookIssueResult = await _issueService.AddBookIssueAsync(issuedBook);
-            if (bookIssueResult.IssueId != 0)
+            var bookIssuedDetails = await _issueRepository.GetBookIssuedByBookId(issueVm.BookId);
+            if (bookIssuedDetails != null)
             {
-                return Ok(bookIssueResult);
+                foreach (var bookIssuedData in bookIssuedDetails)
+                {
+                    if (((bookIssuedData.StudentId != 0 && bookIssuedData.StudentId == issueVm.StudentId) || (bookIssuedData.StaffId != null && bookIssuedData.StaffId == issueVm.StaffId)) && (bookIssuedData.BookId == issueVm.BookId))
+                    {
+                        return BadRequest($"Book with book id {issueVm.BookId} is already issued!");
+                    }
+                }
             }
-            return NotFound("Sorry, book not found!");
+            var issuedBook = _mapper.Map<IssueVm, Issue>(issueVm);
+            var bookIdResult = await _bookRepository.GetBookById(issuedBook.BookId);
+            var staffIdValidate = await _staffRepository.GetStaffByIdAsync(issueVm.StaffId);
+            var studentIdValidate = await _studentRepository.GetStudentByIdAsync(issueVm.StudentId ?? 0);
+            var bookToBeIssue = _issueService.AddBookIssueAsync(issuedBook, bookIdResult, staffIdValidate, studentIdValidate);
+            var bookIssuedResult = await _issueRepository.AddBookIssueAsync(bookToBeIssue, bookIdResult);
+
+            if (bookIssuedResult != null && bookIssuedResult.IssueId != 0)
+            {
+                if (bookIssuedResult.StudentId >= 0)
+                {
+                    _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
+                    return Ok(bookIssuedResult);
+                }
+                _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
+                return Ok(bookIssuedResult);
+            }
+            return BadRequest("Sorry, book is not added");
         }
 
         [HttpGet]
@@ -94,12 +119,19 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{bookIssuedId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] Issue issue)
+        public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] IssueUpdateVm updateIssue)
         {
+            var existingBookIssuedRecord = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
+            if (existingBookIssuedRecord == null)
+            {
+                return BadRequest($"Book issued with issued id {bookIssuedId} is not exist!");
+            }
             _logger.LogInformation($"Updating book issued details with book issued id: {bookIssuedId}");
-            var result = await _issueService.UpdateBookIssuedAsync(bookIssuedId, issue);
-            if (result != null)
-                return Ok(result);
+            var updateIssueMapped = _mapper.Map<IssueUpdateVm, Issue>(updateIssue);
+            var bookIssueToBeUpdate = _issueService.UpdateBookIssuedAsync(bookIssuedId, existingBookIssuedRecord, updateIssueMapped);
+            var updatedBookIssue = _issueRepository.UpdateBookIssuedAsync(bookIssueToBeUpdate);
+            if (updatedBookIssue != null)
+                return Ok(bookIssueToBeUpdate);
             return BadRequest();
         }
 
@@ -107,10 +139,15 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task<ActionResult> DeleteIssue(short bookIssuedId)
         {
-            _logger.LogInformation($"Deleting book issed details with book issued id: {bookIssuedId}");
-            var issueDelete = await _issueService.DeleteIssueAsync(bookIssuedId);
-            if (issueDelete != null)
-                return Ok(issueDelete);
+            var issuedRecord = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
+            if (issuedRecord == null)
+            {
+                BadRequest("Book Issue not found!");
+            }
+            var deletedBookIssued = await _issueRepository.DeleteIssueAsync(issuedRecord!);
+            _logger.LogInformation($"Deleting book issued details with book issued id: {bookIssuedId}");
+            if (deletedBookIssued != null)
+                return Ok(deletedBookIssued);
             return NotFound();
         }
     }

@@ -23,25 +23,26 @@ namespace LibraryManagement.Infrastructure.Repositories
             _penaltyRepository = penaltyRepository;
         }
 
-        public async Task<Return?> AddReturnAsync(Return returnDetails, Book book)
+        public async Task<Return?> AddReturnAsync(Return returnDetails, Book book, Issue bookIssue)
         {
             _libraryDbContext.Returns.Add(returnDetails);
+            await _issueRepository.DeleteIssueAsync(bookIssue);
             _libraryDbContext.Books.Update(book);
             await _libraryDbContext.SaveChangesAsync();
             return returnDetails;
         }
 
-        public async Task<IEnumerable<Return>> GetReturnAsync()
+        public async Task<IEnumerable<Return?>> GetReturnAsync()
         {
             var getReturnQuery = "select * from [return]";
             var returnData = await _dapperConnection.QueryAsync<Return>(getReturnQuery);
             return returnData;
         }
 
-        public async Task<Return> GetReturnByIdAsync(int returnId)
+        public async Task<Return?> GetReturnByIdAsync(int returnId)
         {
             var getReturnByIdQuery = "select * from [return] where returnId = @returnId";
-            return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId = returnId }));
+            return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId }));
         }
 
         public async Task<Return> UpdateReturnAsync(Return returnDetails)

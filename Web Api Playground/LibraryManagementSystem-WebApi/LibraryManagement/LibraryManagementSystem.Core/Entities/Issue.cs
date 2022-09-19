@@ -18,5 +18,10 @@
         public virtual Staff? Staff { get; set; }
         public virtual Student? Student { get; set; }
         public virtual ICollection<Penalty> Penalties { get; set; }
+
+        public static explicit operator Task(Issue v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
