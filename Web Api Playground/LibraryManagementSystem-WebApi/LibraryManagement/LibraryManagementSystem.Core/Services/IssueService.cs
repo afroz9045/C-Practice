@@ -47,7 +47,6 @@ namespace LibraryManagement.Core.Services
             existingIssue.IssueId = issueId;
             existingIssue.IssueDate = issue.IssueDate;
             existingIssue.ExpiryDate = issue.ExpiryDate;
-            existingIssue.BookId = issue.BookId;
 
             return existingIssue;
         }

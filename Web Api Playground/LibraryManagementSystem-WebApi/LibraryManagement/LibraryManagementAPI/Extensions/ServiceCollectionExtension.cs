@@ -20,7 +20,9 @@ namespace LibraryManagement.Api.Extensions
             // Add services to the container.
 
             services.AddControllers().AddJsonOptions(options =>
-                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            }
                 );
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
@@ -55,11 +57,11 @@ namespace LibraryManagement.Api.Extensions
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IDesignationService, DesignationService>();
+            services.AddScoped<IStaffService, StaffService>();
+            services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IIssueService, IssueService>();
             services.AddScoped<IPenaltyService, PenaltyService>();
             services.AddScoped<IReturnService, ReturnService>();
-            services.AddScoped<IStaffService, StaffService>();
-            services.AddScoped<IStudentService, StudentService>();
 
             // Resolving dependencies for repositories
             services.AddScoped<IBookRepository, BookRepository>();
@@ -67,9 +69,9 @@ namespace LibraryManagement.Api.Extensions
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
-            services.AddTransient<IIssueRepository, IssueRepository>();
-            services.AddTransient<IPenaltyRepository, PenaltyRepository>();
-            services.AddTransient<IReturnRepository, ReturnRepository>();
+            services.AddScoped<IIssueRepository, IssueRepository>();
+            services.AddScoped<IPenaltyRepository, PenaltyRepository>();
+            services.AddScoped<IReturnRepository, ReturnRepository>();
 
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));

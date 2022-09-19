@@ -39,7 +39,7 @@ namespace LibraryManagement.Api.Controllers
             {
                 foreach (var bookIssuedData in bookIssuedDetails)
                 {
-                    if ((bookIssuedData.StudentId == issueVm.StudentId || bookIssuedData.StaffId == issueVm.StaffId) && (bookIssuedData.BookId == issueVm.BookId))
+                    if (((bookIssuedData.StudentId != 0 && bookIssuedData.StudentId == issueVm.StudentId) || (bookIssuedData.StaffId != null && bookIssuedData.StaffId == issueVm.StaffId)) && (bookIssuedData.BookId == issueVm.BookId))
                     {
                         return BadRequest($"Book with book id {issueVm.BookId} is already issued!");
                     }
@@ -119,7 +119,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{bookIssuedId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] Issue issue)
+        public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] IssueUpdateVm updateIssue)
         {
             var existingBookIssuedRecord = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
             if (existingBookIssuedRecord == null)
@@ -127,10 +127,11 @@ namespace LibraryManagement.Api.Controllers
                 return BadRequest($"Book issued with issued id {bookIssuedId} is not exist!");
             }
             _logger.LogInformation($"Updating book issued details with book issued id: {bookIssuedId}");
-            var bookIssueToBeUpdate = _issueService.UpdateBookIssuedAsync(bookIssuedId, existingBookIssuedRecord, issue);
+            var updateIssueMapped = _mapper.Map<IssueUpdateVm, Issue>(updateIssue);
+            var bookIssueToBeUpdate = _issueService.UpdateBookIssuedAsync(bookIssuedId, existingBookIssuedRecord, updateIssueMapped);
             var updatedBookIssue = _issueRepository.UpdateBookIssuedAsync(bookIssueToBeUpdate);
             if (updatedBookIssue != null)
-                return Ok(updatedBookIssue);
+                return Ok(bookIssueToBeUpdate);
             return BadRequest();
         }
 

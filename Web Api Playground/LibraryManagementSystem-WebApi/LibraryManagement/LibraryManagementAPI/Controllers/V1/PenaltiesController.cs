@@ -1,4 +1,5 @@
 ﻿using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,15 @@ namespace LibraryManagement.Api.Controllers
     public class PenaltiesController : ApiController
     {
         private readonly IPenaltyService _penaltyService;
+        private readonly IPenaltyRepository _penaltyRepository;
+        private readonly IIssueRepository _issueRepository;
         private readonly ILogger<PenaltiesController> _logger;
 
-        public PenaltiesController(IPenaltyService penaltyService, ILogger<PenaltiesController> logger)
+        public PenaltiesController(IPenaltyService penaltyService, IPenaltyRepository penaltyRepository, IIssueRepository issueRepository, ILogger<PenaltiesController> logger)
         {
             _penaltyService = penaltyService;
+            _penaltyRepository = penaltyRepository;
+            _issueRepository = issueRepository;
             _logger = logger;
         }
 
@@ -20,11 +25,20 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> PayPenalty(short bookIssuedId, [FromBody] int penaltyAmount)
         {
+            var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(bookIssuedId);
+            var bookIssuedDetails = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
             _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
-            var penaltyPaidStatus = await _penaltyService.PayPenaltyAsync(bookIssuedId, penaltyAmount);
-            if (penaltyPaidStatus == true)
+            var isPenaltyExist = await _penaltyRepository.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
+            if (isPenaltyExist == null)
             {
-                return Ok("Transaction is successfull");
+                return BadRequest("Penalty not found!");
+            }
+            var penaltyPaidStatusDetails = _penaltyService.PayPenalty(bookIssuedId, penaltyAmount, isPenaltyExist, bookIssuedDetails);
+            if (penaltyPaidStatusDetails != null && penaltyPaidStatusDetails.PenaltyPaidStatus == true)
+            {
+                var penaltyPaid = _penaltyRepository.PayPenaltyAsync(penaltyPaidStatusDetails);
+                _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
+                return Ok("Transaction is successful");
             }
             return NotFound("Transaction Failed");
         }
@@ -33,8 +47,8 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetPenalties()
         {
-            _logger.LogInformation("Geting Penalties}");
-            var penalties = await _penaltyService.GetPenaltiesAsync();
+            _logger.LogInformation("Getting Penalties}");
+            var penalties = await _penaltyRepository.GetPenaltiesAsync();
             if (penalties != null)
             {
                 return Ok(penalties);
@@ -47,7 +61,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetPenaltiesById(short issueId)
         {
             _logger.LogInformation($"Getting penalty with issue book issue id: {issueId}");
-            var penalty = await _penaltyService.GetPenaltyByIdAsync(issueId);
+            var penalty = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
             if (penalty != null)
             {
                 return Ok(penalty);
@@ -60,12 +74,13 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> DeletePenalty(short issueId)
         {
             _logger.LogInformation($"Deleting penalty with book issue id: {issueId} ");
-            var deletedPenalty = await _penaltyService.DeletePenaltyAsync(issueId);
-            if (deletedPenalty != null)
+            var penaltyToBeDelete = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
+            if (penaltyToBeDelete != null)
             {
+                var deletedPenalty = await _penaltyRepository.DeletePenaltyAsync(penaltyToBeDelete);
                 return Ok(deletedPenalty);
             }
-            return BadRequest();
+            return BadRequest("Penalty not found!");
         }
     }
 }

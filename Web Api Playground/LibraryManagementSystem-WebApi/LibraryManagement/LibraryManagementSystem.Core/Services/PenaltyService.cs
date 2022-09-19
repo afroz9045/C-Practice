@@ -17,72 +17,43 @@ namespace LibraryManagement.Core.Services
             _issueService = issueService;
         }
 
-        public async Task<IEnumerable<Penalty>?> GetPenaltiesAsync()
+        public Penalty? IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails)
         {
-            var penalties = await _penaltyRepository.GetPenaltiesAsync();
-            if (penalties != null)
-                return penalties;
-            return null;
-        }
-
-        public async Task<Penalty?> GetPenaltyByIdAsync(short issueId)
-        {
-            var penalty = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
-            if (penalty != null)
-                return penalty;
-            return null;
-        }
-
-        public async Task<Penalty?> IsPenalty(short issueId)
-        {
-            var isPenaltyAlreadyExits = await GetPenaltyByIdAsync(issueId);
-            if (isPenaltyAlreadyExits == null)
+            //var isPenaltyAlreadyExits = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
+            if (existingPenalty == null && bookIssueDetails != null)
             {
-                var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
-                TimeSpan expiredDate = DateTime.UtcNow.Subtract(issueDetails.ExpiryDate);
-                if (issueDetails != null && expiredDate.Days > 0)
+                //var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
+                TimeSpan expiredDate = DateTime.UtcNow.Subtract(bookIssueDetails.ExpiryDate);
+                if (bookIssueDetails != null && expiredDate.Days > 0)
                 {
                     var penalty = new Penalty()
                     {
-                        IssueId = issueDetails.IssueId,
+                        IssueId = bookIssueDetails.IssueId,
                         PenaltyAmount = expiredDate.Days * 2,
                         PenaltyPaidStatus = false
                     };
-                    var penaltyResult = await _penaltyRepository.IsPenalty(penalty);
-                    if (penaltyResult != null)
-                        return penaltyResult;
+                    //var penaltyResult = await _penaltyRepository.IsPenalty(penalty);
+                    //if (penaltyResult != null)
+                    return penalty;
                 }
             }
-            else if (isPenaltyAlreadyExits != null)
+            else if (existingPenalty != null)
             {
-                return isPenaltyAlreadyExits;
+                return existingPenalty;
             }
 
             return null;
         }
 
-        public async Task<bool> PayPenaltyAsync(short issueId, int penaltyAmount)
+        public Penalty? PayPenalty(short issueId, int penaltyAmount, Penalty? existingPenalty, Issue? bookIssueDetails)
         {
-            var penalty = await IsPenalty(issueId);
-            if (penalty != null && penaltyAmount == penalty.PenaltyAmount)
+            //var penalty = IsPenalty(issueId, existingPenalty, bookIssueDetails);
+            if (existingPenalty != null && penaltyAmount == existingPenalty.PenaltyAmount)
             {
-                //penalty.PenaltyAmount -= penaltyAmount;
-                penalty.PenaltyPaidStatus = true;
-                var isPenaltyPaid = await _penaltyRepository.PayPenaltyAsync(penalty);
-                return isPenaltyPaid;
+                existingPenalty.PenaltyPaidStatus = true;
+                return existingPenalty;
             }
-            return false;
-        }
-
-        public async Task<Penalty?> DeletePenaltyAsync(short issueId)
-        {
-            var penalty = await GetPenaltyByIdAsync(issueId);
-            if (penalty != null)
-            {
-                var deletedPenalty = await _penaltyRepository.DeletePenaltyAsync(penalty);
-                return deletedPenalty;
-            }
-            return null;
+            return existingPenalty;
         }
     }
 }

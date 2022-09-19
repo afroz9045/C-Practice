@@ -17,6 +17,7 @@ namespace LibraryManagement.Api.Configuration
             CreateMap<IssueVm, Issue>();
             CreateMap<ReturnVm, Return>();
             CreateMap<BookIssuedToVm, BookIssuedTo>();
+            CreateMap<IssueUpdateVm, Issue>();
         }
     }
 }
