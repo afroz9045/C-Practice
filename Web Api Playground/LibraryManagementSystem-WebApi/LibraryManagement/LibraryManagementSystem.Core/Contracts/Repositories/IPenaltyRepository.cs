@@ -4,7 +4,7 @@ namespace LibraryManagement.Core.Contracts.Repositories
 {
     public interface IPenaltyRepository
     {
-        Task<Penalty?> IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails);
+        Task<Penalty?> IsPenalty(Penalty isPenalty);
 
         Task<IEnumerable<Penalty>?> GetPenaltiesAsync();
 

@@ -6,6 +6,6 @@ namespace LibraryManagement.Core.Contracts.Services
     {
         Penalty? IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails);
 
-        Penalty? PayPenalty(short issueId, int penaltyAmount, Penalty? existingPenalty, Issue? bookIssueDetails);
+        Penalty? PayPenalty(int penaltyAmount, Penalty? existingPenalty);
     }
 }

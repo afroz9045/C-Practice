@@ -68,7 +68,7 @@ namespace LibraryManagement.Api.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetBookById(int bookId)
         {
-            if (bookId == 0)
+            if (bookId <= 0)
             {
                 return BadRequest($"Invalid book id {bookId}");
             }

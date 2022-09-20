@@ -15,23 +15,16 @@ namespace LibraryManagement.Core.Services
 
         public async Task<Staff?> AddStaffAsync(Staff staff)
         {
-            var staffDetails = await GetStaffByName(staff.StaffName);
-            if (staffDetails == null)
-            {
-                var staffId = await GenerateStaffId();
+            var staffId = await GenerateStaffId();
 
-                var staffRecord = new Staff()
-                {
-                    StaffId = staffId,
-                    StaffName = staff.StaffName,
-                    Gender = staff.Gender,
-                    DesignationId = staff.DesignationId
-                };
-                var staffAddedResult = await _staffRepository.AddStaffAsync(staffRecord);
-                if (staffAddedResult != null)
-                    return staffAddedResult;
-            }
-            return null;
+            var staffRecord = new Staff()
+            {
+                StaffId = staffId,
+                StaffName = staff.StaffName,
+                Gender = staff.Gender,
+                DesignationId = staff.DesignationId
+            };
+            return staffRecord;
         }
 
         public async Task<string?> GenerateStaffId()
@@ -47,54 +40,14 @@ namespace LibraryManagement.Core.Services
             return "S1001";
         }
 
-        public async Task<Staff?> GetStaffByName(string staffName)
+        public Staff UpdateStaffAsync(Staff existingstaff, Staff updatedStaff)
         {
-            var staffRecord = await _staffRepository.GetStaffByName(staffName);
-            return staffRecord;
-        }
+            existingstaff.StaffId = existingstaff.StaffId;
+            existingstaff.StaffName = updatedStaff.StaffName;
+            existingstaff.Gender = updatedStaff.Gender;
+            existingstaff.DesignationId = updatedStaff.DesignationId;
 
-        public async Task<IEnumerable<Staff>?> GetStaffAsync()
-        {
-            var staffDetails = await _staffRepository.GetStaffAsync();
-            if (staffDetails != null)
-                return staffDetails;
-            return null;
-        }
-
-        public async Task<Staff?> GetStaffByIdAsync(string staffId)
-        {
-            var staffDetail = await _staffRepository.GetStaffByIdAsync(staffId);
-            if (staffDetail != null)
-                return staffDetail;
-            return null;
-        }
-
-        public async Task<Staff?> UpdateStaffAsync(Staff staff, string staffId)
-        {
-            var staffRecord = await GetStaffByIdAsync(staffId);
-            if (staffRecord != null)
-            {
-                staffRecord.StaffId = staffId;
-                staffRecord.StaffName = staff.StaffName;
-                staffRecord.Gender = staff.Gender;
-                staffRecord.DesignationId = staff.DesignationId;
-
-                var updatedStaffRecord = await _staffRepository.UpdateStaffAsync(staffRecord);
-                if (updatedStaffRecord != null)
-                    return updatedStaffRecord;
-            }
-            return null;
-        }
-
-        public async Task<Staff?> DeleteStaffAsync(string staffId)
-        {
-            var staffRecord = await GetStaffByIdAsync(staffId);
-            if (staffRecord != null)
-            {
-                var deletedStaffRecord = await _staffRepository.DeleteStaffAsync(staffRecord);
-                return deletedStaffRecord;
-            }
-            return null;
+            return existingstaff;
         }
     }
 }

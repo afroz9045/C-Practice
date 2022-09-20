@@ -7,14 +7,10 @@ namespace LibraryManagement.Core.Services
     public class PenaltyService : IPenaltyService
     {
         private readonly IPenaltyRepository _penaltyRepository;
-        private readonly IIssueRepository _issueRepository;
-        private readonly IIssueService _issueService;
 
-        public PenaltyService(IPenaltyRepository penaltyRepository, IIssueRepository issueRepository, IIssueService issueService)
+        public PenaltyService(IPenaltyRepository penaltyRepository)
         {
             _penaltyRepository = penaltyRepository;
-            _issueRepository = issueRepository;
-            _issueService = issueService;
         }
 
         public Penalty? IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails)
@@ -45,7 +41,7 @@ namespace LibraryManagement.Core.Services
             return null;
         }
 
-        public Penalty? PayPenalty(short issueId, int penaltyAmount, Penalty? existingPenalty, Issue? bookIssueDetails)
+        public Penalty? PayPenalty(int penaltyAmount, Penalty? existingPenalty)
         {
             //var penalty = IsPenalty(issueId, existingPenalty, bookIssueDetails);
             if (existingPenalty != null && penaltyAmount == existingPenalty.PenaltyAmount)

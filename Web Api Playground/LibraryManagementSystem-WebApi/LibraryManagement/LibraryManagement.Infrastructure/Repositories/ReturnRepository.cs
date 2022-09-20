@@ -26,7 +26,6 @@ namespace LibraryManagement.Infrastructure.Repositories
         public async Task<Return?> AddReturnAsync(Return returnDetails, Book book, Issue bookIssue)
         {
             _libraryDbContext.Returns.Add(returnDetails);
-            await _issueRepository.DeleteIssueAsync(bookIssue);
             _libraryDbContext.Books.Update(book);
             await _libraryDbContext.SaveChangesAsync();
             return returnDetails;

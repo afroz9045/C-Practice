@@ -43,7 +43,5 @@ namespace SchoolManagementAPI.Infrastructure.Configuration
 
             return info;
         }
-
-
     }
 }

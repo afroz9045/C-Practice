@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -10,30 +9,32 @@ namespace LibraryManagement.Infrastructure.Repositories
     public class PenaltyRepository : IPenaltyRepository
     {
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
-        private readonly IPenaltyService _penaltyService;
+
+        //private readonly IPenaltyService _penaltyService;
         private readonly IDbConnection _dapperConnection;
+
         private readonly IIssueRepository _issueRepository;
 
-        public PenaltyRepository(LibraryManagementSystemDbContext libraryDbContext, IPenaltyService penaltyService, IDbConnection dapperConnection, IIssueRepository issueRepository)
+        public PenaltyRepository(LibraryManagementSystemDbContext libraryDbContext/*, IPenaltyService penaltyService*/, IDbConnection dapperConnection, IIssueRepository issueRepository)
         {
             _libraryDbContext = libraryDbContext;
-            _penaltyService = penaltyService;
+            // _penaltyService = penaltyService;
             _dapperConnection = dapperConnection;
             _issueRepository = issueRepository;
         }
 
-        public async Task<Penalty?> IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails)
+        public async Task<Penalty?> IsPenalty(Penalty isPenalty)
         {
-            var isPenalty = _penaltyService.IsPenalty(issueId, existingPenalty, bookIssueDetails);
-            if (isPenalty != null && existingPenalty == null)
+            var isPenaltyAlreadyExist = await GetPenaltyByIdAsync(isPenalty.IssueId);
+            if (isPenaltyAlreadyExist == null && isPenalty != null)
             {
                 await _libraryDbContext.Penalties.AddAsync(isPenalty);
                 await _libraryDbContext.SaveChangesAsync();
                 return isPenalty;
             }
-            else if (isPenalty != null && existingPenalty != null)
+            else if (isPenaltyAlreadyExist != null && isPenalty != null)
             {
-                return existingPenalty;
+                return isPenalty;
             }
             return null;
         }
