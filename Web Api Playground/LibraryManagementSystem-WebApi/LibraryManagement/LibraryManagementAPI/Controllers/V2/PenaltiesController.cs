@@ -1,5 +1,6 @@
 ﻿using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers.V2
@@ -26,15 +27,20 @@ namespace LibraryManagement.Api.Controllers.V2
         {
             var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(bookIssuedId);
             var bookIssuedDetails = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
-            _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
-            var isPenaltyExist = await _penaltyRepository.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
-            if (isPenaltyExist == null)
+            if (existingPenalty != null && existingPenalty.PenaltyPaidStatus == true)
+            {
+                return BadRequest($"Penalty already paid! with book issue id {bookIssuedId}");
+            }
+            Penalty? isPenalty = _penaltyService.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
+            if (isPenalty == null)
             {
                 return BadRequest("Penalty not found!");
             }
-            var penaltyPaidStatusDetails = _penaltyService.PayPenalty(bookIssuedId, penaltyAmount, isPenaltyExist, bookIssuedDetails);
+            var isPenaltyExist = await _penaltyRepository.IsPenalty(isPenalty);
+            var penaltyPaidStatusDetails = isPenaltyExist != null ? _penaltyService.PayPenalty(penaltyAmount, isPenaltyExist) : null;
             if (penaltyPaidStatusDetails != null && penaltyPaidStatusDetails.PenaltyPaidStatus == true)
             {
+                _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
                 var penaltyPaid = _penaltyRepository.PayPenaltyAsync(penaltyPaidStatusDetails);
                 _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
                 return Ok("Transaction is successful");

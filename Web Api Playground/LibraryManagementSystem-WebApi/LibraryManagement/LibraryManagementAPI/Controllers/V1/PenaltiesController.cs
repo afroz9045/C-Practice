@@ -1,6 +1,7 @@
 ﻿using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -21,19 +22,21 @@ namespace LibraryManagement.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost("pay/{bookIssuedId}")]
+        [HttpPost("pay/{bookIssuedId},{penaltyAmount}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PayPenalty(short bookIssuedId, [FromBody] int penaltyAmount)
+        public async Task<ActionResult> PayPenalty(short bookIssuedId, int penaltyAmount)
         {
             var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(bookIssuedId);
             var bookIssuedDetails = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
             _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
-            var isPenaltyExist = await _penaltyRepository.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
-            if (isPenaltyExist == null)
+            Penalty? isPenalty = _penaltyService.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
+            if (isPenalty == null)
             {
+                //throw new ArgumentException();
                 return BadRequest("Penalty not found!");
             }
-            var penaltyPaidStatusDetails = _penaltyService.PayPenalty(bookIssuedId, penaltyAmount, isPenaltyExist, bookIssuedDetails);
+            var isPenaltyExist = await _penaltyRepository.IsPenalty(isPenalty);
+            var penaltyPaidStatusDetails = isPenaltyExist != null ? _penaltyService.PayPenalty(penaltyAmount, isPenaltyExist) : null;
             if (penaltyPaidStatusDetails != null && penaltyPaidStatusDetails.PenaltyPaidStatus == true)
             {
                 var penaltyPaid = _penaltyRepository.PayPenaltyAsync(penaltyPaidStatusDetails);

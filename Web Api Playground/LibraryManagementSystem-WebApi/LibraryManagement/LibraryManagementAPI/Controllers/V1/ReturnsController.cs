@@ -4,7 +4,6 @@ using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,16 +14,18 @@ namespace LibraryManagement.Api.Controllers
     {
         private readonly IReturnService _returnService;
         private readonly IIssueRepository _issueRepository;
+        private readonly IPenaltyService _penaltyService;
         private readonly IBookRepository _bookRepository;
         private readonly IPenaltyRepository _penaltyRepository;
         private readonly IReturnRepository _returnRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ReturnsController> _logger;
 
-        public ReturnsController(IReturnService returnService, IIssueRepository issueRepository, IBookRepository bookRepository, IPenaltyRepository penaltyRepository, IReturnRepository returnRepository, IMapper mapper, ILogger<ReturnsController> logger)
+        public ReturnsController(IReturnService returnService, IIssueRepository issueRepository, IPenaltyService penaltyService, IBookRepository bookRepository, IPenaltyRepository penaltyRepository, IReturnRepository returnRepository, IMapper mapper, ILogger<ReturnsController> logger)
         {
             _returnService = returnService;
             _issueRepository = issueRepository;
+            _penaltyService = penaltyService;
             _bookRepository = bookRepository;
             _penaltyRepository = penaltyRepository;
             _returnRepository = returnRepository;
@@ -36,7 +37,6 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, [Required] short issueId)
         {
-            _logger.LogInformation($"Adding Book return with issue id : {issueId}");
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
             var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
             if (issueDetails == null)
@@ -45,12 +45,17 @@ namespace LibraryManagement.Api.Controllers
             }
             var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
             var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
-            var isPenalty = await _penaltyRepository.IsPenalty(issueId, penaltyData, issueDetails);
-            var returnResult = _returnService.AddReturn(returnBook, issueId, isPenalty, bookDetails, issueDetails);
-            if (returnResult.Item1 != null && returnResult.Item2 != null && returnResult.Item1.ReturnId > 0)
+            Penalty? isPenalty = _penaltyService.IsPenalty(issueId, penaltyData, issueDetails);
+            var isPenaltyExist = isPenalty != null ? await _penaltyRepository.IsPenalty(isPenalty) : null;
+            if (isPenaltyExist == null || isPenaltyExist.PenaltyPaidStatus == true)
             {
-                var returnRecordResult = await _returnRepository.AddReturnAsync(returnResult.Item1, returnResult.Item2, issueDetails);
-                return Ok(returnRecordResult);
+                var returnResult = _returnService.AddReturn(returnBook, issueId, isPenaltyExist, bookDetails, issueDetails);
+                if (returnResult.Item1 != null && returnResult.Item2 != null)
+                {
+                    _logger.LogInformation($"Adding Book return with issue id : {issueId}");
+                    var returnRecordResult = await _returnRepository.AddReturnAsync(returnResult.Item1, returnResult.Item2, issueDetails);
+                    return Ok(returnRecordResult);
+                }
             }
             return NotFound("Please Check with your Issued Books and Penalty!");
         }

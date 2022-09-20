@@ -12,17 +12,11 @@ namespace LibraryManagement.Infrastructure.Repositories
     {
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
         private readonly IDbConnection _dapperConnection;
-        private readonly IBookRepository _bookRepository;
-        private readonly IStaffRepository _staffRepository;
-        private readonly IStudentRepository _studentRepository;
 
-        public IssueRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection, IBookRepository bookRepository, IStaffRepository staffRepository, IStudentRepository studentRepository)
+        public IssueRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection)
         {
             _libraryDbContext = libraryDbContext;
             _dapperConnection = dapperConnection;
-            _bookRepository = bookRepository;
-            _staffRepository = staffRepository;
-            _studentRepository = studentRepository;
         }
 
         public async Task<Issue?> AddBookIssueAsync(Issue? issue, Book? book)
