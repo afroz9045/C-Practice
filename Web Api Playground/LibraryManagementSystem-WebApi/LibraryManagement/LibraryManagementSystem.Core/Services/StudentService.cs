@@ -15,76 +15,36 @@ namespace LibraryManagement.Core.Services
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<IEnumerable<Student>?> GetStudentsAsync()
+        public Student? AddStudent(Student student, IEnumerable<Department>? departmentData)
         {
-            var studentRecords = await _studentRepository.GetStudentsAsync();
-            if (studentRecords != null)
-            {
-                return studentRecords;
-            }
-            return null;
-        }
-
-        public async Task<Student?> GetStudentByIdAsync(int studentId)
-        {
-            var student = await _studentRepository.GetStudentByIdAsync(studentId);
-            if (student != null)
-            {
-                return student;
-            }
-            return null;
-        }
-
-        public async Task<Student?> AddStudentAsync(Student student)
-        {
-            var departmentData = await _departmentRepository.GetDepartmentsAsync();
-            var studentData = await _studentRepository.GetStudentsAsync();
             string? departmentName = null;
-            if (studentData != null && departmentData != null)
+            if (student != null && departmentData != null)
             {
                 departmentName = (from dept in departmentData
-                                  join std in studentData
-                                  on dept.DeptId equals std.DepartmentId
                                   where dept.DeptId == student.DepartmentId
                                   select dept.DepartmentName).FirstOrDefault();
-            }
-            Student studentRecord = new Student()
-            {
-                DepartmentId = student.DepartmentId,
-                StudentName = student.StudentName,
-                Gender = student.Gender,
-                StudentDepartment = departmentName
-            };
-            var addedStudent = await _studentRepository.AddStudentAsync(studentRecord);
-            if (addedStudent != null)
-                return addedStudent;
-            return null;
-        }
 
-        public async Task<Student?> updateStudentAsync(Student student, int studentId)
-        {
-            var studentRecord = await GetStudentByIdAsync(studentId);
-            if (studentRecord != null)
-            {
-                studentRecord.DepartmentId = student.DepartmentId;
-                studentRecord.StudentName = student.StudentName;
-                studentRecord.Gender = student.Gender;
-
-                var updatedStudent = await _studentRepository.updateStudentAsync(studentRecord);
-                if (updatedStudent != null)
-                    return updatedStudent;
+                Student studentRecord = new Student()
+                {
+                    DepartmentId = student.DepartmentId,
+                    StudentName = student.StudentName,
+                    Gender = student.Gender,
+                    StudentDepartment = departmentName
+                };
+                return studentRecord;
             }
             return null;
         }
 
-        public async Task<Student?> DeleteStudentAsync(int studentId)
+        public Student? updateStudentAsync(Student student, int studentId, Student? existingStudent)
         {
-            var studentRecord = await GetStudentByIdAsync(studentId);
-            if (studentRecord != null)
+            if (existingStudent != null && student != null)
             {
-                var deletedStudent = await _studentRepository.DeleteStudentAsync(studentRecord);
-                if (deletedStudent != null)
-                    return deletedStudent;
+                existingStudent.DepartmentId = student.DepartmentId;
+                existingStudent.StudentName = student.StudentName;
+                existingStudent.Gender = student.Gender;
+
+                return existingStudent;
             }
             return null;
         }

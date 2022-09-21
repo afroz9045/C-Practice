@@ -59,7 +59,7 @@ namespace LibraryManagement.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet("{staffName}")]
+        [HttpGet("name/{staffName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetStaffByName(string staffName)
         {
@@ -98,7 +98,7 @@ namespace LibraryManagement.Api.Controllers
             }
             var deletedStaff = await _staffRepository.DeleteStaffAsync(staffToBeDelete);
             if (deletedStaff != null)
-                return Ok(deletedStaff);
+                return NoContent();
             return NotFound();
         }
     }

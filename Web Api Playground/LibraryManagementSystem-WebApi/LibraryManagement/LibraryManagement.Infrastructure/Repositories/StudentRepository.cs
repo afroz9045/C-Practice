@@ -44,11 +44,15 @@ namespace LibraryManagement.Infrastructure.Repositories
             return student;
         }
 
-        public async Task<Student?> DeleteStudentAsync(Student student)
+        public async Task<Student?> DeleteStudentAsync(Student? student)
         {
-            _libraryDbContext.Students.Remove(student);
-            await _libraryDbContext.SaveChangesAsync();
-            return student;
+            if (student != null)
+            {
+                _libraryDbContext.Students.Remove(student);
+                await _libraryDbContext.SaveChangesAsync();
+                return student;
+            }
+            return null;
         }
     }
 }

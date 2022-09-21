@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using ErrorHandling.Middleware;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Serilog;
 
 namespace LibraryManagement.Api.Extensions
@@ -20,6 +21,7 @@ namespace LibraryManagement.Api.Extensions
                     }
                 });
             }
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseAuthorization();

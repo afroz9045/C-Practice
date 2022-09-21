@@ -147,7 +147,7 @@ namespace LibraryManagement.Api.Controllers
             var deletedBookIssued = await _issueRepository.DeleteIssueAsync(issuedRecord!);
             _logger.LogInformation($"Deleting book issued details with book issued id: {bookIssuedId}");
             if (deletedBookIssued != null)
-                return Ok(deletedBookIssued);
+                return NoContent();
             return NotFound();
         }
     }

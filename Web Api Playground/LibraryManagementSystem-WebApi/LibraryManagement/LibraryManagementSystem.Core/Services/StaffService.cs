@@ -30,7 +30,7 @@ namespace LibraryManagement.Core.Services
         public async Task<string?> GenerateStaffId()
         {
             var recentStaffRecord = await _staffRepository.GetRecentInsertedStaff();
-            if (recentStaffRecord != null && recentStaffRecord.DesignationId != null)
+            if (recentStaffRecord != null && recentStaffRecord.StaffId != null)
             {
                 var firstCharacter = recentStaffRecord.StaffId.Substring(0, 1);
                 var remainingNumber = Convert.ToInt32(recentStaffRecord.StaffId.Substring(1));

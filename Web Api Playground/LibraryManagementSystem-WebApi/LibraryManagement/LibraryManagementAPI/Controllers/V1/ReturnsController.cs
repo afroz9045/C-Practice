@@ -107,7 +107,7 @@ namespace LibraryManagement.Api.Controllers
             if (bookReturnToBeDelete != null)
             {
                 var returnDelete = await _returnRepository.DeleteReturnAsync(bookReturnToBeDelete);
-                return Ok(returnDelete);
+                return NoContent();
             }
             return BadRequest("Book Return not found");
         }
