@@ -81,7 +81,7 @@ namespace LibraryManagement.Api.Controllers
             if (penaltyToBeDelete != null)
             {
                 var deletedPenalty = await _penaltyRepository.DeletePenaltyAsync(penaltyToBeDelete);
-                return Ok(deletedPenalty);
+                return NoContent();
             }
             return BadRequest("Penalty not found!");
         }

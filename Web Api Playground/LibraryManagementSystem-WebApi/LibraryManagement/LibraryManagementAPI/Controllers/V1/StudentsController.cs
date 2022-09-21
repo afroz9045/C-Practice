@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,16 @@ namespace LibraryManagement.Api.Controllers
     public class StudentsController : ApiController
     {
         private readonly IStudentService _studentService;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentService studentService, IMapper mapper, ILogger<StudentsController> logger)
+        public StudentsController(IStudentService studentService, IStudentRepository studentRepository, IDepartmentRepository departmentRepository, IMapper mapper, ILogger<StudentsController> logger)
         {
             _studentService = studentService;
+            _studentRepository = studentRepository;
+            _departmentRepository = departmentRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -27,9 +32,11 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Adding Student details");
             var student = _mapper.Map<StudentVm, Student>(studentVm);
-            var result = await _studentService.AddStudentAsync(student);
-            if (result != null)
-                return Ok(result);
+            var departmentData = await _departmentRepository.GetDepartmentsAsync();
+            var studentToBeAdd = _studentService.AddStudent(student, departmentData);
+            var addedStudent = studentToBeAdd != null ? await _studentRepository.AddStudentAsync(studentToBeAdd) : null;
+            if (addedStudent != null)
+                return Ok(addedStudent);
             return BadRequest();
         }
 
@@ -38,7 +45,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudents()
         {
             _logger.LogInformation("Getting Students details");
-            var result = await _studentService.GetStudentsAsync();
+            var result = await _studentRepository.GetStudentsAsync();
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -49,7 +56,7 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudentById(int studentId)
         {
             _logger.LogInformation($"Getting student details with student id: {studentId}");
-            var result = await _studentService.GetStudentByIdAsync(studentId);
+            var result = await _studentRepository.GetStudentByIdAsync(studentId);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -61,9 +68,11 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Updating student details with student id:{studentId}");
             var student = _mapper.Map<StudentVm, Student>(studentVm);
-            var result = await _studentService.updateStudentAsync(student, studentId);
-            if (result != null)
-                return Ok(result);
+            var existingStudentRecord = await _studentRepository.GetStudentByIdAsync(studentId);
+            var studentToBeUpdate = _studentService.updateStudentAsync(student, studentId, existingStudentRecord);
+            var updatedStudent = studentToBeUpdate != null ? await _studentRepository.updateStudentAsync(studentToBeUpdate) : null;
+            if (updatedStudent != null)
+                return Ok(updatedStudent);
             return BadRequest();
         }
 
@@ -72,8 +81,9 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> DeleteStudent(int studentId)
         {
             _logger.LogInformation($"Deleting student details with student id: {studentId} ");
-            var result = await _studentService.DeleteStudentAsync(studentId);
-            if (result != null)
+            var existingStudent = await _studentRepository.GetStudentByIdAsync(studentId);
+            var deletedStudent = await _studentRepository.DeleteStudentAsync(existingStudent);
+            if (deletedStudent != null)
                 return NoContent();
             return BadRequest();
         }

@@ -6,7 +6,7 @@ namespace LibraryManagement.Core.Contracts.Repositories
     {
         Task<Student> AddStudentAsync(Student student);
 
-        Task<Student?> DeleteStudentAsync(Student student);
+        Task<Student?> DeleteStudentAsync(Student? student);
 
         Task<Student?> GetStudentByIdAsync(int studentId);
 
