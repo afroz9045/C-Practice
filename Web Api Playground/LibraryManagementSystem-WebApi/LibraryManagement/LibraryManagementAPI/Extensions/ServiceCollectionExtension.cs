@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
+﻿using LibraryManagement.Core.Constants;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Services;
 using LibraryManagement.Infrastructure.Data;
@@ -52,6 +53,7 @@ namespace LibraryManagement.Api.Extensions
         {
             services.AddDbContext<LibraryManagementSystemDbContext>(option =>
             option.UseSqlServer(configuration.GetConnectionString("LibraryManagementDbContext")));
+            services.Configure<Constants>(configuration.GetSection("Constants"));
 
             // Resolving dependencies for services
             services.AddScoped<IBookService, BookService>();

@@ -31,6 +31,13 @@ namespace LibraryManagement.Infrastructure.Repositories
             return null;
         }
 
+        public int GetBooksToBeReturnByEntity(int? studentId, string? staffId)
+        {
+            var booksToBeReturnQuery = "exec SpGetCountOfBooksReturnByEntity @studentId,@staffId";
+            var resultBooksToBeReturn = _dapperConnection.QuerySingleOrDefault<int>(booksToBeReturnQuery, new { studentId, staffId });
+            return resultBooksToBeReturn;
+        }
+
         public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null)
         {
             var bookIssuedEntityStaff = await (from issued in _libraryDbContext.Issues.Include(x => x.Book)

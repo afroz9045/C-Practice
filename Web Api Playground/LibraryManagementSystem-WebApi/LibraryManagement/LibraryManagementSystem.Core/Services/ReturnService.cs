@@ -11,6 +11,7 @@ namespace LibraryManagement.Core.Services
             {
                 var returnRecord = new Return();
                 returnRecord.ExpiryDate = issueDetails.ExpiryDate;
+                returnRecord.IssueId = issueId;
                 returnRecord.IssueDate = issueDetails.IssueDate;
                 returnRecord.BookId = issueDetails.BookId;
                 returnRecord.ReturnDate = DateTime.UtcNow;
