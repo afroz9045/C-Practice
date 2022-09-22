@@ -70,8 +70,7 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             if (bookId <= 0)
             {
-                //return BadRequest();
-                throw new ArgumentException();
+                return BadRequest();
             }
             _logger.LogInformation($"Getting Available Book Detail by Book Id: {bookId}");
             var bookByBookId = await _bookRepository.GetBookById(bookId);

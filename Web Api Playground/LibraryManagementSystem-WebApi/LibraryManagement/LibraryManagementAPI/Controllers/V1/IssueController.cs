@@ -34,6 +34,11 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
+            int booksToBeReturn = _issueRepository.GetBooksToBeReturnByEntity(issueVm.StudentId, issueVm.StaffId);
+            if (booksToBeReturn >= 5)
+            {
+                return BadRequest("Already books issued limit is reached please return the books which is not required!");
+            }
             var bookIssuedDetails = await _issueRepository.GetBookIssuedByBookId(issueVm.BookId);
             if (bookIssuedDetails != null)
             {

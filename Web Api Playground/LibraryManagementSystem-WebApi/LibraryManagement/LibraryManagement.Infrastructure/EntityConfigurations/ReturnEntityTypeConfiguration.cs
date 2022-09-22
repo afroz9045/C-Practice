@@ -30,6 +30,11 @@ namespace LibraryManagement.Infrastructure.EntityConfigurations
                 .WithMany(p => p.Returns)
                 .HasForeignKey(d => d.BookId)
                 .HasConstraintName("FK__return__bookId__38996AB5");
+
+            builder.HasOne(d => d.Issue)
+                  .WithMany()
+                  .HasForeignKey(d => d.IssueId)
+                  .HasConstraintName("FK__return__IssueId__4F47C5E3");
         }
     }
 }

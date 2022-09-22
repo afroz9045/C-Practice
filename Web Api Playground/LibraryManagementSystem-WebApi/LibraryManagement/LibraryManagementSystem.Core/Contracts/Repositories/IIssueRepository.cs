@@ -7,6 +7,8 @@ namespace LibraryManagement.Core.Contracts.Repositories
     {
         Task<Issue?> AddBookIssueAsync(Issue? issue, Book? book);
 
+        int GetBooksToBeReturnByEntity(int? studentId, string? staffId);
+
         Task<IEnumerable<Issue>?> GetBookIssuedAsync();
 
         Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null);
