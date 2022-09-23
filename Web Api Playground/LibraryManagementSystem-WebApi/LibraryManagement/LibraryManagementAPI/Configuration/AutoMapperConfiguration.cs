@@ -9,6 +9,7 @@ namespace LibraryManagement.Api.Configuration
     {
         internal AutoMapperConfiguration()
         {
+            // Vm to entity
             CreateMap<BookVm, Book>();
             CreateMap<DepartmentVm, Department>();
             CreateMap<StudentVm, Student>();
@@ -18,6 +19,16 @@ namespace LibraryManagement.Api.Configuration
             CreateMap<ReturnVm, Return>();
             CreateMap<BookIssuedToVm, BookIssuedTo>();
             CreateMap<IssueUpdateVm, Issue>();
+
+            // Entity to dto
+            CreateMap<Book, BookDto>();
+            CreateMap<Department, DepartmentDto>();
+            CreateMap<Designation, DesignationDto>();
+            CreateMap<Issue, IssueDto>();
+            CreateMap<BookIssuedTo, IssueStaffDto>();
+            CreateMap<BookIssuedTo, IssueStudentDto>();
+            CreateMap<Issue, IssueStaffDto>();
+            CreateMap<Issue, IssueStudentDto>();
         }
     }
 }

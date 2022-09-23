@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,8 +40,9 @@ namespace LibraryManagement.Api.Controllers
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
             var designationToBeAdd = await _designationService.AddDesignationAsync(designation, designationRecord);
             var addedDesignation = await _designationRepository.AddDesignationAsync(designationToBeAdd!);
-            if (addedDesignation != null)
-                return Ok(addedDesignation);
+            var designationDto = addedDesignation != null ? _mapper.Map<Designation, DesignationDto>(addedDesignation) : null;
+            if (designationDto != null)
+                return Ok(designationDto);
             return BadRequest();
         }
 
@@ -50,8 +52,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Getting designations details");
             var designations = await _designationRepository.GetDesignationAsync();
-            if (designations != null)
-                return Ok(designations);
+            var designationDto = designations != null ? _mapper.Map<IEnumerable<Designation>, IEnumerable<DesignationDto>>(designations) : null;
+            if (designationDto != null)
+                return Ok(designationDto);
             return NotFound();
         }
 
@@ -60,9 +63,10 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetDesignationById(string designationId)
         {
             _logger.LogInformation($"Getting designation by designation id: {designationId}");
-            var result = await _designationRepository.GetDesignationByIdAsync(designationId);
-            if (result != null)
-                return Ok(result);
+            var designationResult = await _designationRepository.GetDesignationByIdAsync(designationId);
+            var designationDto = designationResult != null ? _mapper.Map<Designation, DesignationDto>(designationResult) : null;
+            if (designationDto != null)
+                return Ok(designationDto);
             return NotFound();
         }
 
@@ -70,10 +74,11 @@ namespace LibraryManagement.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetDesignationByName(string designationName)
         {
-            _logger.LogInformation($"Getting designation by designation designation name: {designationName}");
-            var result = await _designationRepository.GetDesignationByNameAsync(designationName);
-            if (result != null)
-                return Ok(result);
+            _logger.LogInformation($"Getting designation by designation name: {designationName}");
+            var designationResult = await _designationRepository.GetDesignationByNameAsync(designationName);
+            var designationDto = designationResult != null ? _mapper.Map<Designation, DesignationDto>(designationResult) : null;
+            if (designationDto != null)
+                return Ok(designationDto);
             return NotFound();
         }
 
@@ -90,8 +95,9 @@ namespace LibraryManagement.Api.Controllers
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
             var designationToBeUpdate = _designationService.UpdateDesignationAsync(designationId, designation, designationRecord);
             var updatedDesignation = await _designationRepository.UpdateDesignationAsync(designationToBeUpdate!);
-            if (updatedDesignation != null)
-                return Ok(updatedDesignation);
+            var designationDto = updatedDesignation != null ? _mapper.Map<Designation, DesignationDto>(updatedDesignation) : null;
+            if (designationDto != null)
+                return Ok(designationDto);
             return BadRequest();
         }
 
