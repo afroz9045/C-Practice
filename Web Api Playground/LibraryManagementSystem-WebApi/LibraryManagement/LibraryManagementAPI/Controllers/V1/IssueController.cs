@@ -2,6 +2,7 @@
 using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -61,11 +62,13 @@ namespace LibraryManagement.Api.Controllers
             {
                 if (bookIssuedResult.StudentId >= 0)
                 {
+                    var issueStudentDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStudentDto>(bookIssuedResult) : null;
                     _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
-                    return Ok(bookIssuedResult);
+                    return Ok(issueStudentDto);
                 }
+                var issueStaffDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStaffDto>(bookIssuedResult) : null;
                 _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
-                return Ok(bookIssuedResult);
+                return Ok(issueStaffDto);
             }
             return BadRequest("Sorry, book is not added");
         }
@@ -76,8 +79,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Getting books issued details");
             var booksIssued = await _issueRepository.GetBookIssuedAsync();
-            if (booksIssued != null)
-                return Ok(booksIssued);
+            var issueDto = booksIssued != null ? _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(booksIssued) : null;
+            if (issueDto != null)
+                return Ok(issueDto);
             return NotFound();
         }
 
@@ -87,8 +91,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting book issued details by book id: {bookIssuedId} ");
             var bookIssued = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
-            if (bookIssued != null)
-                return Ok(bookIssued);
+            var issueStudentDto = bookIssued != null ? _mapper.Map<Issue, IssueStudentDto>(bookIssued) : null;
+            if (issueStudentDto != null)
+                return Ok(issueStudentDto);
             return NotFound();
         }
 
@@ -98,9 +103,10 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
             var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
-            if (bookIssuedToRecords != null)
+            var issueStaffDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueStaffDto>>(bookIssuedToRecords) : null;
+            if (issueStaffDto != null)
             {
-                return Ok(bookIssuedToRecords);
+                return Ok(issueStaffDto);
             }
             return BadRequest("Data not Found!");
         }
@@ -115,9 +121,10 @@ namespace LibraryManagement.Api.Controllers
             }
             _logger.LogInformation($"Getting Book issued to student with student id: {bookIssuedToStudent}");
             var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent);
-            if (bookIssuedToRecords != null)
+            var issueStudentDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueStudentDto>>(bookIssuedToRecords) : null;
+            if (issueStudentDto != null)
             {
-                return Ok(bookIssuedToRecords);
+                return Ok(issueStudentDto);
             }
             return BadRequest("Data not Found!");
         }
@@ -134,9 +141,10 @@ namespace LibraryManagement.Api.Controllers
             _logger.LogInformation($"Updating book issued details with book issued id: {bookIssuedId}");
             var updateIssueMapped = _mapper.Map<IssueUpdateVm, Issue>(updateIssue);
             var bookIssueToBeUpdate = _issueService.UpdateBookIssuedAsync(bookIssuedId, existingBookIssuedRecord, updateIssueMapped);
-            var updatedBookIssue = _issueRepository.UpdateBookIssuedAsync(bookIssueToBeUpdate);
-            if (updatedBookIssue != null)
-                return Ok(bookIssueToBeUpdate);
+            var updatedBookIssue = await _issueRepository.UpdateBookIssuedAsync(bookIssueToBeUpdate);
+            var issueDto = updatedBookIssue != null ? _mapper.Map<Issue, IssueDto>(updatedBookIssue) : null;
+            if (issueDto != null)
+                return Ok(issueDto);
             return BadRequest();
         }
 

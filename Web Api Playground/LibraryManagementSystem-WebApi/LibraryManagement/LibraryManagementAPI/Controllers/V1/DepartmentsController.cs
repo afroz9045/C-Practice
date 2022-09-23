@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,8 +38,9 @@ namespace LibraryManagement.Api.Controllers
             }
             var departmentToBeAdd = _departmentService.AddDepartmentAsync(department);
             var addedDepartment = await _departmentRepository.AddDepartmentAsync(departmentToBeAdd!);
-            if (addedDepartment != null)
-                return Ok(addedDepartment);
+            var departmentDto = addedDepartment != null ? _mapper.Map<Department, DepartmentDto>(addedDepartment) : null;
+            if (departmentDto != null)
+                return Ok(departmentDto);
             return BadRequest();
         }
 
@@ -48,8 +50,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Getting Departments details");
             var departments = await _departmentRepository.GetDepartmentsAsync();
-            if (departments != null)
-                return Ok(departments);
+            var departmentDto = departments != null ? _mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentDto>>(departments) : null;
+            if (departmentDto != null)
+                return Ok(departmentDto);
             return NotFound();
         }
 
@@ -59,8 +62,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting Department details by id: {departmentId}");
             var departmentResult = await _departmentRepository.GetDepartmentByIdAsync(departmentId);
-            if (departmentResult != null)
-                return Ok(departmentResult);
+            var departmentDto = departmentResult != null ? _mapper.Map<Department, DepartmentDto>(departmentResult) : null;
+            if (departmentDto != null)
+                return Ok(departmentDto);
             return BadRequest();
         }
 
@@ -70,8 +74,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting Department details by department name: {departmentName}");
             var departmentResult = await _departmentRepository.GetDepartmentByNameAsync(departmentName);
-            if (departmentResult != null)
-                return Ok(departmentResult);
+            var departmentDto = departmentResult != null ? _mapper.Map<Department, DepartmentDto>(departmentResult) : null;
+            if (departmentDto != null)
+                return Ok(departmentDto);
             return BadRequest();
         }
 
@@ -88,8 +93,9 @@ namespace LibraryManagement.Api.Controllers
             var departmentToBeUpdate = _mapper.Map<DepartmentVm, Department>(departmentVm);
             var result = _departmentService.UpdateDepartmentAsync(existingDepartment, departmentToBeUpdate);
             var updatedDepartment = await _departmentRepository.UpdateDepartmentAsync(result!);
-            if (updatedDepartment != null)
-                return Ok(updatedDepartment);
+            var departmentDto = updatedDepartment != null ? _mapper.Map<Department, DepartmentDto>(updatedDepartment) : null;
+            if (departmentDto != null)
+                return Ok(departmentDto);
             return BadRequest();
         }
 

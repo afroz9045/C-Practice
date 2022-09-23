@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,12 +44,14 @@ namespace LibraryManagement.Api.Controllers.V1
             if (bookResult != null && bookResult.StockAvailable == 1)
             {
                 var bookAddedResult = await _bookRepository.AddBookAsync(bookResult);
-                return Ok(bookAddedResult);
+                var bookDto = bookAddedResult != null ? _mapper.Map<Book, BookDto>(bookAddedResult) : null;
+                return Ok(bookDto);
             }
             else if (bookResult != null && bookResult.StockAvailable > 1)
             {
                 var bookAddedResult = await _bookRepository.AddBookAsync(bookResult);
-                return Ok($"Book stock updated with book id: {bookResult.BookId}");
+                var bookDto = bookAddedResult != null ? _mapper.Map<Book, BookDto>(bookAddedResult) : null;
+                return Ok($"Book stock updated with book id: {bookDto!.BookId}");
             }
             return BadRequest("Book is not added,check details and try again");
         }
@@ -59,8 +62,9 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             _logger.LogInformation("Getting Available Books Details");
             var booksFromRepo = await _bookRepository.GetBooksAsync();
-            if (booksFromRepo != null)
-                return Ok(booksFromRepo);
+            var booksDto = booksFromRepo != null ? _mapper.Map<IEnumerable<Book>, IEnumerable<BookDto>>(booksFromRepo) : null;
+            if (booksDto != null)
+                return Ok(booksDto);
             return NotFound("Books not found");
         }
 
@@ -74,8 +78,9 @@ namespace LibraryManagement.Api.Controllers.V1
             }
             _logger.LogInformation($"Getting Available Book Detail by Book Id: {bookId}");
             var bookByBookId = await _bookRepository.GetBookById(bookId);
-            if (bookByBookId != null)
-                return Ok(bookByBookId);
+            var bookDto = bookByBookId != null ? _mapper.Map<Book, BookDto>(bookByBookId) : null;
+            if (bookDto != null)
+                return Ok(bookDto);
             return NotFound();
         }
 
@@ -85,8 +90,9 @@ namespace LibraryManagement.Api.Controllers.V1
         {
             _logger.LogInformation($"Getting Book by book name {bookName}");
             var bookByBookName = await _bookRepository.GetBookByBookName(bookName);
-            if (bookByBookName != null)
-                return Ok(bookByBookName);
+            var bookDto = bookByBookName != null ? _mapper.Map<Book, BookDto>(bookByBookName) : null;
+            if (bookDto != null)
+                return Ok(bookDto);
             return NotFound();
         }
 
@@ -103,8 +109,9 @@ namespace LibraryManagement.Api.Controllers.V1
             }
             var result = _bookService.UpdateBooksAsync(book, existingBook);
             var updatedBookDetails = await _bookRepository.UpdateBookAsync(result!);
-            if (updatedBookDetails != null)
-                return Ok(updatedBookDetails);
+            var bookDto = updatedBookDetails != null ? _mapper.Map<Book, BookDto>(updatedBookDetails) : null;
+            if (bookDto != null)
+                return Ok(bookDto);
             return BadRequest();
         }
 
