@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
@@ -40,6 +41,23 @@ namespace LibraryManagement.Core.Services
                 }
             }
             return null;
+        }
+
+        public IEnumerable<IssueDto> IsStudentOrStaff(IEnumerable<Issue> issue)
+        {
+            List<IssueDto> result = new List<IssueDto>();
+            foreach (var issuedRecord in issue)
+            {
+                IssueDto issueDto = new();
+                issueDto.BookId = issuedRecord.BookId;
+                issueDto.ExpiryDate = issuedRecord.ExpiryDate;
+                issueDto.IssueDate = issuedRecord.IssueDate;
+                issueDto.IssueId = issuedRecord.IssueId;
+                issueDto.Id = string.IsNullOrEmpty(issuedRecord.StaffId) ? issuedRecord.StudentId.ToString() : issuedRecord.StaffId;
+                issueDto.IssuedTo = string.IsNullOrEmpty(issuedRecord.StaffId) ? "Student" : "Staff";
+                result.Add(issueDto);
+            }
+            return result;
         }
 
         public Issue? UpdateBookIssuedAsync(short issueId, Issue existingIssue, Issue issue)

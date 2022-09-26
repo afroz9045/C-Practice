@@ -1,6 +1,8 @@
-﻿using EmployeeRecordBook.Api.Infrastructure.Specs;
+﻿using AutoMapper;
+using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,13 +12,15 @@ namespace LibraryManagement.Api.Controllers
     public class PenaltiesController : ApiController
     {
         private readonly IPenaltyService _penaltyService;
+        private readonly IMapper _mapper;
         private readonly IPenaltyRepository _penaltyRepository;
         private readonly IIssueRepository _issueRepository;
         private readonly ILogger<PenaltiesController> _logger;
 
-        public PenaltiesController(IPenaltyService penaltyService, IPenaltyRepository penaltyRepository, IIssueRepository issueRepository, ILogger<PenaltiesController> logger)
+        public PenaltiesController(IPenaltyService penaltyService, IMapper mapper, IPenaltyRepository penaltyRepository, IIssueRepository issueRepository, ILogger<PenaltiesController> logger)
         {
             _penaltyService = penaltyService;
+            _mapper = mapper;
             _penaltyRepository = penaltyRepository;
             _issueRepository = issueRepository;
             _logger = logger;
@@ -32,7 +36,6 @@ namespace LibraryManagement.Api.Controllers
             Penalty? isPenalty = _penaltyService.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
             if (isPenalty == null)
             {
-                //throw new ArgumentException();
                 return BadRequest("Penalty not found!");
             }
             var isPenaltyExist = await _penaltyRepository.IsPenalty(isPenalty);
@@ -54,7 +57,8 @@ namespace LibraryManagement.Api.Controllers
             var penalties = await _penaltyRepository.GetPenaltiesAsync();
             if (penalties != null)
             {
-                return Ok(penalties);
+                var penaltiesDto = _mapper.Map<IEnumerable<Penalty>, IEnumerable<PenaltyDto>>(penalties);
+                return Ok(penaltiesDto);
             }
             return NotFound("Penalties not Found!");
         }
@@ -67,7 +71,8 @@ namespace LibraryManagement.Api.Controllers
             var penalty = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
             if (penalty != null)
             {
-                return Ok(penalty);
+                var penaltyDto = _mapper.Map<Penalty, PenaltyDto>(penalty);
+                return Ok(penaltyDto);
             }
             return NotFound("Penalty not Found!");
         }

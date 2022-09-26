@@ -62,11 +62,11 @@ namespace LibraryManagement.Api.Controllers
             {
                 if (bookIssuedResult.StudentId >= 0)
                 {
-                    var issueStudentDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStudentDto>(bookIssuedResult) : null;
+                    var issueStudentDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStudentOrStaffDto>(bookIssuedResult) : null;
                     _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
                     return Ok(issueStudentDto);
                 }
-                var issueStaffDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStaffDto>(bookIssuedResult) : null;
+                var issueStaffDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueDto>(bookIssuedResult) : null;
                 _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
                 return Ok(issueStaffDto);
             }
@@ -79,9 +79,9 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation("Getting books issued details");
             var booksIssued = await _issueRepository.GetBookIssuedAsync();
-            var issueDto = booksIssued != null ? _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(booksIssued) : null;
-            if (issueDto != null)
-                return Ok(issueDto);
+            var resultantBookIssues = _issueService.IsStudentOrStaff(booksIssued!);
+            if (resultantBookIssues != null)
+                return Ok(resultantBookIssues);
             return NotFound();
         }
 
@@ -91,7 +91,7 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting book issued details by book id: {bookIssuedId} ");
             var bookIssued = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
-            var issueStudentDto = bookIssued != null ? _mapper.Map<Issue, IssueStudentDto>(bookIssued) : null;
+            var issueStudentDto = bookIssued != null ? _mapper.Map<Issue, IssueStudentOrStaffDto>(bookIssued) : null;
             if (issueStudentDto != null)
                 return Ok(issueStudentDto);
             return NotFound();
@@ -103,7 +103,7 @@ namespace LibraryManagement.Api.Controllers
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
             var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: 0, staffId: bookIssuedToStaff);
-            var issueStaffDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueStaffDto>>(bookIssuedToRecords) : null;
+            var issueStaffDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueDto>>(bookIssuedToRecords) : null;
             if (issueStaffDto != null)
             {
                 return Ok(issueStaffDto);
@@ -121,7 +121,7 @@ namespace LibraryManagement.Api.Controllers
             }
             _logger.LogInformation($"Getting Book issued to student with student id: {bookIssuedToStudent}");
             var bookIssuedToRecords = await _issueRepository.GetBookIssuedToEntityDetails(studentId: bookIssuedToStudent);
-            var issueStudentDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueStudentDto>>(bookIssuedToRecords) : null;
+            var issueStudentDto = bookIssuedToRecords != null ? _mapper.Map<IEnumerable<BookIssuedTo>, IEnumerable<IssueStudentOrStaffDto>>(bookIssuedToRecords) : null;
             if (issueStudentDto != null)
             {
                 return Ok(issueStudentDto);
