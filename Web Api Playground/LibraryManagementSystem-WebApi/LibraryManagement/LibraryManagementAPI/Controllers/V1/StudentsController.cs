@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +37,10 @@ namespace LibraryManagement.Api.Controllers
             var studentToBeAdd = _studentService.AddStudent(student, departmentData);
             var addedStudent = studentToBeAdd != null ? await _studentRepository.AddStudentAsync(studentToBeAdd) : null;
             if (addedStudent != null)
-                return Ok(addedStudent);
+            {
+                var studentDto = _mapper.Map<Student, StudentDto>(addedStudent);
+                return Ok(studentDto);
+            }
             return BadRequest();
         }
 
@@ -45,9 +49,12 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudents()
         {
             _logger.LogInformation("Getting Students details");
-            var result = await _studentRepository.GetStudentsAsync();
-            if (result != null)
-                return Ok(result);
+            var studentsResult = await _studentRepository.GetStudentsAsync();
+            if (studentsResult != null)
+            {
+                var studentDto = _mapper.Map<IEnumerable<Student>, IEnumerable<StudentDto>>(studentsResult);
+                return Ok(studentDto);
+            }
             return NotFound();
         }
 
@@ -56,9 +63,12 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStudentById(int studentId)
         {
             _logger.LogInformation($"Getting student details with student id: {studentId}");
-            var result = await _studentRepository.GetStudentByIdAsync(studentId);
-            if (result != null)
-                return Ok(result);
+            var studentResult = await _studentRepository.GetStudentByIdAsync(studentId);
+            if (studentResult != null)
+            {
+                var studentDto = _mapper.Map<Student, StudentDto>(studentResult);
+                return Ok(studentDto);
+            }
             return NotFound();
         }
 
@@ -72,7 +82,10 @@ namespace LibraryManagement.Api.Controllers
             var studentToBeUpdate = _studentService.updateStudentAsync(student, studentId, existingStudentRecord);
             var updatedStudent = studentToBeUpdate != null ? await _studentRepository.updateStudentAsync(studentToBeUpdate) : null;
             if (updatedStudent != null)
-                return Ok(updatedStudent);
+            {
+                var studentDto = _mapper.Map<Student, StudentDto>(updatedStudent);
+                return Ok(studentDto);
+            }
             return BadRequest();
         }
 

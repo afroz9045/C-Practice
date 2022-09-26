@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -54,7 +55,8 @@ namespace LibraryManagement.Api.Controllers
                 {
                     _logger.LogInformation($"Adding Book return with issue id : {issueId}");
                     var returnRecordResult = await _returnRepository.AddReturnAsync(returnResult.Item1, returnResult.Item2, issueDetails);
-                    return Ok(returnRecordResult);
+                    var returnDto = _mapper.Map<Return, ReturnDto>(returnRecordResult!);
+                    return Ok(returnDto);
                 }
             }
             return NotFound("Please Check with your Issued Books and Penalty!");
@@ -67,7 +69,10 @@ namespace LibraryManagement.Api.Controllers
             _logger.LogInformation($"Getting Books returns");
             var bookReturnResult = await _returnRepository.GetReturnAsync();
             if (bookReturnResult != null)
-                return Ok(bookReturnResult);
+            {
+                var returnDto = _mapper.Map<IEnumerable<Return>, IEnumerable<ReturnDto>>(bookReturnResult!);
+                return Ok(returnDto);
+            }
             return NotFound();
         }
 
@@ -78,7 +83,10 @@ namespace LibraryManagement.Api.Controllers
             _logger.LogInformation($"Getting Book return by return id {bookReturnId}");
             var bookReturnResult = await _returnRepository.GetReturnByIdAsync(bookReturnId);
             if (bookReturnResult != null)
-                return Ok(bookReturnResult);
+            {
+                var returnDto = _mapper.Map<Return, ReturnDto>(bookReturnResult!);
+                return Ok(returnDto);
+            }
             return NotFound();
         }
 
@@ -93,7 +101,8 @@ namespace LibraryManagement.Api.Controllers
             if (existingReturnRecord != null && returnToBeUpdate != null)
             {
                 var updatedReturnDetails = await _returnRepository.UpdateReturnAsync(returnToBeUpdate);
-                return Ok(updatedReturnDetails);
+                var returnDto = _mapper.Map<Return, ReturnDto>(updatedReturnDetails!);
+                return Ok(returnDto);
             }
             return BadRequest();
         }

@@ -3,6 +3,7 @@ using EmployeeRecordBook.Api.Infrastructure.Specs;
 using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,10 @@ namespace LibraryManagement.Api.Controllers
             var staffToBeAdd = await _staffService.AddStaffAsync(staff);
             var addedStaff = staffToBeAdd != null ? await _staffRepository.AddStaffAsync(staffToBeAdd) : null;
             if (addedStaff != null)
-                return Ok(addedStaff);
+            {
+                var staffDto = _mapper.Map<Staff, StaffDto>(addedStaff);
+                return Ok(staffDto);
+            }
             return BadRequest();
         }
 
@@ -44,7 +48,10 @@ namespace LibraryManagement.Api.Controllers
             _logger.LogInformation("Getting staff details");
             var staffResult = await _staffRepository.GetStaffAsync();
             if (staffResult != null)
-                return Ok(staffResult);
+            {
+                var staffsDto = _mapper.Map<IEnumerable<Staff>, IEnumerable<StaffDto>>(staffResult);
+                return Ok(staffsDto);
+            }
             return NotFound();
         }
 
@@ -53,9 +60,12 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStaffById(string staffId)
         {
             _logger.LogInformation($"Getting staff details with staff id {staffId}");
-            var result = await _staffRepository.GetStaffByIdAsync(staffId);
-            if (result != null)
-                return Ok(result);
+            var staffResult = await _staffRepository.GetStaffByIdAsync(staffId);
+            if (staffResult != null)
+            {
+                var staffDto = _mapper.Map<Staff, StaffDto>(staffResult);
+                return Ok(staffDto);
+            }
             return NotFound();
         }
 
@@ -64,9 +74,12 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> GetStaffByName(string staffName)
         {
             _logger.LogInformation($"Getting staff details with staff name {staffName}");
-            var result = await _staffRepository.GetStaffByName(staffName);
-            if (result != null)
-                return Ok(result);
+            var staffResult = await _staffRepository.GetStaffByName(staffName);
+            if (staffResult != null)
+            {
+                var staffDto = _mapper.Map<Staff, StaffDto>(staffResult);
+                return Ok(staffDto);
+            }
             return NotFound();
         }
 
@@ -81,7 +94,8 @@ namespace LibraryManagement.Api.Controllers
             {
                 var staffToBeUpdate = _staffService.UpdateStaffAsync(existingStaffRecord, staff);
                 var updatedStaff = await _staffRepository.UpdateStaffAsync(staffToBeUpdate);
-                return Ok(updatedStaff);
+                var staffDto = _mapper.Map<Staff, StaffDto>(updatedStaff!);
+                return Ok(staffDto);
             }
             return BadRequest();
         }

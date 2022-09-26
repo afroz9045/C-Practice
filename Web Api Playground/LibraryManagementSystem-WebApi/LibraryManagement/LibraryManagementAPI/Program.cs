@@ -11,6 +11,7 @@ builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuratio
 #region Configure and Register AutoMapper
 
 var config = new MapperConfiguration(config => config.AddProfile(new AutoMapperConfiguration()));
+
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton<IMapper>(mapper);
 
