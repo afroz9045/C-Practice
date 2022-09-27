@@ -26,6 +26,7 @@ namespace LibraryManagement.Api.Configuration
             CreateMap<Designation, DesignationDto>();
             CreateMap<Issue, IssueDto>();
             CreateMap<BookIssuedTo, IssueStudentOrStaffDto>();
+            CreateMap<Issue, IssueStudentOrStaffDto>();
             CreateMap<IssueDto, IssueStudentOrStaffDto>();
             CreateMap<Penalty, PenaltyDto>();
             CreateMap<Return, ReturnDto>();
