@@ -63,12 +63,22 @@ namespace LibraryManagement.Api.Controllers
                 if (bookIssuedResult.StudentId >= 0)
                 {
                     var issueStudentDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueStudentOrStaffDto>(bookIssuedResult) : null;
-                    _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
-                    return Ok(issueStudentDto);
+                    if (issueStudentDto != null && bookIssuedResult != null)
+                    {
+                        issueStudentDto.Id = bookIssuedResult.StudentId.ToString();
+                        issueStudentDto.IssuedTo = "Student";
+                        _logger.LogInformation($"Adding Book issue details with student id: {issueVm.StudentId}");
+                        return Ok(issueStudentDto);
+                    }
                 }
                 var issueStaffDto = bookIssuedResult != null ? _mapper.Map<Issue, IssueDto>(bookIssuedResult) : null;
-                _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
-                return Ok(issueStaffDto);
+                if (issueStaffDto != null && bookIssuedResult != null)
+                {
+                    issueStaffDto.Id = bookIssuedResult.StaffId;
+                    issueStaffDto.IssuedTo = "Staff";
+                    _logger.LogInformation($"Adding Book issue details with staff id: {issueVm.StaffId}");
+                    return Ok(issueStaffDto);
+                }
             }
             return BadRequest("Sorry, book is not added");
         }
