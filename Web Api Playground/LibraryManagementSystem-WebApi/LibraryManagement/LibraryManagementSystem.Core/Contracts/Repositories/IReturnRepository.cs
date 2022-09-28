@@ -12,6 +12,8 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<Return?> GetReturnByIdAsync(int returnId);
 
+        Task<IEnumerable<Return>> GetBooksReturnedByDateRange(DateTime fromDate, DateTime? toDate = null);
+
         Task<Return> UpdateReturnAsync(Return returnDetails);
     }
 }

@@ -15,6 +15,8 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<Issue?> GetBookIssuedByIdAsync(short issueId);
 
+        Task<IEnumerable<Issue>> GetBooksIssuedByDateRange(DateTime fromDate, DateTime? toDate = null);
+
         Task<IEnumerable<Issue>?> GetBookIssuedByBookId(int bookId);
 
         Task<Issue?> UpdateBookIssuedAsync(Issue? issue);

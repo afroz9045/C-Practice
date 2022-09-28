@@ -90,6 +90,17 @@ namespace LibraryManagement.Api.Controllers
             return NotFound();
         }
 
+        [HttpGet("date")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetBooksReturnedByDate(DateTime fromDate, DateTime? toDate)
+        {
+            var returnedBooks = await _returnRepository.GetBooksReturnedByDateRange(fromDate, toDate);
+            var returnedBooksDto = _mapper.Map<IEnumerable<Return>, IEnumerable<ReturnDto>>(returnedBooks);
+            if (returnedBooksDto.Count() > 0)
+                return Ok(returnedBooksDto);
+            return BadRequest("NO books return found!");
+        }
+
         [HttpPut("{bookReturnId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateReturnBookDetails(int bookReturnId, [FromBody] ReturnVm returnVm)

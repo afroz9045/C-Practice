@@ -139,6 +139,17 @@ namespace LibraryManagement.Api.Controllers
             return BadRequest("Data not Found!");
         }
 
+        [HttpGet("date")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetIssuedBooksByDate(DateTime fromDate, DateTime? toDate)
+        {
+            var issuedBooks = await _issueRepository.GetBooksIssuedByDateRange(fromDate, toDate);
+            var issuedBooksDto = _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(issuedBooks);
+            if (issuedBooksDto.Count() > 0)
+                return Ok(issuedBooks);
+            return BadRequest();
+        }
+
         [HttpPut("{bookIssuedId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] IssueUpdateVm updateIssue)

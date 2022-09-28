@@ -39,25 +39,6 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<IEnumerable<BookIssuedTo>?> GetBookIssuedToEntityDetails(int studentId, string? staffId = null)
         {
-            //var bookIssuedEntityStaff = await (from issued in _libraryDbContext.Issues.Include(x => x.Book)
-            //                                   join staff in _libraryDbContext.Staffs
-            //                                   on issued.StaffId equals staff.StaffId into st
-            //                                   from staffRecord in st.DefaultIfEmpty()
-            //                                   join student in _libraryDbContext.Students
-            //                                   on issued.StudentId equals student.StudentId into stu
-            //                                   from studentRecord in stu.DefaultIfEmpty()
-            //                                   where (staffId == null || issued.StaffId == staffId)
-            //                                   && (studentId <= 0 || issued.StudentId == studentId)
-            //                                   select new BookIssuedTo
-            //                                   {
-            //                                       BookId = issued.BookId,
-            //                                       BookName = issued.Book.BookName,
-            //                                       StaffId = staffRecord.StaffId,
-            //                                       StaffName = staffRecord.StaffName,
-            //                                       StudentId = studentRecord.StudentId,
-            //                                       StudentName = studentRecord.StudentName
-            //                                   }).ToListAsync();
-
             var spToGetNumberOfBooksIssuedToEntity = "exec SpGetBookIssuedToEntity @StudentId ,@staffId";
             var resultantBooksIssued = await _dapperConnection.QueryAsync<BookIssuedTo>(spToGetNumberOfBooksIssuedToEntity, new { studentId, staffId });
             return resultantBooksIssued;
@@ -68,6 +49,15 @@ namespace LibraryManagement.Infrastructure.Repositories
             var bookIssuedRecordsByBookIdQuery = "select * from issue where BookId = @bookId";
             var bookIssuedData = await _dapperConnection.QueryAsync<Issue>(bookIssuedRecordsByBookIdQuery, new { bookId });
             return bookIssuedData;
+        }
+
+        public async Task<IEnumerable<Issue>> GetBooksIssuedByDateRange(DateTime fromDate, DateTime? toDate = null)
+        {
+            if (toDate == null)
+                toDate = DateTime.UtcNow;
+            var booksIssuedOnDateRangeQuery = "exec SpGetBooksIssuedByDateRange @fromDate,@toDate";
+            var resultantBooksIssued = await _dapperConnection.QueryAsync<Issue>(booksIssuedOnDateRangeQuery, new { fromDate, toDate });
+            return resultantBooksIssued;
         }
 
         public async Task<IEnumerable<Issue>?> GetBookIssuedAsync()
