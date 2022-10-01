@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -32,6 +33,7 @@ namespace LibraryManagement.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
@@ -137,6 +139,17 @@ namespace LibraryManagement.Api.Controllers
                 return Ok(issueStudentDto);
             }
             return BadRequest("Data not Found!");
+        }
+
+        [HttpGet("date")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetIssuedBooksByDate(DateTime fromDate, DateTime? toDate)
+        {
+            var issuedBooks = await _issueRepository.GetBooksIssuedByDateRange(fromDate, toDate);
+            var issuedBooksDto = _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(issuedBooks);
+            if (issuedBooksDto.Count() > 0)
+                return Ok(issuedBooks);
+            return BadRequest();
         }
 
         [HttpPut("{bookIssuedId}")]

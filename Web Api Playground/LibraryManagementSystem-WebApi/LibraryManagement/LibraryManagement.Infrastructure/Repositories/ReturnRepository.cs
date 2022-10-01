@@ -44,6 +44,15 @@ namespace LibraryManagement.Infrastructure.Repositories
             return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId }));
         }
 
+        public async Task<IEnumerable<Return>> GetBooksReturnedByDateRange(DateTime fromDate, DateTime? toDate = null)
+        {
+            if (toDate == null)
+                toDate = DateTime.UtcNow;
+            var booksReturnedOnDateRangeQuery = "exec SpGetBooksReturnedByDateRange @fromDate,@toDate";
+            var resultantBooksReturned = await _dapperConnection.QueryAsync<Return>(booksReturnedOnDateRangeQuery, new { fromDate, toDate });
+            return resultantBooksReturned;
+        }
+
         public async Task<Return> UpdateReturnAsync(Return returnDetails)
         {
             _libraryDbContext.Update(returnDetails);
