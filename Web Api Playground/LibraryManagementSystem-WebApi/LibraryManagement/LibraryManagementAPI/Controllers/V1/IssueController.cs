@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -32,6 +33,7 @@ namespace LibraryManagement.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {

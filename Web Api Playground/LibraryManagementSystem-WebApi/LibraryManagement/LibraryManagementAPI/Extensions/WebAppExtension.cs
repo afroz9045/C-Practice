@@ -24,6 +24,7 @@ namespace LibraryManagement.Api.Extensions
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
         }

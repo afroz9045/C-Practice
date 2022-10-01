@@ -4,12 +4,17 @@ using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Services;
 using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SchoolManagementAPI.Infrastructure.Configuration;
+using Swashbuckle.AspNetCore.Filters;
 using System.Data;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace LibraryManagement.Api.Extensions
@@ -47,6 +52,22 @@ namespace LibraryManagement.Api.Extensions
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ReportApiVersions = true;
             });
+
+            #region Swagger
+
+            services.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Description = "Jwt Authentication"
+                });
+                option.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+
+            #endregion Swagger
         }
 
         public static void RegisterApplicationServices(this IServiceCollection services, IConfiguration configuration)
@@ -77,6 +98,27 @@ namespace LibraryManagement.Api.Extensions
 
             services.AddTransient<IDbConnection>(db => new SqlConnection(
                                 configuration.GetConnectionString("LibraryManagementDbContext")));
+
+            #region Authentication
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.FromHours(2)
+                    };
+                });
+
+            #endregion Authentication
         }
     }
 }

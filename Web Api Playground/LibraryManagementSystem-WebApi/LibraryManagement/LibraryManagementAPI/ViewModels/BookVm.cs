@@ -7,7 +7,7 @@ namespace LibraryManagement.Api.ViewModels
         [StringLength(50), Required]
         public string BookName { get; set; } = null!;
 
-        [Range(0, 9999999)]
+        [Range(0, 9999999),Required]
         public int Isbn { get; set; }
 
         [StringLength(25), Required]
