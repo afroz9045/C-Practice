@@ -96,6 +96,17 @@ namespace LibraryManagement.Api.Controllers.V1
             return NotFound();
         }
 
+        [HttpGet("outofstock")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetOutOfStockBooks()
+        {
+            var outOfStockBooks = await _bookRepository.GetOutOfStockBooks();
+            var bookDto = outOfStockBooks != null ? _mapper.Map<IEnumerable<Book>, IEnumerable<BookDto>>(outOfStockBooks) : null;
+            if (bookDto != null)
+                return Ok(bookDto);
+            return BadRequest("No books are out of stock");
+        }
+
         [HttpPut("{bookId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int bookId)
