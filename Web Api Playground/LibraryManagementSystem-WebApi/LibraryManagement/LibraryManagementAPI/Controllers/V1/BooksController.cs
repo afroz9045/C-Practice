@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,6 +36,7 @@ namespace LibraryManagement.Api.Controllers.V1
         ///
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> AddBook([FromBody] BookVm bookVm)
         {
             _logger.LogInformation("Adding a Book");
@@ -58,6 +60,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [AllowAnonymous]
         public async Task<ActionResult> GetBooks()
         {
             _logger.LogInformation("Getting Available Books Details");
@@ -70,6 +73,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet("{bookId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookById(int bookId)
         {
             if (bookId <= 0)
@@ -86,6 +90,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet("{bookName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookByName(string bookName)
         {
             _logger.LogInformation($"Getting Book by book name {bookName}");
@@ -98,6 +103,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet("outofstock")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetOutOfStockBooks()
         {
             var outOfStockBooks = await _bookRepository.GetOutOfStockBooks();
@@ -109,6 +115,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpPut("{bookId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> UpdateBookDetails([FromBody] BookVm bookVm, int bookId)
         {
             var book = _mapper.Map<BookVm, Book>(bookVm);
@@ -128,6 +135,7 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpDelete("{bookId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> DeleteBook(int bookId)
         {
             _logger.LogInformation($"Deleting a Book with {bookId}");

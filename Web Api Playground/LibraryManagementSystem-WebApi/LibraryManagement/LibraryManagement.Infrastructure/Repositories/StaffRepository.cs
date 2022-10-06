@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
@@ -9,11 +10,13 @@ namespace LibraryManagement.Infrastructure.Repositories
     public class StaffRepository : IStaffRepository
     {
         private readonly LibraryManagementSystemDbContext _libraryDbContext;
+        private readonly IMapper _mapper;
         private readonly IDbConnection _dapperConnection;
 
-        public StaffRepository(LibraryManagementSystemDbContext libraryDbContext, IDbConnection dapperConnection)
+        public StaffRepository(LibraryManagementSystemDbContext libraryDbContext, IMapper mapper, IDbConnection dapperConnection)
         {
             _libraryDbContext = libraryDbContext;
+            _mapper = mapper;
             _dapperConnection = dapperConnection;
         }
 

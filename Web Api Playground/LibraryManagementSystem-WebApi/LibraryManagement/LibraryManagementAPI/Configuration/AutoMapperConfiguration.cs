@@ -19,6 +19,7 @@ namespace LibraryManagement.Api.Configuration
             CreateMap<ReturnVm, Return>();
             CreateMap<BookIssuedToVm, BookIssuedTo>();
             CreateMap<IssueUpdateVm, Issue>();
+            CreateMap<StaffVm, RegistrationVm>();
 
             // Entity to dto
             CreateMap<Book, BookDto>();

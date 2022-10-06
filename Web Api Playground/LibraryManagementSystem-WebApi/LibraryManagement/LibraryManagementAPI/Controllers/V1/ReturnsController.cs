@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,6 +37,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost("{issueId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, [Required] short issueId)
         {
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
@@ -64,6 +66,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookReturn()
         {
             _logger.LogInformation($"Getting Books returns");
@@ -78,6 +81,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{bookReturnId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookReturnById(int bookReturnId)
         {
             _logger.LogInformation($"Getting Book return by return id {bookReturnId}");
@@ -92,6 +96,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("date")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBooksReturnedByDate(DateTime fromDate, DateTime? toDate)
         {
             var returnedBooks = await _returnRepository.GetBooksReturnedByDateRange(fromDate, toDate);
@@ -103,6 +108,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{bookReturnId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> UpdateReturnBookDetails(int bookReturnId, [FromBody] ReturnVm returnVm)
         {
             _logger.LogInformation($"Updating book return details with book return id {bookReturnId}");
@@ -120,6 +126,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> DeleteReturnBook(int returnId)
         {
             _logger.LogInformation($"Deleting Book Return details with return id : {returnId}");

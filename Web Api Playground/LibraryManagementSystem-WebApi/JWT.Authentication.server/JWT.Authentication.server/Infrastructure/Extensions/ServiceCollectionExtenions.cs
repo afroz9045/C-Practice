@@ -13,6 +13,7 @@ namespace JWT.Authentication.Server.Infrastructure.Extensions
             #region Register Repository
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IDesignationRepository, DesignationRepository>();
             services.AddTransient<IStaffRepository, StaffRepository>();
 
             #endregion Register Repository
@@ -24,7 +25,6 @@ namespace JWT.Authentication.Server.Infrastructure.Extensions
                      {
                          options.UseSqlServer(configuration.GetConnectionString("IdentityDbContext"));
                      });
-
 
             #endregion Database
         }

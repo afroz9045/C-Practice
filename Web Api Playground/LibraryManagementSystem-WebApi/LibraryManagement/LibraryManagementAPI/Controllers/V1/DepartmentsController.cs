@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -27,6 +28,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> AddDepartment([FromBody] DepartmentVm departmentVm)
         {
             _logger.LogInformation("Adding Department");
@@ -46,6 +48,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [AllowAnonymous]
         public async Task<ActionResult> GetDepartments()
         {
             _logger.LogInformation("Getting Departments details");
@@ -58,6 +61,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{departmentId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDepartmentById(short departmentId)
         {
             _logger.LogInformation($"Getting Department details by id: {departmentId}");
@@ -70,6 +74,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{departmentName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDepartmentByName(string departmentName)
         {
             _logger.LogInformation($"Getting Department details by department name: {departmentName}");
@@ -82,6 +87,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{deptId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> UpdateDepartment([FromBody] DepartmentVm departmentVm, short deptId)
         {
             var existingDepartment = await _departmentRepository.GetDepartmentByIdAsync(deptId);
@@ -101,6 +107,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete("{departmentId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> DeleteDepartment(short departmentId)
         {
             var departmentToBeDelete = await _departmentRepository.GetDepartmentByIdAsync(departmentId);

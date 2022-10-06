@@ -33,7 +33,7 @@ namespace LibraryManagement.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Librarian")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> AddIssueBook([FromBody] IssueVm issueVm)
         {
@@ -87,6 +87,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Principle,Director")]
         public async Task<ActionResult> GetIssueBookDetails()
         {
             _logger.LogInformation("Getting books issued details");
@@ -99,6 +100,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{bookIssuedId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Principle,Director")]
         public async Task<ActionResult> GetIssueBookByIdDetails(short bookIssuedId)
         {
             _logger.LogInformation($"Getting book issued details by book id: {bookIssuedId} ");
@@ -111,6 +113,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("staff/{bookIssuedToStaff}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Principle,Director")]
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] string bookIssuedToStaff)
         {
             _logger.LogInformation($"Getting Book issued to staff with staff id: {bookIssuedToStaff}");
@@ -125,6 +128,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("students/{bookIssuedToStudent:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Principle,Director")]
         public async Task<ActionResult> GetIssuedBooksDetails([FromRoute] int bookIssuedToStudent)
         {
             if (bookIssuedToStudent <= 0)
@@ -143,6 +147,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("date")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Principle,Director")]
         public async Task<ActionResult> GetIssuedBooksByDate(DateTime fromDate, DateTime? toDate)
         {
             var issuedBooks = await _issueRepository.GetBooksIssuedByDateRange(fromDate, toDate);
@@ -154,6 +159,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{bookIssuedId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> UpdateIssuedBookDetails(short bookIssuedId, [FromBody] IssueUpdateVm updateIssue)
         {
             var existingBookIssuedRecord = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
@@ -173,6 +179,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete("{bookIssuedId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> DeleteIssue(short bookIssuedId)
         {
             var issuedRecord = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);

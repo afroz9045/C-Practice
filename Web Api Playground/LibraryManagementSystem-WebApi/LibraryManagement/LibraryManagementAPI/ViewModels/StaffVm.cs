@@ -12,5 +12,11 @@ namespace LibraryManagement.Api.ViewModels
 
         [StringLength(15), Required]
         public string? DesignationId { get; set; }
+
+        [StringLength(50), Required]
+        public string Email { get; set; } = null!;
+
+        [StringLength(50), Required]
+        public string Password { get; set; } = null!;
     }
 }

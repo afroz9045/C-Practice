@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -29,6 +30,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Librarian,Director,Principle,HOD")]
         public async Task<ActionResult> AddStudent([FromBody] StudentVm studentVm)
         {
             _logger.LogInformation("Adding Student details");
@@ -46,6 +48,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStudents()
         {
             _logger.LogInformation("Getting Students details");
@@ -60,6 +63,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{studentId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStudentById(int studentId)
         {
             _logger.LogInformation($"Getting student details with student id: {studentId}");
@@ -74,6 +78,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{studentId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Librarian,Director,Principle,HOD")]
         public async Task<ActionResult> UpdateStudent([FromBody] StudentVm studentVm, int studentId)
         {
             _logger.LogInformation($"Updating student details with student id:{studentId}");
@@ -91,6 +96,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete("{studentId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> DeleteStudent(int studentId)
         {
             _logger.LogInformation($"Deleting student details with student id: {studentId} ");

@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
+﻿using AutoMapper;
+using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 
@@ -7,10 +8,12 @@ namespace LibraryManagement.Core.Services
     public class StaffService : IStaffService
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IMapper _mapper;
 
-        public StaffService(IStaffRepository staffRepository)
+        public StaffService(IStaffRepository staffRepository, IMapper mapper)
         {
             _staffRepository = staffRepository;
+            _mapper = mapper;
         }
 
         public async Task<Staff?> AddStaffAsync(Staff staff)
