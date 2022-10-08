@@ -1,6 +1,7 @@
 ﻿using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace LibraryManagement.Core.Services
 {
@@ -10,13 +11,15 @@ namespace LibraryManagement.Core.Services
         private readonly IBookRepository _bookRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly IConfiguration _configuration;
 
-        public IssueService(IIssueRepository issueRepository, IBookRepository bookRepository, IStaffRepository staffRepository, IStudentRepository studentRepository)
+        public IssueService(IIssueRepository issueRepository, IBookRepository bookRepository, IStaffRepository staffRepository, IStudentRepository studentRepository, IConfiguration configuration)
         {
             _issueRepository = issueRepository;
             _bookRepository = bookRepository;
             _staffRepository = staffRepository;
             _studentRepository = studentRepository;
+            _configuration = configuration;
         }
 
         public Issue? AddBookIssueAsync(Issue issue, Book? bookIdResult, Staff? staffIdValidate, Student? studentIdValidate)
@@ -31,7 +34,7 @@ namespace LibraryManagement.Core.Services
                     if (bookIdResult != null && bookIdResult.StockAvailable > 0)
                     {
                         issuedBook.IssueDate = DateTime.Today;
-                        issuedBook.ExpiryDate = DateTime.Today.AddDays(30);
+                        issuedBook.ExpiryDate = DateTime.Today.AddDays(/*30*/Convert.ToInt32(_configuration.GetSection("Constants").GetSection("BookIssueDays").Value));
                         issuedBook.StaffId = issue.StaffId;
                         issuedBook.StudentId = issue.StudentId;
 

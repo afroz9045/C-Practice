@@ -14,13 +14,13 @@ namespace JWT.Authentication.Infrastructure.DataContext
         {
         }
 
-        public virtual DbSet<Credential> Credentials { get; set; } = null!;
+        public virtual DbSet<UserDetail> UserDetails { get; set; } = null!;
         public virtual DbSet<Designation> Designations { get; set; } = null!;
         public virtual DbSet<Staff> staff { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Credential>(entity =>
+            modelBuilder.Entity<UserDetail>(entity =>
             {
                 entity.HasKey(e => e.UserId)
                     .HasName("PK__Credenti__1788CCAC0BDA1875");

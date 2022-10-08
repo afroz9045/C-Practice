@@ -12,7 +12,7 @@ using System.Text;
 
 namespace JWT.Authentication.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -38,7 +38,7 @@ namespace JWT.Authentication.Server.Controllers
                 var passwordSalt = GenerateSalt();
                 staffWithCredentials.Password += passwordSalt;
                 var passwordHash = GenerateHashPassword(staffWithCredentials.Password);
-                Credential user = new()
+                UserDetail user = new()
                 {
                     FullName = staffWithCredentials.FullName,
                     Email = staffWithCredentials.Email,
@@ -54,7 +54,7 @@ namespace JWT.Authentication.Server.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<ActionResult> Login(LoginVm userVm)
+        public async Task<ActionResult> Login([FromBody] LoginVm userVm)
         {
             var user = await _userRepository.GetUserDetails(userVm.Email);
             var userRole = await _designationRepository.GetUserDesignation(user.StaffId);
@@ -91,7 +91,7 @@ namespace JWT.Authentication.Server.Controllers
             return Convert.ToBase64String(salt);
         }
 
-        private string GenerateToken(Credential user, string role)
+        private string GenerateToken(UserDetail user, string role)
         {
             var claims = new[]
             {

@@ -17,7 +17,7 @@ namespace JWT.Authentication.Infrastructure.Repositories
         public async Task<string?> GetUserDesignation(string staffId)
         {
             var designation = await (from staff in _dbContext.staff
-                                     join credential in _dbContext.Credentials
+                                     join credential in _dbContext.UserDetails
                                      on staff.StaffId equals credential.StaffId
                                      join desig in _dbContext.Designations
                                      on staff.DesignationId equals desig.DesignationId

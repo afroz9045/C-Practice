@@ -18,13 +18,15 @@ namespace LibraryManagement.Api.Controllers
         private readonly IStaffRepository _staffRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<StaffController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public StaffController(IStaffService staffService, IStaffRepository staffRepository, IMapper mapper, ILogger<StaffController> logger)
+        public StaffController(IStaffService staffService, IStaffRepository staffRepository, IMapper mapper, ILogger<StaffController> logger, IConfiguration configuration)
         {
             _staffService = staffService;
             _staffRepository = staffRepository;
             _mapper = mapper;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -48,9 +50,9 @@ namespace LibraryManagement.Api.Controllers
                         Password = staffVm.Password,
                         StaffId = addedStaff.StaffId
                     };
-                    client.BaseAddress = new Uri("https://localhost:7260/");
+                    client.BaseAddress = new Uri(_configuration.GetSection("Constants").GetSection("AuthenticationBaseUrl").Value);
                     var content = new StringContent(JsonSerializer.Serialize(staffWithCredentials), System.Text.Encoding.UTF8, "application/json");
-                    var result = await client.PostAsync("api/Auth/register", content);
+                    var result = await client.PostAsync(_configuration.GetSection("Constants").GetSection("AuthenticationSubUrl").Value, content);
                 }
                 var staffDto = _mapper.Map<Staff, StaffDto>(addedStaff);
                 return Ok(staffDto);

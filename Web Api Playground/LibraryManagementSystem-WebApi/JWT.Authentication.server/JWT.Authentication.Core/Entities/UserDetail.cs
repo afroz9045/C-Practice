@@ -1,6 +1,9 @@
-﻿namespace JWT.Authentication.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace JWT.Authentication.Core.Entities
 {
-    public class Credential
+    public partial class UserDetail
     {
         public int UserId { get; set; }
         public string FullName { get; set; } = null!;
