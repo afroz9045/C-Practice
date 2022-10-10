@@ -1,5 +1,4 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Dtos;
+﻿using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using Microsoft.Extensions.Configuration;
 
@@ -7,18 +6,10 @@ namespace LibraryManagement.Core.Services
 {
     public class IssueService : IIssueService
     {
-        private readonly IIssueRepository _issueRepository;
-        private readonly IBookRepository _bookRepository;
-        private readonly IStaffRepository _staffRepository;
-        private readonly IStudentRepository _studentRepository;
         private readonly IConfiguration _configuration;
 
-        public IssueService(IIssueRepository issueRepository, IBookRepository bookRepository, IStaffRepository staffRepository, IStudentRepository studentRepository, IConfiguration configuration)
+        public IssueService(IConfiguration configuration)
         {
-            _issueRepository = issueRepository;
-            _bookRepository = bookRepository;
-            _staffRepository = staffRepository;
-            _studentRepository = studentRepository;
             _configuration = configuration;
         }
 

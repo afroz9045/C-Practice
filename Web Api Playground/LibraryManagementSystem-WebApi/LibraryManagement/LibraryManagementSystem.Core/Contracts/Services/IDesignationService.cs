@@ -4,9 +4,7 @@ namespace LibraryManagement.Core.Contracts.Services
 {
     public interface IDesignationService
     {
-        Task<Designation?> AddDesignationAsync(Designation designation, Designation? existingDesignation);
-
-        Task<string?> GenerateDesignationId();
+        Designation? AddDesignationAsync(Designation designation, Designation? recentDesignation);
 
         Designation? UpdateDesignationAsync(string designationId, Designation designation, Designation existingDesignation);
     }

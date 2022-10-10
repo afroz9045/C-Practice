@@ -1,21 +1,12 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
+﻿using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
 {
     public class DesignationService : IDesignationService
     {
-        private readonly IDesignationRepository _designationRepository;
-
-        public DesignationService(IDesignationRepository designationRepository)
+        public string? GenerateDesignationId(Designation? recentDesignationRecord)
         {
-            _designationRepository = designationRepository;
-        }
-
-        public async Task<string?> GenerateDesignationId()
-        {
-            var recentDesignationRecord = await _designationRepository.GetRecentInsertedDesignation();
             if (recentDesignationRecord != null && recentDesignationRecord.DesignationId != null)
             {
                 var firstCharacter = recentDesignationRecord.DesignationId.Substring(0, 1);
@@ -26,9 +17,9 @@ namespace LibraryManagement.Core.Services
             return "A100";
         }
 
-        public async Task<Designation?> AddDesignationAsync(Designation designation, Designation? existingDesignation)
+        public Designation? AddDesignationAsync(Designation designation, Designation? recentDesignation)
         {
-            var designationId = await GenerateDesignationId();
+            var designationId = GenerateDesignationId(recentDesignation);
             var designationGenerate = new Designation()
             {
                 DesignationId = designationId,

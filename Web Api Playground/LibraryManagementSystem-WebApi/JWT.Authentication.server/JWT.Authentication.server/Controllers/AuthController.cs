@@ -98,6 +98,7 @@ namespace JWT.Authentication.Server.Controllers
                 new Claim("UserId", user.UserId.ToString()),
                 new Claim("FullName", user.FullName),
                 new Claim("Email", user.Email),
+                new Claim("Role",role),
                 new Claim(ClaimTypes.Role,role)
             };
 

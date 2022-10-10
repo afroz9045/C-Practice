@@ -40,7 +40,8 @@ namespace LibraryManagement.Api.Controllers
             }
             _logger.LogInformation("Adding designation");
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
-            var designationToBeAdd = await _designationService.AddDesignationAsync(designation, designationRecord);
+            var recentDesignation = await _designationRepository.GetRecentInsertedDesignation();
+            var designationToBeAdd = _designationService.AddDesignationAsync(designation, recentDesignation);
             var addedDesignation = await _designationRepository.AddDesignationAsync(designationToBeAdd!);
             var designationDto = addedDesignation != null ? _mapper.Map<Designation, DesignationDto>(addedDesignation) : null;
             if (designationDto != null)

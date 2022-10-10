@@ -1,20 +1,10 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
+﻿using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
 {
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
-        private readonly IDepartmentRepository _departmentRepository;
-
-        public StudentService(IStudentRepository studentRepository, IDepartmentRepository departmentRepository)
-        {
-            _studentRepository = studentRepository;
-            _departmentRepository = departmentRepository;
-        }
-
         public Student? AddStudent(Student student, IEnumerable<Department>? departmentData)
         {
             string? departmentName = null;

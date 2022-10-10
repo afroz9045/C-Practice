@@ -37,7 +37,8 @@ namespace LibraryManagement.Api.Controllers
             _logger.LogInformation($"Adding Staff details");
             var staff = _mapper.Map<StaffVm, Staff>(staffVm);
 
-            var staffToBeAdd = await _staffService.AddStaffAsync(staff);
+            var recentStaff = await _staffRepository.GetRecentInsertedStaff();
+            var staffToBeAdd = _staffService.AddStaffAsync(staff, recentStaff);
             var addedStaff = staffToBeAdd != null ? await _staffRepository.AddStaffAsync(staffToBeAdd) : null;
             if (addedStaff != null)
             {

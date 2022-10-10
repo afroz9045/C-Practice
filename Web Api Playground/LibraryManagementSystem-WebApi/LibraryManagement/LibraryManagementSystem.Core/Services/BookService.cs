@@ -1,17 +1,10 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
+﻿using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository _bookRepository;
-
-        public BookService(IBookRepository bookRepository)
-        {
-            _bookRepository = bookRepository;
-        }
 
         /// <summary>
         /// This method is use to add new book or update the book stock if book name is matching with existing books
