@@ -58,6 +58,13 @@ namespace LibraryManagement.Infrastructure.Repositories
             return bookData;
         }
 
+        public async Task<IEnumerable<Book>?> GetOutOfStockBooks()
+        {
+            var outOfStockBooksQuery = "select * from [books] where StockAvailable =0";
+            var outOfStockBooks = await _dapperConnection.QueryAsync<Book>(outOfStockBooksQuery);
+            return outOfStockBooks;
+        }
+
         public async Task<Book?> GetBookById(int? bookId)
         {
             var getBookByIdQuery = "select * from [Books] where BookId=@bookId";

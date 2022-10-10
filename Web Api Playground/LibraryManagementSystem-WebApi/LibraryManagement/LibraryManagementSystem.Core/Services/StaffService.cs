@@ -1,21 +1,13 @@
-﻿using LibraryManagement.Core.Contracts.Repositories;
-using LibraryManagement.Core.Contracts.Services;
+﻿using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
 {
     public class StaffService : IStaffService
     {
-        private readonly IStaffRepository _staffRepository;
-
-        public StaffService(IStaffRepository staffRepository)
+        public Staff? AddStaffAsync(Staff staff, Staff? recentStaffRecord)
         {
-            _staffRepository = staffRepository;
-        }
-
-        public async Task<Staff?> AddStaffAsync(Staff staff)
-        {
-            var staffId = await GenerateStaffId();
+            var staffId = GenerateStaffId(recentStaffRecord);
 
             var staffRecord = new Staff()
             {
@@ -27,9 +19,8 @@ namespace LibraryManagement.Core.Services
             return staffRecord;
         }
 
-        public async Task<string?> GenerateStaffId()
+        public string GenerateStaffId(Staff? recentStaffRecord)
         {
-            var recentStaffRecord = await _staffRepository.GetRecentInsertedStaff();
             if (recentStaffRecord != null && recentStaffRecord.StaffId != null)
             {
                 var firstCharacter = recentStaffRecord.StaffId.Substring(0, 1);

@@ -12,6 +12,8 @@ namespace LibraryManagement.Core.Contracts.Repositories
 
         Task<Book?> GetBookByBookName(string bookName);
 
+        Task<IEnumerable<Book>?> GetOutOfStockBooks();
+
         Task<Book> UpdateBookAsync(Book book);
 
         Task<Book?> DeleteBookAsync(Book book);

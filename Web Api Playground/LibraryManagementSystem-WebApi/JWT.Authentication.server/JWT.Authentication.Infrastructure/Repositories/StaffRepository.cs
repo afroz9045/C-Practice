@@ -14,12 +14,14 @@ namespace JWT.Authentication.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<staff?> GetStaffByStaffId(string staffId)
+        public async Task<Staff?> GetStaffByStaffId(string staffId)
         {
             var staffDetails = await (from staff in _dbContext.staff
                                       where staff.StaffId == staffId
                                       select staff).FirstOrDefaultAsync();
             return staffDetails;
         }
+
+       
     }
 }

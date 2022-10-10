@@ -4,6 +4,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
@@ -28,6 +29,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost("pay/{bookIssuedId},{penaltyAmount}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Librarian")]
         public async Task<ActionResult> PayPenalty(short bookIssuedId, int penaltyAmount)
         {
             var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(bookIssuedId);
@@ -51,6 +53,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Accountant")]
         public async Task<ActionResult> GetPenalties()
         {
             _logger.LogInformation("Getting Penalties}");
@@ -65,6 +68,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{issueId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Accountant")]
         public async Task<ActionResult> GetPenaltiesById(short issueId)
         {
             _logger.LogInformation($"Getting penalty with issue book issue id: {issueId}");
@@ -79,6 +83,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete("{issueId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Librarian,Director")]
         public async Task<ActionResult> DeletePenalty(short issueId)
         {
             _logger.LogInformation($"Deleting penalty with book issue id: {issueId} ");

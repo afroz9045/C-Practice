@@ -6,8 +6,8 @@ namespace JWT.Authentication.Server.Core.Contract.Repositories
     {
         public Task<bool> ValidateUser(string email, string password);
 
-        public Task<bool> RegisterUser(Credential user);
+        public Task<bool> RegisterUser(UserDetail user);
 
-        Task<Credential> GetUserDetails(string email);
+        Task<UserDetail> GetUserDetails(string email);
     }
 }

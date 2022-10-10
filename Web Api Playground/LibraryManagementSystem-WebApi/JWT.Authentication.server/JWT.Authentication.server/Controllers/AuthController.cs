@@ -12,35 +12,38 @@ using System.Text;
 
 namespace JWT.Authentication.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IDesignationRepository _designationRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IConfiguration _config;
 
-        public AuthController(IUserRepository userRepository, IStaffRepository staffRepository, IConfiguration config)
+        public AuthController(IUserRepository userRepository, IDesignationRepository designationRepository, IStaffRepository staffRepository, IConfiguration config)
         {
             _userRepository = userRepository;
+            _designationRepository = designationRepository;
             _staffRepository = staffRepository;
             _config = config;
         }
 
         [Route("register")]
         [HttpPost]
-        public async Task<ActionResult> Register(RegistrationVm userVm)
+        public async Task<ActionResult> Register([FromBody] RegistrationVm staffWithCredentials)
         {
-            var staffDetails = await _staffRepository.GetStaffByStaffId(userVm.StaffId);
-            if (staffDetails != null && staffDetails.DesignationId == "A106" && staffDetails.StaffName == userVm.FullName)
+            var staffDetails = await _staffRepository.GetStaffByStaffId(staffWithCredentials.StaffId);
+            if (staffDetails != null && string.Equals(staffDetails.StaffName, staffWithCredentials.FullName, StringComparison.OrdinalIgnoreCase))
             {
                 var passwordSalt = GenerateSalt();
-                userVm.Password += passwordSalt;
-                var passwordHash = GenerateHashPassword(userVm.Password);
-                Credential user = new()
+                staffWithCredentials.Password += passwordSalt;
+                var passwordHash = GenerateHashPassword(staffWithCredentials.Password);
+                UserDetail user = new()
                 {
-                    FullName = userVm.FullName,
-                    Email = userVm.Email,
+                    FullName = staffWithCredentials.FullName,
+                    Email = staffWithCredentials.Email,
                     Password = passwordHash,
+                    StaffId = staffWithCredentials.StaffId,
                     SaltedPassword = passwordSalt
                 };
                 await _userRepository.RegisterUser(user);
@@ -51,16 +54,17 @@ namespace JWT.Authentication.Server.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<ActionResult> Login(LoginVm userVm)
+        public async Task<ActionResult> Login([FromBody] LoginVm userVm)
         {
             var user = await _userRepository.GetUserDetails(userVm.Email);
+            var userRole = await _designationRepository.GetUserDesignation(user.StaffId);
             if (user is null)
                 return BadRequest("Invalid Email address or Password");
             userVm.Password += user.SaltedPassword;
             var passwordHash = GenerateHashPassword(userVm.Password);
             if (passwordHash == user.Password)
             {
-                var token = GenerateToken(user);
+                var token = GenerateToken(user, userRole);
                 return Ok(token);
             }
             return BadRequest("Invalid Email address or Password");
@@ -87,14 +91,15 @@ namespace JWT.Authentication.Server.Controllers
             return Convert.ToBase64String(salt);
         }
 
-        private string GenerateToken(Credential user)
+        private string GenerateToken(UserDetail user, string role)
         {
             var claims = new[]
             {
                 new Claim("UserId", user.UserId.ToString()),
                 new Claim("FullName", user.FullName),
                 new Claim("Email", user.Email),
-                new Claim(ClaimTypes.Role,"admin")
+                new Claim("Role",role),
+                new Claim(ClaimTypes.Role,role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

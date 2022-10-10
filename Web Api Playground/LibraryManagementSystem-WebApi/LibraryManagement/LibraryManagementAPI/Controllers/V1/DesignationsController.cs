@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,6 +30,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> AddDesignation([FromBody] DesignationVm designationVm)
         {
             var designationRecord = await _designationRepository.GetDesignationByNameAsync(designationVm.DesignationName);
@@ -38,7 +40,8 @@ namespace LibraryManagement.Api.Controllers
             }
             _logger.LogInformation("Adding designation");
             var designation = _mapper.Map<DesignationVm, Designation>(designationVm);
-            var designationToBeAdd = await _designationService.AddDesignationAsync(designation, designationRecord);
+            var recentDesignation = await _designationRepository.GetRecentInsertedDesignation();
+            var designationToBeAdd = _designationService.AddDesignationAsync(designation, recentDesignation);
             var addedDesignation = await _designationRepository.AddDesignationAsync(designationToBeAdd!);
             var designationDto = addedDesignation != null ? _mapper.Map<Designation, DesignationDto>(addedDesignation) : null;
             if (designationDto != null)
@@ -48,6 +51,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignations()
         {
             _logger.LogInformation("Getting designations details");
@@ -60,6 +64,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("id/{designationId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignationById(string designationId)
         {
             _logger.LogInformation($"Getting designation by designation id: {designationId}");
@@ -72,6 +77,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{designationName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignationByName(string designationName)
         {
             _logger.LogInformation($"Getting designation by designation name: {designationName}");
@@ -84,6 +90,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{designationId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> UpdateDesignation([FromBody] DesignationVm designationVm, string designationId)
         {
             var designationRecord = await _designationRepository.GetDesignationByIdAsync(designationId);
@@ -103,6 +110,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpDelete("{designationId}")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
+        [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> DeleteDesignation(string designationId)
         {
             var designationRecord = await _designationRepository.GetDesignationByIdAsync(designationId);

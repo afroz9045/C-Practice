@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JWT.Authentication.Core.Entities
 {
-    public partial class staff
+    public class Staff
     {
         public string StaffId { get; set; } = null!;
         public string StaffName { get; set; } = null!;
