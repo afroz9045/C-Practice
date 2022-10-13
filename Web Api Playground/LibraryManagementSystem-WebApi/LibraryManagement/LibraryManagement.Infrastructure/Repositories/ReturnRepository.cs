@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using LibraryManagement.Core.Contracts.Repositories;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 using LibraryManagement.Infrastructure.Data;
 using System.Data;
@@ -42,6 +43,13 @@ namespace LibraryManagement.Infrastructure.Repositories
         {
             var getReturnByIdQuery = "select * from [return] where returnId = @returnId";
             return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId }));
+        }
+
+        public async Task<IEnumerable<PendingBookReturnDto>> GetPendingBookToBeReturn()
+        {
+            var pendingReturnsQuery = "exec SpGetPendingBookReturns";
+            var pendingBookReturnsResult = await _dapperConnection.QueryAsync<PendingBookReturnDto>(pendingReturnsQuery);
+            return pendingBookReturnsResult;
         }
 
         public async Task<IEnumerable<Return>> GetBooksReturnedByDateRange(DateTime fromDate, DateTime? toDate = null)

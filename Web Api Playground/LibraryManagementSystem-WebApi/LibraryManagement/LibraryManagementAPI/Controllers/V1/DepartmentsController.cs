@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/departments")]
     public class DepartmentsController : ApiController
     {
         private readonly IDepartmentRepository _departmentRepository;
@@ -48,7 +49,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [AllowAnonymous]
         public async Task<ActionResult> GetDepartments()
         {
             _logger.LogInformation("Getting Departments details");
@@ -61,7 +61,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{departmentId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDepartmentById(short departmentId)
         {
             _logger.LogInformation($"Getting Department details by id: {departmentId}");
@@ -74,7 +73,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{departmentName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDepartmentByName(string departmentName)
         {
             _logger.LogInformation($"Getting Department details by department name: {departmentName}");

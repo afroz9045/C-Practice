@@ -12,6 +12,7 @@ using System.Text.Json;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/staffs")]
     public class StaffController : ApiController
     {
         private readonly IStaffService _staffService;
@@ -63,7 +64,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStaff()
         {
             _logger.LogInformation("Getting staff details");
@@ -78,7 +78,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{staffId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStaffById(string staffId)
         {
             _logger.LogInformation($"Getting staff details with staff id {staffId}");
@@ -93,7 +92,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("name/{staffName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStaffByName(string staffName)
         {
             _logger.LogInformation($"Getting staff details with staff name {staffName}");

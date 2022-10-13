@@ -5,6 +5,6 @@ namespace LibraryManagement.Api.ViewModels
     public class ReturnVm
     {
         [Required]
-        public int BookId { get; set; }
+        public short IssueId { get; set; }
     }
 }

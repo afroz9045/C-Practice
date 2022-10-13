@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/returnbook")]
     public class ReturnsController : ApiController
     {
         private readonly IReturnService _returnService;
@@ -35,33 +36,33 @@ namespace LibraryManagement.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost("{issueId}")]
+        [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         [Authorize(Roles = "Librarian")]
-        public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm, [Required] short issueId)
+        public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm)
         {
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
-            var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(issueId);
+            var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(returnVm.IssueId);
             if (issueDetails == null)
             {
-                return BadRequest($"No book issued to this issued Id : {issueId}");
+                return BadRequest($"No book issued to this issued Id : {returnVm.IssueId}");
             }
             var bookDetails = await _bookRepository.GetBookById(issueDetails.BookId);
-            var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueId);
-            Penalty? isPenalty = _penaltyService.IsPenalty(issueId, penaltyData, issueDetails);
+            var penaltyData = await _penaltyRepository.GetPenaltyByIdAsync(issueDetails.IssueId);
+            Penalty? isPenalty = _penaltyService.IsPenalty(issueDetails.IssueId, penaltyData, issueDetails);
             var isPenaltyExist = isPenalty != null ? await _penaltyRepository.IsPenalty(isPenalty) : null;
             if (isPenaltyExist == null || isPenaltyExist.PenaltyPaidStatus == true)
             {
-                var returnResult = _returnService.AddReturn(returnBook, issueId, isPenaltyExist, bookDetails, issueDetails);
+                var returnResult = _returnService.AddReturn(returnBook, returnVm.IssueId, isPenaltyExist, bookDetails, issueDetails);
                 if (returnResult.Item1 != null && returnResult.Item2 != null)
                 {
-                    _logger.LogInformation($"Adding Book return with issue id : {issueId}");
+                    _logger.LogInformation($"Adding Book return with issue id : {returnVm.IssueId}");
                     var returnRecordResult = await _returnRepository.AddReturnAsync(returnResult.Item1, returnResult.Item2, issueDetails);
                     var returnDto = _mapper.Map<Return, ReturnDto>(returnRecordResult!);
                     return Ok(returnDto);
                 }
             }
-            return NotFound("Please Check with your Issued Books and Penalty!");
+            return BadRequest("Please Check with your Issued Books and Penalty!");
         }
 
         [HttpGet]
@@ -92,6 +93,17 @@ namespace LibraryManagement.Api.Controllers
                 return Ok(returnDto);
             }
             return NotFound();
+        }
+
+        [HttpGet("pendingreturns")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetPendingBookReturns()
+        {
+            _logger.LogInformation("Getting pending book returns");
+            var pendingBooksToBeReturn = await _returnRepository.GetPendingBookToBeReturn();
+            if (pendingBooksToBeReturn != null)
+                return Ok(pendingBooksToBeReturn);
+            return NotFound("Book returns not found");
         }
 
         [HttpGet("date")]

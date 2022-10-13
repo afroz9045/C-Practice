@@ -5,7 +5,7 @@ namespace LibraryManagement.Core.Services
 {
     public class PenaltyService : IPenaltyService
     {
-        public Penalty? IsPenalty(short issueId, Penalty? existingPenalty, Issue? bookIssueDetails)
+        public Penalty? IsPenalty(short? issueId, Penalty? existingPenalty, Issue? bookIssueDetails)
         {
             if (existingPenalty == null && bookIssueDetails != null)
             {

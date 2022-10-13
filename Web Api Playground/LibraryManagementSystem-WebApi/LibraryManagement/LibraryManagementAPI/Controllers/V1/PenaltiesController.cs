@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/bookspenalty")]
     public class PenaltiesController : ApiController
     {
         private readonly IPenaltyService _penaltyService;

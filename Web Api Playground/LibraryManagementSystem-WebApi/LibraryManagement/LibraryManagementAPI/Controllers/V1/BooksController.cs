@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/books")]
     public class BooksController : ApiController
     {
         private readonly IBookService _bookService;
@@ -60,7 +61,6 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [AllowAnonymous]
         public async Task<ActionResult> GetBooks()
         {
             _logger.LogInformation("Getting Available Books Details");
@@ -73,7 +73,6 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet("{bookId:int}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookById(int bookId)
         {
             if (bookId <= 0)
@@ -90,7 +89,6 @@ namespace LibraryManagement.Api.Controllers.V1
 
         [HttpGet("{bookName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle")]
         public async Task<ActionResult> GetBookByName(string bookName)
         {
             _logger.LogInformation($"Getting Book by book name {bookName}");
