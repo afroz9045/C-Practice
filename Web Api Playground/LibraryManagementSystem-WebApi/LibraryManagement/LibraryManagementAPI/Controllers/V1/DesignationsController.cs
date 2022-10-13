@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/designations")]
     public class DesignationsController : ApiController
     {
         private readonly IDesignationRepository _designationRepository;
@@ -51,7 +52,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignations()
         {
             _logger.LogInformation("Getting designations details");
@@ -64,7 +64,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("id/{designationId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignationById(string designationId)
         {
             _logger.LogInformation($"Getting designation by designation id: {designationId}");
@@ -77,7 +76,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{designationName}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant,Clerk")]
         public async Task<ActionResult> GetDesignationByName(string designationName)
         {
             _logger.LogInformation($"Getting designation by designation name: {designationName}");

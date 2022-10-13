@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/students")]
     public class StudentsController : ApiController
     {
         private readonly IStudentService _studentService;
@@ -30,7 +31,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        [Authorize(Roles = "Librarian,Director,Principle,HOD")]
+        [Authorize(Roles = "Director,Principle,HOD")]
         public async Task<ActionResult> AddStudent([FromBody] StudentVm studentVm)
         {
             _logger.LogInformation("Adding Student details");
@@ -48,7 +49,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStudents()
         {
             _logger.LogInformation("Getting Students details");
@@ -63,7 +63,6 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("{studentId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        [Authorize(Roles = "Librarian,Director,Principle,Professor,Lecturer,Associate Lecturer,HOD,Accountant")]
         public async Task<ActionResult> GetStudentById(int studentId)
         {
             _logger.LogInformation($"Getting student details with student id: {studentId}");
@@ -78,7 +77,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPut("{studentId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        [Authorize(Roles = "Librarian,Director,Principle,HOD")]
+        [Authorize(Roles = "Director,Principle,HOD")]
         public async Task<ActionResult> UpdateStudent([FromBody] StudentVm studentVm, int studentId)
         {
             _logger.LogInformation($"Updating student details with student id:{studentId}");

@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Dtos;
+using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Contracts.Repositories
 {
@@ -9,6 +10,8 @@ namespace LibraryManagement.Core.Contracts.Repositories
         Task<Return> DeleteReturnAsync(Return bookReturn);
 
         Task<IEnumerable<Return?>> GetReturnAsync();
+
+        Task<IEnumerable<PendingBookReturnDto>> GetPendingBookToBeReturn();
 
         Task<Return?> GetReturnByIdAsync(int returnId);
 

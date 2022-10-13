@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
     [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/issuebook")]
     public class IssueController : ApiController
     {
         private readonly IIssueRepository _issueRepository;
