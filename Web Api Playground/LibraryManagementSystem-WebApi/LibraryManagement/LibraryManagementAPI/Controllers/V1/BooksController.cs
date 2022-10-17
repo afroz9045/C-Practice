@@ -54,7 +54,11 @@ namespace LibraryManagement.Api.Controllers.V1
             {
                 var bookAddedResult = await _bookRepository.AddBookAsync(bookResult);
                 var bookDto = bookAddedResult != null ? _mapper.Map<Book, BookDto>(bookAddedResult) : null;
-                return Ok($"Book stock updated with book id: {bookDto!.BookId}");
+                if (bookDto != null)
+                {
+                    bookDto.StockUpdate = true;
+                    return Ok(bookDto);
+                }
             }
             return BadRequest("Book is not added,check details and try again");
         }
@@ -109,6 +113,25 @@ namespace LibraryManagement.Api.Controllers.V1
             if (bookDto != null)
                 return Ok(bookDto);
             return BadRequest("No books are out of stock");
+        }
+
+        [HttpPut("stockupdate")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        [Authorize(Roles = "Librarian")]
+        public async Task<ActionResult> UpdateBookStock([FromBody] BookStockUpdateVm bookStockUpdate)
+        {
+            var availableBook = await _bookRepository.GetBookById(bookStockUpdate.BookId);
+            if (availableBook == null)
+            {
+                return BadRequest("Entered Book id is not found!");
+            }
+            else if (availableBook != null)
+            {
+                var stockToBeUpdate = _bookService.UpdateBookStock(availableBook, bookStockUpdate.StockToBeUpdate);
+                var updatedStock = await _bookRepository.UpdateBookAsync(stockToBeUpdate);
+                return Ok(updatedStock);
+            }
+            return BadRequest();
         }
 
         [HttpPut("{bookId}")]
