@@ -5,7 +5,6 @@ namespace LibraryManagement.Core.Services
 {
     public class BookService : IBookService
     {
-
         /// <summary>
         /// This method is use to add new book or update the book stock if book name is matching with existing books
         /// </summary>
@@ -13,7 +12,7 @@ namespace LibraryManagement.Core.Services
         /// <returns>Book</returns>
         public Book? AddBookAsync(Book book, Book? existingBook)
         {
-            if (book != null && existingBook != null && book.BookName == existingBook.BookName)
+            if (book != null && existingBook != null && book.BookName == existingBook.BookName && book.Isbn == existingBook.Isbn)
             {
                 if (existingBook.BookEdition != book.BookEdition)
                 {
@@ -30,6 +29,12 @@ namespace LibraryManagement.Core.Services
                 return newBook;
             }
             return null;
+        }
+
+        public Book UpdateBookStock(Book book, int stockToBeUpdate)
+        {
+            book.StockAvailable += stockToBeUpdate;
+            return book;
         }
 
         /// <summary>

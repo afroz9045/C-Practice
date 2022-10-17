@@ -8,6 +8,8 @@ namespace LibraryManagement.Core.Contracts.Services
 
         Book? UpdateBooksAsync(Book book, Book? existingBook);
 
+        Book UpdateBookStock(Book book, int stockToBeUpdate);
+
         Book? AddInitialBookStock(Book? book);
 
         Book? IncrementBookStock(Book? book);
