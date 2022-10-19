@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Dtos;
+using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Contracts.Services
 {
@@ -7,5 +8,7 @@ namespace LibraryManagement.Core.Contracts.Services
         (Return?, Book?) AddReturn(Return returnDetails, short issueId, Penalty? isPenalty, Book? bookDetails, Issue issueDetails);
 
         Return? UpdateReturnAsync(int returnId, Return? existingReturnDetails, Return returnDetailsToBeUpdate);
+
+        IEnumerable<PendingReturnDto> IsStudentOrStaff(IEnumerable<PendingBookReturnDto> returns);
     }
 }

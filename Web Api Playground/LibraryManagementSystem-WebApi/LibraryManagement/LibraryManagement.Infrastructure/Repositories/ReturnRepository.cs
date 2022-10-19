@@ -45,6 +45,12 @@ namespace LibraryManagement.Infrastructure.Repositories
             return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIdQuery, new { returnId }));
         }
 
+        public async Task<Return?> GetReturnByIssueIdAsync(int issueId)
+        {
+            var getReturnByIssueIdQuery = "select * from [return] where IssueId = @issueId";
+            return (await _dapperConnection.QueryFirstOrDefaultAsync<Return>(getReturnByIssueIdQuery, new { issueId }));
+        }
+
         public async Task<IEnumerable<PendingBookReturnDto>> GetPendingBookToBeReturn()
         {
             var pendingReturnsQuery = "exec SpGetPendingBookReturns";

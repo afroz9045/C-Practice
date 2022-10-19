@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmployeeRecordBook.Api.Infrastructure.Specs;
+using LibraryManagement.Api.ViewModels;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
@@ -28,26 +29,26 @@ namespace LibraryManagement.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost("pay/{bookIssuedId},{penaltyAmount}")]
+        [HttpPost("pay")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         [Authorize(Roles = "Librarian")]
-        public async Task<ActionResult> PayPenalty(short bookIssuedId, int penaltyAmount)
+        public async Task<ActionResult> PayPenalty([FromBody] PayPenaltyVm penaltyVm/*short bookIssuedId, int penaltyAmount*/)
         {
-            var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(bookIssuedId);
-            var bookIssuedDetails = await _issueRepository.GetBookIssuedByIdAsync(bookIssuedId);
-            _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
-            Penalty? isPenalty = _penaltyService.IsPenalty(bookIssuedId, existingPenalty, bookIssuedDetails);
+            var existingPenalty = await _penaltyRepository.GetPenaltyByIdAsync(penaltyVm.BookIssuedId);
+            var bookIssuedDetails = await _issueRepository.GetBookIssuedByIdAsync(penaltyVm.BookIssuedId);
+            _logger.LogInformation($"Paying Penalty with book issued id: {penaltyVm.BookIssuedId}");
+            Penalty? isPenalty = _penaltyService.IsPenalty(penaltyVm.BookIssuedId, existingPenalty, bookIssuedDetails);
             if (isPenalty == null)
             {
                 return BadRequest("Penalty not found!");
             }
             var isPenaltyExist = await _penaltyRepository.IsPenalty(isPenalty);
-            var penaltyPaidStatusDetails = isPenaltyExist != null ? _penaltyService.PayPenalty(penaltyAmount, isPenaltyExist) : null;
+            var penaltyPaidStatusDetails = isPenaltyExist != null ? _penaltyService.PayPenalty(penaltyVm.PenaltyAmount, isPenaltyExist) : null;
             if (penaltyPaidStatusDetails != null && penaltyPaidStatusDetails.PenaltyPaidStatus == true)
             {
                 var penaltyPaid = _penaltyRepository.PayPenaltyAsync(penaltyPaidStatusDetails);
-                _logger.LogInformation($"Paying Penalty with book issued id: {bookIssuedId}");
-                return Ok("Transaction is successful");
+                _logger.LogInformation($"Paying Penalty with book issued id: {penaltyVm.BookIssuedId}");
+                return Ok();
             }
             return NotFound("Transaction Failed");
         }
