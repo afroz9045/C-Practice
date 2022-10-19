@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Core.Contracts.Services;
+using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Services
@@ -20,6 +21,21 @@ namespace LibraryManagement.Core.Services
                 return (returnRecord, bookDetails);
             }
             return (null, null);
+        }
+
+        public IEnumerable<PendingReturnDto> IsStudentOrStaff(IEnumerable<PendingBookReturnDto> returns)
+        {
+            List<PendingReturnDto> result = new List<PendingReturnDto>();
+            foreach (var returnRecord in returns)
+            {
+                PendingReturnDto returnDto = new();
+                returnDto.IssueId = returnRecord.IssueId;
+                returnDto.BookId = returnRecord.BookId;
+                returnDto.Id = string.IsNullOrEmpty(returnRecord.StaffId) ? returnRecord.StudentId.ToString() : returnRecord.StaffId;
+                returnDto.IssuedTo = string.IsNullOrEmpty(returnRecord.StaffId) ? "Student" : "Staff";
+                result.Add(returnDto);
+            }
+            return result;
         }
 
         public Return? UpdateReturnAsync(int returnId, Return? existingReturnDetails, Return returnDetailsToBeUpdate)

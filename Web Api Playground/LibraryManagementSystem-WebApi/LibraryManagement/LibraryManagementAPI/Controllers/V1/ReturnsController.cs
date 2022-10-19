@@ -42,6 +42,11 @@ namespace LibraryManagement.Api.Controllers
         public async Task<ActionResult> AddReturn([FromBody] ReturnVm returnVm)
         {
             var returnBook = _mapper.Map<ReturnVm, Return>(returnVm);
+            var isAlreadyReturned = await _returnRepository.GetReturnByIssueIdAsync(returnVm.IssueId);
+            if (isAlreadyReturned != null)
+            {
+                return BadRequest($"Book is already Returned!");
+            }
             var issueDetails = await _issueRepository.GetBookIssuedByIdAsync(returnVm.IssueId);
             if (issueDetails == null)
             {
@@ -95,14 +100,15 @@ namespace LibraryManagement.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet("pendingreturns")]
+        [HttpGet("pending-returns")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> GetPendingBookReturns()
         {
             _logger.LogInformation("Getting pending book returns");
             var pendingBooksToBeReturn = await _returnRepository.GetPendingBookToBeReturn();
-            if (pendingBooksToBeReturn != null)
-                return Ok(pendingBooksToBeReturn);
+            var booksToReturn = _returnService.IsStudentOrStaff(pendingBooksToBeReturn);
+            if (booksToReturn != null)
+                return Ok(booksToReturn);
             return NotFound("Book returns not found");
         }
 
