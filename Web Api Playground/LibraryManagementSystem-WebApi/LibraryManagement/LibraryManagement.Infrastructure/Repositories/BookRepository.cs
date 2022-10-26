@@ -81,7 +81,7 @@ namespace LibraryManagement.Infrastructure.Repositories
 
         public async Task<Book?> DeleteBookAsync(Book book)
         {
-            _libraryDbContext.Books?.Remove(book);
+            _libraryDbContext.Books.Remove(book);
             await _libraryDbContext.SaveChangesAsync();
             return book;
         }
