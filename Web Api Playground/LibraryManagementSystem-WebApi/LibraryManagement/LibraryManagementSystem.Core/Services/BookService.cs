@@ -33,7 +33,7 @@ namespace LibraryManagement.Core.Services
 
         public Book UpdateBookStock(Book book, int stockToBeUpdate)
         {
-            book.StockAvailable += stockToBeUpdate;
+            book.StockAvailable = stockToBeUpdate;
             return book;
         }
 

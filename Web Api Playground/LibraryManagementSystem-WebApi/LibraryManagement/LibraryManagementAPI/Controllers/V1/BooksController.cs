@@ -5,6 +5,7 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
+using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +18,15 @@ namespace LibraryManagement.Api.Controllers.V1
     public class BooksController : ApiController
     {
         private readonly IBookService _bookService;
+        private readonly IReturnRepository _returnRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<BooksController> _logger;
 
-        public BooksController(IBookService bookService, IBookRepository bookRepository, IMapper mapper, ILogger<BooksController> logger)
+        public BooksController(IBookService bookService, IReturnRepository returnRepository, IBookRepository bookRepository, IMapper mapper, ILogger<BooksController> logger)
         {
             _bookService = bookService;
+            _returnRepository = returnRepository;
             _bookRepository = bookRepository;
             _mapper = mapper;
             _logger = logger;
@@ -125,10 +128,15 @@ namespace LibraryManagement.Api.Controllers.V1
             {
                 return BadRequest("Entered Book id is not found!");
             }
+            else if (bookStockUpdate.StockToBeUpdate == availableBook.StockAvailable)
+            {
+                return BadRequest("Already present stock can't be update again!");
+            }
             else if (availableBook != null)
             {
                 var stockToBeUpdate = _bookService.UpdateBookStock(availableBook, bookStockUpdate.StockToBeUpdate);
                 var updatedStock = await _bookRepository.UpdateBookAsync(stockToBeUpdate);
+
                 return Ok(updatedStock);
             }
             return BadRequest();
@@ -148,6 +156,10 @@ namespace LibraryManagement.Api.Controllers.V1
             }
             var result = _bookService.UpdateBooksAsync(book, existingBook);
             var updatedBookDetails = await _bookRepository.UpdateBookAsync(result!);
+            if (existingBook == updatedBookDetails)
+            {
+                return BadRequest("No updates found!please update some changes to update");
+            }
             var bookDto = updatedBookDetails != null ? _mapper.Map<Book, BookDto>(updatedBookDetails) : null;
             if (bookDto != null)
                 return Ok(bookDto);
@@ -164,6 +176,12 @@ namespace LibraryManagement.Api.Controllers.V1
             if (existingBook == null)
             {
                 return BadRequest("Book is not exist!");
+            }
+            var pendingBooksToBeReturn = await _returnRepository.GetPendingBookToBeReturn();
+            var isIssuedBookPending = pendingBooksToBeReturn.Where(x => x.BookId == bookId).FirstOrDefault();
+            if (isIssuedBookPending != null)
+            {
+                return BadRequest($"Delete request for this book id: {bookId} is pending to return!");
             }
             var result = await _bookRepository.DeleteBookAsync(existingBook!);
             if (result != null)

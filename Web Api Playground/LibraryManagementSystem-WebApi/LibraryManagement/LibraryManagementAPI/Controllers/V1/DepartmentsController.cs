@@ -95,6 +95,10 @@ namespace LibraryManagement.Api.Controllers
             }
             _logger.LogInformation($"Updating Department with department id: {deptId}");
             var departmentToBeUpdate = _mapper.Map<DepartmentVm, Department>(departmentVm);
+            if (existingDepartment.DepartmentName == departmentToBeUpdate.DepartmentName)
+            {
+                return BadRequest("No updates found! please update some changes to update");
+            }
             var result = _departmentService.UpdateDepartmentAsync(existingDepartment, departmentToBeUpdate);
             var updatedDepartment = await _departmentRepository.UpdateDepartmentAsync(result!);
             var departmentDto = updatedDepartment != null ? _mapper.Map<Department, DepartmentDto>(updatedDepartment) : null;
