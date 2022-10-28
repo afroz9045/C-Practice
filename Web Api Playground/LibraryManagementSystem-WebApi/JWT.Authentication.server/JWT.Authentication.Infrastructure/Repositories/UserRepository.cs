@@ -30,5 +30,17 @@ namespace JWT.Authentication.Server.Infrastructure.Repositories
         {
             return await _dbContext.UserDetails.FirstOrDefaultAsync(s => s.Email == email);
         }
+
+        public async Task<UserDetail> GetUserDetailsByID(string staffId)
+        {
+            return await _dbContext.UserDetails.FirstOrDefaultAsync(user => user.StaffId == staffId);
+        }
+
+        public async Task<UserDetail> DeleteUserDetails(UserDetail user)
+        {
+            _dbContext.Remove(user);
+            await _dbContext.SaveChangesAsync();
+            return user;
+        }
     }
 }

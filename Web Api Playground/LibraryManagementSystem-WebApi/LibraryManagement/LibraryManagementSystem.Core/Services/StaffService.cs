@@ -5,7 +5,7 @@ namespace LibraryManagement.Core.Services
 {
     public class StaffService : IStaffService
     {
-        public Staff? AddStaffAsync(Staff staff, Staff? recentStaffRecord)
+        public Staff? AddStaff(Staff staff, Staff? recentStaffRecord)
         {
             var staffId = GenerateStaffId(recentStaffRecord);
 
@@ -31,13 +31,9 @@ namespace LibraryManagement.Core.Services
             return "S1001";
         }
 
-        public Staff UpdateStaffAsync(Staff existingstaff, Staff updatedStaff)
+        public Staff UpdateStaff(Staff existingstaff, Staff updatedStaff)
         {
-            existingstaff.StaffId = existingstaff.StaffId;
             existingstaff.StaffName = updatedStaff.StaffName;
-            existingstaff.Gender = updatedStaff.Gender;
-            existingstaff.DesignationId = updatedStaff.DesignationId;
-
             return existingstaff;
         }
     }

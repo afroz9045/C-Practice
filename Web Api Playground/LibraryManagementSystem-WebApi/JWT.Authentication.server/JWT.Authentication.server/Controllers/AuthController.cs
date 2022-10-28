@@ -6,6 +6,7 @@ using JWT.Authentication.Server.Infrastructure.VM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -67,7 +68,20 @@ namespace JWT.Authentication.Server.Controllers
                 var token = GenerateToken(user, userRole);
                 return Ok(token);
             }
-            return BadRequest("Invalid Email address or Password");
+            return BadRequest("Invalid Credentials!");
+        }
+
+        [HttpDelete("delete/{staffId}")]
+        public async Task<ActionResult> RemoveUser(string staffId)
+        {
+            var userDetails = await _userRepository.GetUserDetailsByID(staffId);
+            if (userDetails != null)
+            {
+                var deletedUser = await _userRepository.DeleteUserDetails(userDetails);
+                if (deletedUser != null)
+                    return NoContent();
+            }
+            return NotFound();
         }
 
         private string GenerateHashPassword(string password)

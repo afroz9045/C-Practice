@@ -4,8 +4,8 @@ namespace LibraryManagement.Core.Contracts.Services
 {
     public interface IStaffService
     {
-        Staff? AddStaffAsync(Staff staff, Staff? recentStaffRecord);
+        Staff? AddStaff(Staff staff, Staff? recentStaffRecord);
 
-        Staff UpdateStaffAsync(Staff existingStaff, Staff staffToBeUpdate);
+        Staff UpdateStaff(Staff existingStaff, Staff staffToBeUpdate);
     }
 }

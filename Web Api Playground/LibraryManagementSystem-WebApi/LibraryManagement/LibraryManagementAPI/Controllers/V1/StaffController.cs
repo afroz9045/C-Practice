@@ -39,7 +39,7 @@ namespace LibraryManagement.Api.Controllers
             var staff = _mapper.Map<StaffVm, Staff>(staffVm);
 
             var recentStaff = await _staffRepository.GetRecentInsertedStaff();
-            var staffToBeAdd = _staffService.AddStaffAsync(staff, recentStaff);
+            var staffToBeAdd = _staffService.AddStaff(staff, recentStaff);
             var addedStaff = staffToBeAdd != null ? await _staffRepository.AddStaffAsync(staffToBeAdd) : null;
             if (addedStaff != null)
             {
@@ -107,14 +107,14 @@ namespace LibraryManagement.Api.Controllers
         [HttpPut("{staffId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         [Authorize(Roles = "Director,Principle")]
-        public async Task<ActionResult> UpdateStaff([FromBody] StaffVm staffVm, string staffId)
+        public async Task<ActionResult> UpdateStaff([FromBody] StaffUpdateVm staffUpdateVm, string staffId)
         {
             _logger.LogInformation($"Updating staff details with staff id {staffId}");
-            var staff = _mapper.Map<StaffVm, Staff>(staffVm);
+            var staff = _mapper.Map<StaffUpdateVm, Staff>(staffUpdateVm);
             var existingStaffRecord = await _staffRepository.GetStaffByIdAsync(staffId);
             if (existingStaffRecord != null)
             {
-                var staffToBeUpdate = _staffService.UpdateStaffAsync(existingStaffRecord, staff);
+                var staffToBeUpdate = _staffService.UpdateStaff(existingStaffRecord, staff);
                 var updatedStaff = await _staffRepository.UpdateStaffAsync(staffToBeUpdate);
                 var staffDto = _mapper.Map<Staff, StaffDto>(updatedStaff!);
                 return Ok(staffDto);
