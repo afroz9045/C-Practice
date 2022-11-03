@@ -14,6 +14,7 @@ namespace LibraryManagement.Api.Configuration
             CreateMap<DepartmentVm, Department>();
             CreateMap<StudentVm, Student>();
             CreateMap<StaffVm, Staff>();
+            CreateMap<StaffUpdateVm, Staff>();
             CreateMap<DesignationVm, Designation>();
             CreateMap<IssueVm, Issue>();
             CreateMap<ReturnVm, Return>();

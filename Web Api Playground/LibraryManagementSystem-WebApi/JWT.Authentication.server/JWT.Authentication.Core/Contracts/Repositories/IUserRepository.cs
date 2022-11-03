@@ -9,5 +9,9 @@ namespace JWT.Authentication.Server.Core.Contract.Repositories
         public Task<bool> RegisterUser(UserDetail user);
 
         Task<UserDetail> GetUserDetails(string email);
+
+        Task<UserDetail> GetUserDetailsByID(string staffId);
+
+        Task<UserDetail> DeleteUserDetails(UserDetail user);
     }
 }
