@@ -25,5 +25,25 @@ namespace Catalog.Repositories
                 return result;
             return null;
         }
+        public Item CreateItem(Item item)
+        {
+            items.Add(item);
+            return item;
+        }
+
+        public Item UpdateItem(Item item)
+        {
+            var index = items.FindIndex(existingItem=>existingItem.Id ==item.Id);
+            items[index] = item;
+            return item;
+        }
+
+        public Item? DeleteItem(Guid id)
+        {
+            var index = items.FindIndex(existingItem=>existingItem.Id==id);
+            var itemToDelete = GetItem(id);
+            items.RemoveAt(index);
+            return itemToDelete;
+        }
     }
 }

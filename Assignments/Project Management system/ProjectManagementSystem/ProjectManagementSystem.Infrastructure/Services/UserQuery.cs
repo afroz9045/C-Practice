@@ -10,23 +10,23 @@ namespace ProjectManagementSystem.Infrastructure.Services
             int option;
             do
             {
-                Console.WriteLine("\n\nPlease select any one option:\n");
-                Console.WriteLine("Enter 1 for Department details");
-                Console.WriteLine("Enter 2 to search");
-                Console.WriteLine("Enter 3 for project details");
-                Console.WriteLine("Enter 4 for Employee details");
-                Console.WriteLine("Enter 5 to get Assignment Details");
-                Console.WriteLine("Enter 6 to get Number of employees In Each Department");
-                Console.WriteLine("Enter 7 to get Total Salary In Each Department");
-                Console.WriteLine("Enter 8 to get all details of projects and assignment");
-                Console.WriteLine("Enter 9 to clear console");
-                Console.WriteLine("Enter 10 to exit\n");
+                Console.WriteLine("\n\nPlease Select Any One Option:\n");
+                Console.WriteLine("Enter 1 for Department Details");
+                Console.WriteLine("Enter 2 to Search");
+                Console.WriteLine("Enter 3 for Project Details");
+                Console.WriteLine("Enter 4 for Employee Details");
+                Console.WriteLine("Enter 5 to Get Assignment Details");
+                Console.WriteLine("Enter 6 to Get Number of Employees in Each Department");
+                Console.WriteLine("Enter 7 to Get Total Salary In Each Department");
+                Console.WriteLine("Enter 8 to Get All Details of Projects and Assignment");
+                Console.WriteLine("Enter 9 to Clear Console");
+                Console.WriteLine("Enter 10 to Exit\n");
 
                 try
                 {
 
                     var selectedOption = Console.ReadLine();
-                    if(!int.TryParse(selectedOption, out option))
+                    if (!int.TryParse(selectedOption, out option))
                     {
                         throw new FormatException("Invalid Input format!");
                     }
@@ -56,9 +56,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 case 1:
                     try
                     {
-
                         Department();
-
                     }
                     catch (NullReferenceException n)
                     {

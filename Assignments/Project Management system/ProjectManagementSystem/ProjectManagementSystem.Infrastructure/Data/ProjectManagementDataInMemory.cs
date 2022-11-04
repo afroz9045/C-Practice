@@ -7,9 +7,9 @@ namespace ProjectManagementSystem.Infrastructure.Data
 
         // Department Data
         public static List<Department> department = new() {
-        new Department{DeptId = 1,DeptName = "Marketing",phoneNumber = 9292929292 },
-        new Department{DeptId = 2,DeptName = "Finance",phoneNumber = 9292929293 },
-        new Department { DeptId = 3, DeptName = "Accounting", phoneNumber = 9292929294 }
+        new Department{DeptId = 1,DeptName = "Marketing",PhoneNumber = 9292929292 },
+        new Department{DeptId = 2,DeptName = "Finance",PhoneNumber = 9292929293 },
+        new Department { DeptId = 3, DeptName = "Accounting", PhoneNumber = 9292929294 }
         };
 
         // Projects Data

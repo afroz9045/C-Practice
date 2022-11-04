@@ -7,7 +7,7 @@ Console.WriteLine("Hello, World!");
 using (var dbConnection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=adventure"))
 {
 
-    Product product = new Product(dbConnection);
+    IProduct product = new Product(dbConnection);
 
     var productByView = await product.GetProductDetailsByView();
     Console.WriteLine("\n\nProduct data by view:\n");

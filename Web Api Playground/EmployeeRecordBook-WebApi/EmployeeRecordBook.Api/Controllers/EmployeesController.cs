@@ -2,13 +2,8 @@
 using EmployeeRecordBook.Core.Dtos;
 using EmployeeRecordBook.Core.Entities;
 using EmployeeRecordBook.Core.Infrastructure.Repositories;
-using EmployeeRecordBook.Infrastructure.Data;
-using EmployeeRecordBook.Infrastructure.Repositories.Dapper;
-using EmployeeRecordBook.Infrastructure.Repositories.EntityFramework;
 using EmployeeRecordBook.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeRecordBook.Api.Controllers
 {

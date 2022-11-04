@@ -8,13 +8,21 @@ namespace ProjectManagementSystem.Infrastructure.Services
     public class ProjectManagement : IProjectManagement
     {
 
-        // Assignment
+        /// <summary>
+        /// Use this method to get assignment details
+        /// </summary>
+        /// <returns>It returns Assignment details</returns>
         public List<Assignment> GetAssignments()
         {
             return assignments;
         }
 
-        // Get Department
+        /// <summary>
+        ///  Use this method to get Department details 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <param name="deptName"></param>
+        /// <returns>It returns Department details</returns>
         public IEnumerable<Department>? GetDepartment(int? deptId = null, string? deptName = null)
         {
             if (deptId != null || deptName != null)
@@ -28,7 +36,13 @@ namespace ProjectManagementSystem.Infrastructure.Services
             }
             return department;
         }
-        // Get Project
+        /// <summary>
+        /// Use this method to get project details
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <param name="projectName"></param>
+        /// <param name="departmentName"></param>
+        /// <returns>It returns project details</returns>
         public IEnumerable<Project>? GetProject(int? departmentId = null, string? projectName = null, string? departmentName = null)
         {
             if (departmentId != null || projectName != null || departmentName != null)
@@ -45,7 +59,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
             return projects;
         }
 
-        // Get Employee
+        /// <summary>
+        ///  Use this method to get employee details
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <param name="empId"></param>
+        /// <returns>It returns employee details</returns>
         public IEnumerable<Employee> GetEmployees(int? deptId = null, int? empId = null)
         {
             if (deptId != null || empId != null)
@@ -59,7 +78,12 @@ namespace ProjectManagementSystem.Infrastructure.Services
             return employees;
         }
 
-        // Project and Assignment details
+        /// <summary>
+        /// Use this method to get project and assignment details
+        /// </summary>
+        /// <param name="deptName"></param>
+        /// <param name="departmentId"></param>
+        /// <returns>It returns project resource details</returns>
         public IEnumerable<ProjectResourceDetails>? GetProjectAndAssignmentDetails(string? deptName = null, int? departmentId = null)
         {
 
@@ -82,10 +106,10 @@ namespace ProjectManagementSystem.Infrastructure.Services
             var combinedData = from data in projectAndAssignment
                                select new ProjectResourceDetails()
                                {
-                                   departmentName = data.departmentName,
-                                   projectName = data.projectName,
-                                   assignmentName = data.assignmentName,
-                                   employeeName = data.employeeName
+                                   DepartmentName = data.departmentName,
+                                   ProjectName = data.projectName,
+                                   AssignmentName = data.assignmentName,
+                                   EmployeeName = data.employeeName
                                };
 
             return combinedData;
@@ -97,7 +121,7 @@ namespace ProjectManagementSystem.Infrastructure.Services
         public IEnumerable<ProjectResourceDetails>  SearchEntity(string searchKeyword)
         {
             var searchData = from data in GetProjectAndAssignmentDetails()
-                             where data.departmentName.ToLower().Contains(searchKeyword) || data.employeeName.ToLower().Contains(searchKeyword) || data.projectName.ToLower().Contains(searchKeyword) || data.assignmentName.ToLower().Contains(searchKeyword)
+                             where data.DepartmentName.ToLower().Contains(searchKeyword) || data.EmployeeName.ToLower().Contains(searchKeyword) || data.ProjectName.ToLower().Contains(searchKeyword) || data.AssignmentName.ToLower().Contains(searchKeyword)
                              select data;
             return searchData;
         }
@@ -128,8 +152,8 @@ namespace ProjectManagementSystem.Infrastructure.Services
                                      group emp by emp.DepartmentId into dept
                                      select new TotalSalaryByDepartment()
                                      {
-                                         departmentId = dept.Key,
-                                         totalSalary = dept.Sum(s => s.Salary)
+                                         DepartmentId = dept.Key,
+                                         TotalSalary = dept.Sum(s => s.Salary)
                                      };
             return totalSalaryPerDept;
         }
@@ -149,14 +173,14 @@ namespace ProjectManagementSystem.Infrastructure.Services
                 foreach (var data in collection)
                 {
 
-                    Console.WriteLine($"\t{data.departmentName}\t\t{data.projectName}\t{data.assignmentName}\t\t\t{data.employeeName}");
+                    Console.WriteLine($"\t{data.DepartmentName}\t\t{data.ProjectName}\t{data.AssignmentName}\t\t\t{data.EmployeeName}");
                 }
             }
             else if (totalSalary != null)
             {
                 foreach (var data in totalSalary)
                 {
-                    Console.WriteLine($"\t{data.departmentId}\t\t{data.totalSalary}");
+                    Console.WriteLine($"\t{data.DepartmentId}\t\t{data.TotalSalary}");
                 }
             }
             else

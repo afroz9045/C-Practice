@@ -6,6 +6,10 @@ namespace Catalog.Repositories.Contracts
     {
         Item? GetItem(Guid id);
         IEnumerable<Item> GetItems();
-    }
 
+        Item CreateItem(Item item);
+        Item UpdateItem(Item item);
+        Item? DeleteItem(Guid id);
+
+    }
 }

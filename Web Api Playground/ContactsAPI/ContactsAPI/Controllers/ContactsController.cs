@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
