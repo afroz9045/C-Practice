@@ -1,5 +1,4 @@
 ﻿namespace Pms.Core.Entities
-
 {
     public class Project
     {
@@ -14,6 +13,5 @@
         {
             return $"{ProjectID}\t\t{DepartmentId}\t\t{MaxHours}\t\t{StartDate}\t\t{EndDate}\t{ProjectName}";
         }
-
     }
 }

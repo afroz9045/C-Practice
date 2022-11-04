@@ -5,7 +5,6 @@ using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Dtos;
 using LibraryManagement.Core.Entities;
-using LibraryManagement.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

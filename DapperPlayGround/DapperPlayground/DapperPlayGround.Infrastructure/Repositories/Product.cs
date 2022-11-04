@@ -5,7 +5,7 @@ using System.Data;
 
 namespace DapperPlayGround.Infrastructure.Repositories
 {
-    public class Product
+    public class Product : IProduct
     {
         private readonly IDbConnection _adventureContext;
         public Product(IDbConnection adventureContext)
@@ -30,7 +30,7 @@ namespace DapperPlayGround.Infrastructure.Repositories
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("productId", productId, DbType.Int32);
             var guidByProductIdQuery = "spGetProductsGuidByProductId";
-            return await _adventureContext.QueryAsync<GuidData>(guidByProductIdQuery, dynamicParameters, commandType:CommandType.StoredProcedure);
+            return await _adventureContext.QueryAsync<GuidData>(guidByProductIdQuery, dynamicParameters, commandType: CommandType.StoredProcedure);
         }
     }
 }

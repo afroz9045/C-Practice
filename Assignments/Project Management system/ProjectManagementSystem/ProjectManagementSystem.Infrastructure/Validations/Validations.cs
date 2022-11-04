@@ -188,7 +188,7 @@ namespace ProjectManagementSystem.Infrastructure.Validations
             {
                 foreach (var searchResult in searchData)
                 {
-                    Console.WriteLine($"{searchResult.projectName} {searchResult.departmentName} {searchResult.employeeName} {searchResult.assignmentName}");
+                    Console.WriteLine($"{searchResult.ProjectName} {searchResult.DepartmentName} {searchResult.EmployeeName} {searchResult.AssignmentName}");
                 }
 
             }

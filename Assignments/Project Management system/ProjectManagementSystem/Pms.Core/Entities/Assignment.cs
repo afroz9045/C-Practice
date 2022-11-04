@@ -1,5 +1,4 @@
-﻿using System.Text;
-namespace Pms.Core.Entities
+﻿namespace Pms.Core.Entities
 {
     public class Assignment
     {
