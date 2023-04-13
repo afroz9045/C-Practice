@@ -177,7 +177,7 @@ namespace LibraryManagement.Api.Controllers.V1
                 return BadRequest("Book is not exist!");
             }
             var pendingBooksToBeReturn = await _returnRepository.GetPendingBookToBeReturn();
-            var isIssuedBookPending = pendingBooksToBeReturn.Where(x => x.BookId == bookId).FirstOrDefault();
+            var isIssuedBookPending = pendingBooksToBeReturn.FirstOrDefault(x => x.BookId == bookId);
             if (isIssuedBookPending != null)
             {
                 return BadRequest($"Delete request for this book id: {bookId} is pending to return!");
