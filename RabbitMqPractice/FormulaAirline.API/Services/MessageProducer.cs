@@ -11,16 +11,13 @@ public class MessageProducer : IMessageProducer
     {
         var factory = new ConnectionFactory()
         {
-            HostName = "localhost",
-            UserName = "user",
-            Password =  "mypass",
-            VirtualHost = "/"
+            HostName = "localhost"
         };
         var conn = factory.CreateConnection();
 
         using var channel = conn.CreateModel();
 
-        channel.QueueDeclare("bookings",durable:true,exclusive:true,autoDelete:true,null);
+        channel.QueueDeclare("bookings",durable:false,exclusive:false,autoDelete:false,null);
 
         var jsonString = JsonSerializer.Serialize(message);
         var body = Encoding.UTF8.GetBytes(jsonString);

@@ -7,16 +7,13 @@ Console.WriteLine("Welcome to ticketing service.");
 
 var factory = new ConnectionFactory()
         {
-            HostName = "localhost",
-            UserName = "user",
-            Password =  "mypass",
-            VirtualHost = "/"
+            HostName = "localhost"
         };
         var conn = factory.CreateConnection();
 
         using var channel = conn.CreateModel();
 
-        channel.QueueDeclare("bookings",durable:true,exclusive:true,"AutoDelete": true);
+        channel.QueueDeclare("bookings",durable:false,exclusive:false,autoDelete:false,arguments:null);
 
 
         var consumer = new EventingBasicConsumer(channel);
