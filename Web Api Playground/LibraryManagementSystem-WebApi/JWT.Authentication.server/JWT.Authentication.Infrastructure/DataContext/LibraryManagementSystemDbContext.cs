@@ -5,9 +5,9 @@ namespace JWT.Authentication.Infrastructure.DataContext
 {
     public partial class LibraryManagementSystemDbContext : DbContext
     {
-        public LibraryManagementSystemDbContext()
-        {
-        }
+        //public LibraryManagementSystemDbContext()
+        //{
+        //}
 
         public LibraryManagementSystemDbContext(DbContextOptions<LibraryManagementSystemDbContext> options)
             : base(options)
