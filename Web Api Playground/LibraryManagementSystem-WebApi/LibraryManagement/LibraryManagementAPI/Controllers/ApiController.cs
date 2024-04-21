@@ -6,7 +6,7 @@ namespace LibraryManagement.Api.Controllers
 {
     //[Route("v{version:apiVersion}")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ApiController : ControllerBase
     {
     }

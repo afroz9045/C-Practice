@@ -1,4 +1,4 @@
-﻿using LibraryManagement.Core.Constants;
+﻿using LibraryManagement.Api.Configuration;
 using LibraryManagement.Core.Contracts.Repositories;
 using LibraryManagement.Core.Contracts.Services;
 using LibraryManagement.Core.Services;
@@ -11,7 +11,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SchoolManagementAPI.Infrastructure.Configuration;
 using Swashbuckle.AspNetCore.Filters;
 using System.Data;
 using System.Text;

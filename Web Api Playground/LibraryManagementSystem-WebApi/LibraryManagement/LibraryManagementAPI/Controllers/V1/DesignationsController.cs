@@ -31,7 +31,7 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        [Authorize(Roles = "Director,Principle")]
+       // [Authorize(Roles = "Director,Principle")]
         public async Task<ActionResult> AddDesignation([FromBody] DesignationVm designationVm)
         {
             var designationRecord = await _designationRepository.GetDesignationByNameAsync(designationVm.DesignationName);
